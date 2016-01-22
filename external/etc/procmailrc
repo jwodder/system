@@ -1,0 +1,10 @@
+LOGFILE=/var/log/jwodder/procmail.err
+LOGABSTRACT=no
+UMASK=0017
+
+:0 cw
+|/home/jwodder/system/bin/maillog
+
+# Records messages on which maillog fails:
+:0 ce
+/var/log/jwodder/fatal.email

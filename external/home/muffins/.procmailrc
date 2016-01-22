@@ -1,0 +1,5 @@
+#:0 c
+#|(date; id; env; echo) >> ~/procenv.txt
+
+:0:
+/var/mail/`/home/jwodder/system/bin/mailuser "$ORIGINAL_RECIPIENT"`
