@@ -1,0 +1,14 @@
+/var/mail/* {
+	compress
+	delaycompress
+	missingok
+	nocreate
+	notifempty
+	olddir /var/mail.old
+	postrotate
+	    chown mail:mail /var/mail.old/*
+	endscript
+	rotate 5
+	sharedscripts
+	weekly
+}
