@@ -1,0 +1,6 @@
+{
+    "database": "logs",
+    "user":     "logger",
+    "password": "---REDACTED---",
+    "host":     "localhost"
+}

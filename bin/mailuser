@@ -1,0 +1,8 @@
+#!/usr/bin/python
+import sys
+
+try:
+    print sys.argv[1].partition('@')[0].partition('+')[0].replace('/', '-') \
+            or 'NULL'
+except Exception:
+    print 'ERROR'

@@ -1,0 +1,55 @@
+#!/usr/bin/python
+import json
+import re
+import sys
+import time
+from   psycopg2 import connect
+
+errorfile = '/var/log/jwodder/authfail.err'
+credsfile = '/etc/jwodder/logger.json'
+
+with open(errorfile, 'a') as err:
+
+    def logError(e, line=None, about=None):
+        json.dump({
+            "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            "line": line,
+            "about": about,
+            "error_type": e.__class__.__name__,
+            "error": str(e),
+        }, err)
+        err.write('\n')
+        err.flush()
+
+    try:
+        with open(credsfile) as fp:
+            creds = json.load(fp)
+        db = connect(**creds)
+        db.autocommit = True
+        cursor = db.cursor()
+    except Exception as e:
+        logError(e, line=None, about='Error connecting to database')
+        sys.exit(1)
+
+    while True:
+        # `for line in sys.stdin` cannot be used here because Python buffers
+        # stdin when iterating over it, causing the script to wait for some
+        # too-large number of lines to be passed to it until it'll do anything.
+        line = sys.stdin.readline()
+        if line == '':
+            break
+        m = re.search(r'^(\S+) \S+ sshd\[\d+\]:'
+                      r'(?: message repeated \d+ times: \[)?'
+                      r' Failed (?:password|keyboard-interactive/pam) for'
+                      r'(?: invalid user)? (\S+) from (\S+) port \d+ ssh2\]?$',
+		      line)
+        if m:
+            try:
+                cursor.execute('''
+                    INSERT INTO authfail (timestamp, username, src_addr)
+                    VALUES (%s, %s, %s)
+                ''', m.groups())
+            except Exception as e:
+                logError(e, line=line, about='Error inserting into database')
+        else:
+            logError(None, line=line, about='Could not parse logfile entry')

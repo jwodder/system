@@ -1,0 +1,67 @@
+#!/usr/bin/python
+from   datetime    import datetime
+import email
+from   email.utils import getaddresses, mktime_tz, parseaddr, parsedate_tz
+import json
+import logging
+import sys
+from   psycopg2    import connect
+
+errorfile = '/var/log/jwodder/maillog.err'
+credsfile = '/etc/jwodder/logger.json'
+
+sys.stderr = open(errorfile, 'a')
+
+### TODO: Make error logs include a description of the e-mail? (Message-ID,
+### first few characters, ???)
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
+                    level=logging.INFO, datefmt='%Y-%m-%dT%H:%M:%SZ')
+
+try:
+    with open(credsfile) as fp:
+        creds = json.load(fp)
+    db = connect(**creds)
+    cursor = db.cursor()
+except Exception as e:
+    logging.exception('Error connecting to database')
+    #raise
+    sys.exit(1)
+
+def contactID(contact):
+    # `contact` is a `(realname, email_address)` pair.
+    cursor.execute('SELECT id FROM inbox_contacts WHERE realname = %s AND'
+                   ' email_address = %s', contact)
+    cid = cursor.fetchone()
+    if cid is None:
+        cursor.execute('INSERT INTO inbox_contacts (realname, email_address)'
+                       ' VALUES (%s, %s) RETURNING id', contact)
+        cid = cursor.fetchone()
+    return cid[0]
+
+try:
+    rawmsg = sys.stdin.read()
+    size = len(rawmsg)
+    msg = email.message_from_string(rawmsg)
+    subject = '\n'.join(msg.get_all('Subject', []))[:2048]
+    #if '[DIE]' in subject:
+    #	raise RuntimeError('Dying as requested')
+    sender = contactID(parseaddr(msg['From']))
+    date = datetime.utcfromtimestamp(mktime_tz(parsedate_tz(msg['Date'])))\
+                   .strftime('%Y-%m-%dT%H:%M:%SZ')
+    recips = set(map(contactID, getaddresses(msg.get_all('To', [])
+                                           + msg.get_all('CC', []))))
+    cursor.execute('INSERT INTO inbox (timestamp, subject, sender, size,'
+                   ' date) VALUES (statement_timestamp(), %s, %s, %s, %s)'
+                   ' RETURNING id', (subject, sender, size, date))
+    mid = cursor.fetchone()[0]
+    cursor.executemany('INSERT INTO inbox_tocc (msg_id, contact_id)'
+                       ' VALUES (%s, %s)', [(mid, r) for r in recips])
+except Exception:
+    db.rollback()
+    logging.exception('Error processing e-mail')
+    #raise
+    sys.exit(1)
+else:
+    db.commit()
+finally:
+    db.close()

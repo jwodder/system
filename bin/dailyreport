@@ -1,0 +1,287 @@
+#!/usr/bin/python
+from   __future__    import division, unicode_literals
+from   collections   import Counter
+import email.charset
+from   email.message import Message
+from   email.utils   import formataddr
+from   errno         import ENOENT
+from   itertools     import takewhile
+import json
+import os
+import os.path
+import re
+import socket
+import subprocess
+import sys
+import time
+from   prettytable   import PrettyTable
+from   psycopg2      import connect
+
+credsfile = '/etc/jwodder/logger.json'
+mailbox = '/home/jwodder/Mail/INBOX'
+disk_threshold = 50
+ssh_threshold = 20
+smtp_threshold = 2
+http_threshold = 3
+
+mail_daemon = 'MAILER-DAEMON@mail.varonathe.org'
+
+iso8601 = '%Y-%m-%dT%H:%M:%SZ'
+
+tagseq = 'DISK LOGERR REBOOT MAIL'.split()
+tagged = set()
+
+with open(credsfile) as fp:
+    creds = json.load(fp)
+db = connect(**creds)
+cursor = db.cursor()
+
+def longint(n):
+    n = str(n)
+    nl = len(n)
+    triples = [n[i:i+3] for i in xrange(nl % 3, nl, 3)]
+    if nl % 3:
+        triples = [n[:nl%3]] + triples
+    return ' '.join(triples)
+
+def filesize(path):
+    try:
+        about = os.stat(path)
+    except EnvironmentError as e:
+        if e.errno == ENOENT:
+            return None
+        else:
+            raise
+    return about.st_size
+
+def check_errlogs():
+    errlogs = [f for f in os.listdir('/var/log/jwodder')
+                 if filesize(os.path.join('/var/log/jwodder', f)) > 0]
+    if errlogs:
+        tagged.add('LOGERR')
+        return 'The following files in /var/log/jwodder are nonempty:\n' + \
+               ''.join('    ' + f + '\n' for f in errlogs)
+
+def check_load():
+    with open('/proc/loadavg') as fp:
+        return 'Load: ' + ', '.join(fp.read().split()[:3]) + '\n'
+
+def check_disk():
+    # <http://stackoverflow.com/a/12327880/744178>
+    usage   = os.statvfs('/')
+    fssize  = usage.f_blocks * usage.f_frsize
+    #fsavail = usage.f_bavail * usage.f_frsize
+    fsavail = usage.f_bfree * usage.f_frsize
+    fsused  = fssize - fsavail
+    sused   = longint(fsused)
+    ssize   = longint(fssize)
+    width   = max(len(sused), len(ssize))
+    pctused = 100 * fsused / fssize
+    if pctused >= disk_threshold:
+        tagged.add('DISK')
+    return 'Space used on root partition:\n    %*s\n  / %*s\n   (%f%%)\n' \
+            % (width, sused, width, ssize, pctused)
+
+def check_authfail():
+    cursor.execute('''
+        SELECT src_addr, COUNT(*) AS qty FROM authfail
+        WHERE timestamp >= (now() - interval '1 day')
+        GROUP BY src_addr ORDER BY qty DESC, src_addr ASC
+    ''')
+    tbl = PrettyTable(["Attempts", "IP Address"])
+    tbl.align['Attempts'] = 'r'
+    tbl.align['IP Address'] = 'l'
+    for addr, qty in cursor.fetchall():
+        tbl.add_row([qty, addr])
+    return 'Failed SSH login attempts in the past 24 hours:\n' + \
+        tbl.get_string() + '\n'
+
+def check_apache_access():
+    report = 'Website activity in the past 24 hours:\n'
+    cursor.execute('''
+        CREATE TEMPORARY TABLE apache_today ON COMMIT DROP
+        AS SELECT src_addr, reqline, bytesIn, bytesOut FROM apache_access
+           WHERE timestamp >= (now() - interval '1 day')
+    ''')
+    cursor.execute('''
+        SELECT reqline, count(*) AS qty FROM apache_today GROUP BY reqline
+        ORDER BY qty DESC, reqline ASC
+    ''')
+    tbl = PrettyTable(["Hits", "Request"])
+    tbl.align['Hits'] = 'r'
+    tbl.align['Request'] = 'l'
+    for reqline, qty in cursor.fetchall():
+        tbl.add_row([qty, reqline])
+    report += tbl.get_string() + '\n'
+
+    #cursor.execute('''
+    #    SELECT src_addr, count(*) AS qty FROM apache_today GROUP BY src_addr
+    #    ORDER BY qty DESC, src_addr ASC
+    #''')
+    #tbl = PrettyTable(["Visits", "IP Address"])
+    #tbl.align['Visits'] = 'r'
+    #tbl.align['IP Address'] = 'l'
+    #for addr, qty in cursor.fetchall():
+    #    tbl.add_row([qty, addr])
+    #report += tbl.get_string() + '\n\n'
+
+    cursor.execute('SELECT sum(bytesIn), sum(bytesOut) FROM apache_today')
+    bytesIn, bytesOut = map(longint, cursor.fetchone())
+    width = max(len(bytesIn), len(bytesOut))
+    report += 'Total bytes sent:     %*s\n' \
+              'Total bytes received: %*s\n' \
+              % (width, bytesOut, width, bytesIn)
+    return report
+
+def check_inbox():
+    title = 'E-mails received in the past 24 hours:'
+    cursor.execute('''
+        SELECT inbox.id, inbox.subject, inbox_contacts.realname,
+               inbox_contacts.email_address, inbox.size, inbox.date
+        FROM inbox JOIN inbox_contacts ON inbox.sender = inbox_contacts.id
+        WHERE inbox.timestamp >= (now() - interval '1 day')
+        ORDER BY inbox.timestamp ASC, inbox.id ASC
+    ''')
+    inbox = cursor.fetchall()
+    if not inbox:
+        return title + ' none\n'
+    #tbl = PrettyTable(["From", "To", "Subject", "Date", "Size"])
+    #tbl.align = 'l'
+    report = title + '\n---\n'
+    for mid, sub, sender_name, sender_addr, size, date in inbox:
+        cursor.execute('''
+            SELECT c.realname, c.email_address
+            FROM inbox_tocc AS t JOIN inbox_contacts AS c ON t.contact_id = c.id
+            WHERE t.msg_id = %s AND c.email_address LIKE '%%varonathe.org'
+            ORDER BY c.realname ASC, c.email_address ASC
+        ''', (mid,))
+        recips = ','.join(map(formataddr, cursor.fetchall()))
+        #tbl.add_row([
+        #    formataddr((sender_name, sender_addr)),
+        #    recips,
+        #    sub, 
+        #    date.strftime(is8601),
+        #    size,
+        #])
+        report += 'From:    ' + formataddr((sender_name, sender_addr)) + '\n' \
+                  'To:      ' + recips + '\n' \
+                  'Subject: ' + sub + '\n' \
+                  'Date:    ' + date.strftime(iso8601) + '\n' \
+                  'Size:    ' + str(size) + '\n' \
+                  '---\n'
+    #return title + '\n' + tbl.get_string() + '\n'
+    return report
+
+def check_mailbox():
+    size = filesize(mailbox)
+    if size is not None and size > 0:
+        tagged.add('MAIL')
+
+def check_reboot():
+    if filesize('/var/run/reboot-required') is not None:
+        tagged.add('REBOOT')
+        try:
+            with open('/var/run/reboot-required.pkgs') as fp:
+                pkgs = fp.read().splitlines()
+        except IOError:
+            pkgs = []
+        report = 'Reboot required by the following packages:'
+        if pkgs:
+            report += '\n' + ''.join('    ' + s + '\n' for s in pkgs)
+        else:
+            report += ' UNKNOWN\n'
+        return report
+
+def over_threshold(cntr, threshold):
+    return [val for val,_ in takewhile(lambda p: p[1] >= threshold,
+                                       cntr.most_common())]
+
+def ban_ips(reason, ips):
+    args = ['tmpban', '-q', '-r', reason]
+    if 'CRONNING' not in os.environ:
+        args += ['--dry-run']
+    banned = subprocess.check_output(args + ips).splitlines()
+    if banned:
+        return 'IP addresses banned for excessive ' + reason + ':\n' + \
+            ''.join('    ' + a + '\n' for a in banned)
+
+def ban_ssh():
+    cursor.execute('''
+        SELECT src_addr FROM authfail
+        WHERE timestamp >= (now() - interval '1 day')
+        GROUP BY src_addr HAVING COUNT(*) >= %s
+    ''', (ssh_threshold,))
+    return ban_ips('SSH login failures', [a for (a,) in cursor.fetchall()])
+
+def ban_smtp():
+    cursor.execute('''
+        SELECT subject FROM inbox
+        WHERE sender = (SELECT id FROM inbox_contacts WHERE email_address = %s)
+        AND timestamp >= (now() - interval '1 day')
+    ''', (mail_daemon,))
+    baddies = Counter()
+    for subject, in cursor.fetchall():
+        m = re.search(r'^Postfix SMTP server: errors from'
+                      r' .*\[(\d+(\.\d+){3})\]$', subject)
+        if m:
+            baddies[m.group(1)] += 1
+    return ban_ips('SMTP shenanigans', over_threshold(baddies, smtp_threshold))
+
+def ban_http():
+    with open('/etc/jwodder/badhttp') as fp:
+        badhttp = [re.compile(line.strip()) for line in fp]
+    cursor.execute('''
+        SELECT reqline, src_addr FROM apache_access
+        WHERE status != 200 AND timestamp >= (now() - interval '1 day')
+    ''')
+    baddies = Counter()
+    for reqline, ip_addr in cursor.fetchall():
+        if any(rx.search(reqline) for rx in badhttp):
+            baddies[ip_addr] += 1
+    return ban_ips('bad HTTP requests', over_threshold(baddies, http_threshold))
+
+body = ''
+for check in [
+        check_mailbox,
+        check_errlogs,
+        check_reboot,
+        check_load,
+        check_disk,
+        check_inbox,
+        check_authfail,
+        check_apache_access,
+        ban_smtp,
+        ban_ssh,
+        ban_http,
+    ]:
+    report = check()
+    if report is not None and report != '':
+        if body:
+            body += '\n'
+        body += report
+if not body:
+    body = 'Nothing to report\n'
+
+subject = ''
+for tag in tagseq:
+    if tag in tagged:
+        subject += '[' + tag + '] '
+        tagged.remove(tag)
+for tag in sorted(tagged):
+    subject += '[' + tag + '] '
+subject += 'Status Report: %s, %s' % (socket.gethostname(),
+                                      time.strftime(iso8601, time.gmtime()))
+
+msg = Message()
+msg['Subject'] = subject
+msg['To'] = 'jwodder@gmail.com'
+chrset = email.charset.Charset('utf-8')
+chrset.body_encoding = email.charset.QP
+msg.set_payload(body, chrset)
+msg = str(msg)
+
+if sys.stdout.isatty():
+    subprocess.Popen([os.environ.get('PAGER', 'less')], stdin=subprocess.PIPE)\
+              .communicate(msg)
+else:
+    print msg

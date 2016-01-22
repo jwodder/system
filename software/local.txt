@@ -1,0 +1,1 @@
+jq, v.1.5, installed in /usr/local from source

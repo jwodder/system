@@ -1,0 +1,43 @@
+#!/usr/bin/python
+import argparse
+import json
+import subprocess
+import sys
+from   psycopg2 import connect
+
+credsfile = '/etc/jwodder/tmpban.json'
+
+iso8601 = '%Y-%m-%dT%H:%M:%SZ'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-A', '--auto', action='store_true')
+parser.add_argument('ip_addr', nargs='*')
+args = parser.parse_args()
+
+with open(credsfile) as fp:
+    creds = json.load(fp)
+db = connect(**creds)
+cursor = db.cursor()
+
+def unban(ip_addr, ban_start, ban_end, reason):
+    cursor.execute('DELETE FROM bans WHERE ip_addr = %s', (ip_addr,))
+    subprocess.check_output(['sudo', 'ufw', 'delete', 'deny', 'in', 'from',
+                             ip_addr])
+    db.commit()
+    print 'Unbanned: %s (%s/%s; reason: %r)' % (ip_addr, ban_start.strftime(iso8601), ban_end.strftime(iso8601), reason)
+
+if args.auto:
+    cursor.execute('SELECT ip_addr, ban_start, ban_end, reason FROM bans'
+                   ' WHERE ban_end <= now()')
+    for entry in cursor.fetchall():
+        unban(*entry)
+
+for ip_addr in args.ip_addr:
+    cursor.execute('SELECT ban_start, ban_end, reason FROM bans'
+                   ' WHERE ip_addr = %s', (ip_addr,))
+    try:
+        ban_start, ban_end, reason = cursor.fetchone()
+    except (TypeError, ValueError):
+        sys.stderr.write(ip_addr + ': no ban on record\n')
+    else:
+        unban(ip_addr, ban_start, ban_end, reason)

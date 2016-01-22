@@ -1,0 +1,58 @@
+- Uncommented the lines enabling Bash completion in /etc/bash.bashrc
+- Created a swapfile:
+
+    sudo fallocate -l 1988M /swapfile
+    sudo chmod 0600 /swapfile
+    sudo mkswap /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    sudo swapon /swapfile
+
+- Configured ufw:
+
+    sudo ufw default deny incoming
+    sudo ufw allow in 22
+    sudo ufw allow in 80
+    sudo ufw allow in 443
+    sudo ufw enable
+
+- Configured popularity-contest to send statistics (`dpkg-reconfigure
+  popularity-contest`)
+- Configured /etc/skel
+- Added myself to the `adm`, `mail`, `staff`, `sudo`, and `users` groups
+ - `adm` membership lets me read files in `/var/log` without the need for sudo
+- Set up twofactor authentication:
+
+    sudo apt-get install libpam-google-authenticator
+    echo auth required pam_google_authenticator.so | sudo tee -a /etc/pam.d/sshd
+    sudo sed -i 's/^\(ChallengeResponseAuthentication\) no/\1 yes/' /etc/ssh/sshd_config
+    yes | sudo -H google-authenticator
+    yes | google-authenticator
+    sudo service ssh restart
+
+- Disabled root SSH login:
+
+    sudo sed -i 's/^\(PermitRootLogin\) yes/\1 no/' /etc/ssh/sshd_config
+    sudo service ssh restart
+
+- Configured PAM rather than SSH to display the "Last login" message by setting
+  "`PrintLastLog`" in /etc/ssh/sshd_config to `no` (and then restarting `ssh`)
+  and adding the below lines to /etc/pam.d/sshd between the pam_env lines and
+  the pam_selinux line:
+
+    session [default=1] pam_lastlog.so nowtmp showfailed
+    session optional    pam_lastlog.so silent noupdate showfailed
+
+- Disabled `/etc/update-motd.d/{00-header,10-help-text}`
+- Added `--exclude-sysinfo-plugins=LandscapeLink` to the `landscape-sysinfo`
+  command in `/etc/update-motd.d/50-landscape-sysinfo`
+- Added the line `\setenv LESS -iS` to `~postgres/.psqlrc` in order to make
+  psql's pager always use `-S` (when sudo'ing in as `postgres`, at least)
+- Enabled unattended-upgrades with `sudo dpkg-reconfigure unattended-upgrades`
+    - Set the following values in `/etc/apt/apt.conf.d/50unattended-upgrades`:
+
+            Unattended-Upgrade::InstallOnShutdown "false";
+            Unattended-Upgrade::Mail "jwodder";
+            Unattended-Upgrade::MailOnlyOnError "false";
+            Unattended-Upgrade::Automatic-Reboot "false";
+
+- Uncommented the `trusty-backports` lines in `/etc/apt/sources.list`

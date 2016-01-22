@@ -1,0 +1,11 @@
+/admin
+:\)
+\.php
+^(?!GET|POST)
+cgi-bin
+https?:
+myadmin
+mysql
+w00tw00t
+webadmin
+wp-admin

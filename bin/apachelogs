@@ -1,0 +1,71 @@
+#!/usr/bin/python
+import ast
+import json
+import sys
+import time
+from   psycopg2 import connect
+
+# Apache log format:
+# "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
+
+errorfile = '/var/log/jwodder/apachelogs.err'
+credsfile = '/etc/jwodder/logger.json'
+
+with open(errorfile, 'a') as err:
+
+    def logError(e, line=None, about=None):
+        json.dump({
+            "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            "line": line,
+            "about": about,
+            "error_type": e.__class__.__name__,
+            "error": str(e),
+        }, err)
+        err.write('\n')
+        err.flush()
+
+    try:
+        with open(credsfile) as fp:
+            creds = json.load(fp)
+        db = connect(**creds)
+        db.autocommit = True
+        cursor = db.cursor()
+    except Exception as e:
+        logError(e, line=None, about='Error connecting to database')
+        sys.exit(1)
+
+    while True:
+        # `for line in sys.stdin` cannot be used here because Python buffers
+        # stdin when iterating over it, causing the script to wait for some
+        # too-large number of lines to be passed to it until it'll do anything.
+        line = sys.stdin.readline()
+        if line == '':
+            break
+
+        try:
+            timestamp, host, port, src_addr, bytesIn, bytesOut, microsecs, \
+                status, strs = line.split('|', 8)
+            port = int(port)
+            bytesIn = int(bytesIn)
+            bytesOut = int(bytesOut)
+            microsecs = int(microsecs)
+            status = int(status)
+            authuser, reqline, method, path, protocol, referer, user_agent \
+                = ast.literal_eval(strs)
+        except ValueError as e:
+            logError(e, line=line, about='Error parsing logfile entry')
+            continue
+
+        try:
+            cursor.execute('''
+                INSERT INTO apache_access
+                    (timestamp, host, port, src_addr, authuser, bytesIn,
+                     bytesOut, microsecs, status, reqline, method, path,
+                     protocol, referer, user_agent)
+                VALUES
+                    (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ''', (timestamp, host, port, src_addr, authuser, bytesIn, bytesOut,
+                  microsecs, status, reqline, method, path, protocol, referer,
+                  user_agent))
+        except Exception as e:
+            logError(e, line=line, about='Error inserting entry into database')

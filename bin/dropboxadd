@@ -1,0 +1,37 @@
+#!/usr/bin/python
+import os
+import os.path
+import sys
+import dropbox
+
+chunk_size = 150000000
+# The docs say to limit uploads to 150 MB at a time.  It's not clear whether
+# this is supposed to be SI megabytes or mebibytes, so assume the smaller.
+
+with open('/etc/jwodder/dropbox') as fp:
+    token = fp.read().strip()
+
+dbx = dropbox.Dropbox(token)
+
+src, dest = sys.argv[1:]
+if dest.endswith("/"):
+    dest = os.path.join(dest, os.path.basename(src))
+
+with open(src, 'rb') as fp:
+    if os.stat(src).st_size <= chunk_size:
+        dbx.files_upload(fp, dest, dropbox.files.WriteMode.add, autorename=True)
+    else:
+        sess = None
+        sent = 0
+        for chunk in iter(lambda: fp.read(chunk_size), ''):
+            if sess is None:
+                sess = dbx.files_upload_session_start(chunk).session_id
+            else:
+                dbx.files_upload_session_append(chunk, sess, sent)
+            sent += len(chunk)
+        dbx.files_upload_session_finish(
+            '',
+            dropbox.files.UploadSessionCursor(sess, sent),
+            dropbox.files.CommitInfo(dest, dropbox.files.WriteMode.add,
+                                     autorename=True)
+        )
