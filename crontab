@@ -1,9 +1,9 @@
 LANG=en_US.UTF-8
 LC_ALL=en_US.UTF-8
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/jwodder/system/bin
 #:/usr/games:/usr/local/games:/home/jwodder/bin
 CRONNING=true
 
-0 8 * * * /usr/local/bin/dailyreport | sendmail -t
-0 9 * * * /usr/local/bin/untmpban --auto
+0 8 * * * dailyreport | sendmail -t
+0 9 * * * untmpban --auto
 0 9 * * * cd ~; rm -rf .distlib .lesshst .psql_history .python-eggs .sqlite_history

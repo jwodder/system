@@ -8,7 +8,7 @@ import sys
 from   psycopg2    import connect
 
 errorfile = '/var/log/jwodder/maillog.err'
-credsfile = '/etc/jwodder/logger.json'
+credsfile = '/home/jwodder/system/etc/logger.json'
 
 sys.stderr = open(errorfile, 'a')
 

@@ -6,7 +6,7 @@ import time
 from   psycopg2 import connect
 
 errorfile = '/var/log/jwodder/authfail.err'
-credsfile = '/etc/jwodder/logger.json'
+credsfile = '/home/jwodder/system/etc/logger.json'
 
 with open(errorfile, 'a') as err:
 
