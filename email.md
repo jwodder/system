@@ -25,6 +25,7 @@
 - Run `newaliases` to update Postfix's knowledge of `/etc/aliases`
 - Create a "`muffins`" user account (belonging to the `mail` group) for dead
   letters
+- Added myself to the `mail` group
 - Create `/usr/local/bin/maillog` and `/etc/procmailrc`
 - Create `/usr/local/bin/mailuser` and give `muffins` a `.procmailrc` for
   using it to sort messages into files with the same name as the recipients'
