@@ -1,0 +1,47 @@
+[advice]
+statusHints = false
+
+[alias]
+co       = checkout
+cdiff    = diff --cached
+cat      = !git --no-pager show
+loggraph = log --graph --pretty=oneline --abbrev-commit
+numstat  = !git --no-pager diff --cached --numstat
+purge    = clean -dx
+revno    = rev-list --count HEAD
+shove    = push --all
+svnstat  = !git --no-pager diff --name-status --cached
+toadd    = !git --no-pager diff --name-status
+vreji    = log --pretty=format:%H%x20%x20%ai%n%s%n
+
+[clean]
+requireForce = false
+
+[color]
+pager = false
+
+[core]
+ignorecase = false
+logallrefupdates = false
+
+[diff]
+renames = 1
+
+[gc]
+pruneExpire = 7.days.ago
+reflogexpire = 7
+reflogexpireunreachable = 7
+
+[merge]
+tool = vimdiff
+
+[push]
+default = simple
+
+#[url "ssh://jwodder@meta.freeshell.org/arpa/gm/j/jwodder/"]
+## Yes, the trailing slash is very necessary.
+#insteadOf = sdf:
+
+#[user]
+#name = John T. Wodder II
+#email = jwodder@sdf.lonestar.org

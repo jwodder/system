@@ -41,6 +41,9 @@ zip
 moreutils
 miscfiles
 
+# apt-add-repository -y ppa:ansible/ansible
+ansible
+
 # No need to carry over to new/clean systems:
 apt-doc
 ascii

@@ -1,15 +1,11 @@
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+[ -z "$PS1" ] && return
 
 alias ls='LC_ALL=C ls'
-alias toc='ls -ACF --color'
+alias toc='LC_ALL=C ls -ACF --color'
 
-PreS1='\u@\h:'
-PS1="$PreS1\w\\$ "
-alias shortPrompt="PS1='$PreS1\W\\\$ '"
-alias longPrompt="PS1='$PreS1\w\\\$ '"
+PS1='\u@\h:\w\$ '
+alias shortps="PS1='${PS1/w/W}'"
+alias longps="PS1='${PS1/W/w}'"
 
 shopt -s checkwinsize failglob globstar no_empty_cmd_completion
 shopt -u progcomp
@@ -27,3 +23,10 @@ then if [ -r ~/.dircolors ]
      else eval "$(dircolors -b)"
      fi
 fi
+
+function show_exit_status {
+    CHILD_ERROR="${?:-0}"
+    [ "$CHILD_ERROR" = 0 ] || printf '\033[1;31m[%d]\033[0m\n' "$CHILD_ERROR"
+}
+
+PROMPT_COMMAND=show_exit_status

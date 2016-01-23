@@ -1,0 +1,24 @@
+---
+- name: Create jwodder
+  user:
+    name: jwodder
+    groups: adm,staff,sudo,users
+    append: true
+    shell: /bin/bash
+    home: /home/jwodder
+    move_home: true
+    comment: 'John T. Wodder II'
+    generate_ssh_key: true
+    ssh_key_type: rsa
+    ssh_key_comment: "jwodder@{{ansible_hostname}}"
+
+- name: Fetch root's authorized_keys
+  command: cat /root/.ssh/authorized_keys
+  register: authkeys
+
+- name: Add root's authorized_keys to jwodder's
+  authorized_key: user=jwodder manage_dir=true key="{{authkeys.stdout}}"
+
+- name: Set up Google Authenticator for jwodder
+  shell: 'yes | google-authenticator'
+  become_user: jwodder
