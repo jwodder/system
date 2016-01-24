@@ -8,7 +8,7 @@ chunk_size = 150000000
 # The docs say to limit uploads to 150 MB at a time.  It's not clear whether
 # this is supposed to be SI megabytes or mebibytes, so assume the smaller.
 
-with open('/home/jwodder/system/etc/dropbox') as fp:
+with open('/opt/jwodder/etc/dropbox') as fp:
     token = fp.read().strip()
 
 dbx = dropbox.Dropbox(token)

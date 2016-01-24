@@ -23,4 +23,6 @@
 
 - name: Set up Google Authenticator for jwodder
   shell: 'yes | google-authenticator'
+  args:
+    creates: /home/jwodder/.google_authenticator
   become_user: jwodder

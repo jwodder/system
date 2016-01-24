@@ -9,7 +9,7 @@ from   psycopg2 import connect
 # "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
 
 errorfile = '/var/log/jwodder/apachelogs.err'
-credsfile = '/home/jwodder/system/etc/logger.json'
+credsfile = '/opt/jwodder/etc/logger.json'
 
 with open(errorfile, 'a') as err:
 

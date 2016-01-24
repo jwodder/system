@@ -3,7 +3,7 @@ LOGABSTRACT=no
 UMASK=0017
 
 :0 cw
-|/home/jwodder/system/bin/maillog
+|/opt/jwodder/bin/maillog
 
 # Records messages on which maillog fails:
 :0 ce

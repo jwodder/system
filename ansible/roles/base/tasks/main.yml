@@ -2,15 +2,16 @@
 - name: Install essential software
   apt: name={{item}} state=present update_cache=yes
   with_items:
-   - apt-transport-https
-   - fail2ban
-   - git
-   - htop
-   - libpam-google-authenticator
-   - software-properties-common
-   - unzip
-   - ufw
-   - zip
+    - apt-transport-https
+    - fail2ban
+    - git
+    - htop
+    - libpam-google-authenticator
+    - moreutils  # chronic
+    - software-properties-common
+    - unzip
+    - ufw
+    - zip
 
 - name: Create swap space
   command: fallocate -l {{ansible_memtotal_mb * 2}}M /swapfile
@@ -20,10 +21,10 @@
 
 - name: Set up swap space
   block:
-   - file: path=/swapfile mode=0600
-   - command: mkswap /swapfile
-   - lineinfile: dest=/etc/fstab line="/swapfile none swap sw 0 0"
-   - command: swapon /swapfile
+    - file: path=/swapfile mode=0600
+    - command: mkswap /swapfile
+    - lineinfile: dest=/etc/fstab line="/swapfile none swap sw 0 0"
+    - command: swapon /swapfile
   when: createdSwap|changed
 
 #- name: Reset any changes made to ufw
@@ -34,10 +35,6 @@
 
 - name: Allow incoming SSH connections
   ufw: rule=allow to_ip=any to_port=22 proto=any direction=in
-  #with_items:
-  # - 22
-  # - 80
-  # - 443
 
 - name: Enable ufw
   ufw: state=enabled
@@ -48,7 +45,7 @@
     line: 'auth required pam_google_authenticator.so'
     insertafter: EOF
   notify:
-   - Restart SSHd
+    - Restart SSHd
 
 - name: Enable Google Authenticator in sshd_config
   lineinfile:
@@ -56,10 +53,12 @@
     regexp: '^ChallengeResponseAuthentication\s+'
     line: 'ChallengeResponseAuthentication yes'
   notify:
-   - Restart SSHd
+    - Restart SSHd
 
 - name: Set up Google Authenticator for root
   shell: 'yes | google-authenticator'
+  args:
+    creates: /root/.google_authenticator
 
 - name: Allow/forbid root login
   lineinfile:
@@ -67,7 +66,7 @@
     regexp: '^PermitRootLogin\s+'
     line: 'PermitRootLogin {{root_login|ternary("yes", "no")}}'
   notify:
-   - Restart SSHd
+    - Restart SSHd
 
 - name: Set /etc/skel
   copy: src=skel/ dest=/etc/skel owner=root group=root

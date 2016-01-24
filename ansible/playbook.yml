@@ -2,5 +2,5 @@
 - hosts: localhost
   sudo: yes
   roles:
-   - base
-   - jwodder
+    - base
+    - jwodder
