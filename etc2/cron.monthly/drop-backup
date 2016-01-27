@@ -7,18 +7,24 @@ VENV=/var/lib/jwodder/dropbox
 set -ex
 mkdir -p "$ROOT"
 
-for dir in /home/jwodder /var/mail /var/mail.old /var/www /etc/letsencrypt \
-           /opt/jwodder
-do if [ "$dir" = /var/www ]
-   then links=
-   else links=--copy-unsafe-links
+for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt /opt/jwodder
+do if [ -e "$dir" ]
+   then if [ "$dir" = /var/www ]
+        then links=
+        else links=--copy-unsafe-links
+        fi
+        rsync -aR $links --delete --delete-excluded \
+              --exclude-from=/opt/jwodder/etc/backup.exclude \
+              "$dir" "$ROOT"
+   else rm -rf "$ROOT$dir"
    fi
-   rsync -aR $links --delete --delete-excluded \
-         --exclude-from=/etc/jwodder/backup.exclude \
-         "$dir" "$ROOT"
 done
 
-sudo -u postgres pg_dumpall -f "$ROOT/postgres.sql"
+if [ -x /etc/init.d/postgresql ]
+### TODO: Look for a better way to test whether PostgreSQL is installed.
+then sudo -u postgres pg_dumpall -f "$ROOT/postgres.sql"
+else rm -rf "$ROOT/postgres.sql"
+fi
 
 cd "$ROOT"
 TARBALL=/var/backups/firefly-`date -u +%Y%m%dT%H%M%SZ`.tgz

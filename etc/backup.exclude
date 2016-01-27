@@ -1,4 +1,8 @@
-/home/jwodder/.cache
-/home/jwodder/.distlib
-/home/jwodder/.local
-/home/jwodder/.pylint.d
+/home/*/.cache
+/home/*/.distlib
+/home/*/.local
+/home/*/.pylint.d
+/root/.cache
+/root/.distlib
+/root/.local
+/root/.pylint.d
