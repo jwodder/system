@@ -1,0 +1,35 @@
+#!/bin/bash
+# letsencrypt was installed (and can be updated) by running:
+#     sudo -H VENV_PATH=/usr/local/letsencrypt ./letsencrypt-auto --help
+# in a copy of the GitHub repository.
+
+# Note that, as of 2016-01-09, wildcard certs are still not supported.
+
+if ((EUID != 0))
+then echo This script must be run as root.
+     exit 1
+fi
+
+VENV_PATH=/usr/local/letsencrypt
+
+set -ex
+DOMAINS=$(paste -d, -s ${1:-/opt/jwodder/etc/domains})
+
+[ ! -e /etc/init.d/apache ] || service apache2 stop
+ufw allow in 80
+ufw allow in 443
+
+$VENV_PATH/bin/letsencrypt certonly \
+    --standalone \
+    --rsa-key-size 4096 \
+    --renew-by-default \
+    --server https://acme-v01.api.letsencrypt.org/directory \
+    --email jwodder+letsencrypt@gmail.com \
+    --domains "$DOMAINS"
+
+[ ! -e /etc/init.d/apache ] || service apache2 start
+
+if [ -e /etc/init.d/postfix ]
+then service postfix stop
+     service postfix start
+fi

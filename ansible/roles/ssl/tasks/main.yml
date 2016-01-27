@@ -1,0 +1,34 @@
+---
+- stat: path=/opt/jwodder/etc/domains
+  register: etc_domains
+
+- assert: that='etc_domains.exists'
+
+- stat: path=/usr/local/letsencrypt
+  register: lenc
+
+- block:
+    - git:
+        repo: https://github.com/letsencrypt/letsencrypt.git
+        dest: /tmp/letsencrypt
+        update: true
+    - command: /tmp/letsencrypt/letsencrypt-auto --help
+      ### Flags need to be added to automatically accept the user agreement
+      environment:
+        VENV_PATH: /usr/local/letsencrypt
+  when: not lenc.stat.exists or update_letsencrypt
+
+- name: Get SSL certificates
+  command: /opt/jwodder/bin/letsencrypt
+  args:
+    creates: /etc/letsencrypt
+
+- name: Create letsencrypt cronjob
+  copy:
+    dest: /etc/cron.weekly/letsencrypt
+    content: |
+        #!/bin/bash
+        test -e /etc/letsencrypt -a \
+             -z "$(find /etc/letsencrypt/live/*/cert.pem -mtime 60 -print)" || \
+            chronic /opt/jwodder/bin/letsencrypt
+    mode: 0755

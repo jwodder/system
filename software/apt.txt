@@ -40,6 +40,9 @@ unzip
 zip
 moreutils
 miscfiles
+bikeshed  # --no-install-recommends
+unicode
+transmission-cli
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
