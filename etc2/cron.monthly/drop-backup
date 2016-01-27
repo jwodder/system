@@ -30,9 +30,12 @@ cd "$ROOT"
 TARBALL=/var/backups/firefly-`date -u +%Y%m%dT%H%M%SZ`.tgz
 tar zcf "$TARBALL" .
 
-[ -e "$VENV" ] || virtualenv "$VENV"
-source "$VENV/bin/activate"
-pip install dropbox
-python /usr/local/bin/dropboxadd "$TARBALL" /Historical/Backups/Droplets/
+if [ ! -e "$VENV" ]
+then virtualenv "$VENV"
+     $VENV/bin/pip install dropbox
+fi
+
+$VENV/bin/python /opt/jwodder/bin/dropboxadd "$TARBALL" \
+                                             /Historical/Backups/Droplets/
 
 rm -f "$TARBALL"
