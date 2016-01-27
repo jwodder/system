@@ -7,14 +7,18 @@ VENV=/var/lib/jwodder/dropbox
 set -ex
 mkdir -p "$ROOT"
 
-for dir in /home/jwodder /var/mail /var/mail.old /var/www /etc/letsencrypt
-do rsync -aR --copy-unsafe-links --delete --delete-excluded \
+for dir in /home/jwodder /var/mail /var/mail.old /var/www /etc/letsencrypt \
+           /opt/jwodder
+do if [ "$dir" = /var/www ]
+   then links=
+   else links=--copy-unsafe-links
+   fi
+   rsync -aR $links --delete --delete-excluded \
          --exclude-from=/etc/jwodder/backup.exclude \
          "$dir" "$ROOT"
 done
 
-sudo -u postgres pg_dump logs > "$ROOT/logs.sql"
-#sudo -u postgres pg_dump tmpban > "$ROOT/tmpban.sql"
+sudo -u postgres pg_dumpall -f "$ROOT/postgres.sql"
 
 cd "$ROOT"
 TARBALL=/var/backups/firefly-`date -u +%Y%m%dT%H%M%SZ`.tgz
