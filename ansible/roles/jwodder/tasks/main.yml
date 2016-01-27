@@ -32,3 +32,22 @@
     dest: /etc/sudoers
     line: 'jwodder ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw'
     validate: 'visudo -cf %s'
+
+- name: Set crontab variables
+  cronvar:
+    user: jwodder
+    name: "{{item.key}}"
+    value: "{{item.value}}"
+  with_dict:
+    LANG: en_US.UTF-8
+    LC_ALL: en_US.UTF-8
+    PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/jwodder/bin'
+    CRONNING: 'true'
+
+- name: Create cronjob for cleaning ~
+  cron:
+    user: jwodder
+    name: purge
+    minute: 0
+    hour: 9
+    job: 'cd ~; xargs -a /opt/jwodder/etc/cruft -r rm -rf'

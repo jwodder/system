@@ -1,0 +1,9 @@
+.distlib
+.gforth-history
+.landscape
+.lesshst
+.psql_history
+.python-eggs
+.python_history
+.rnd
+.sqlite_history
