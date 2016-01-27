@@ -75,3 +75,22 @@
   command: >
     sed -i~ -e '/^# enable bash completion/,/^$/{/^# enable/b; s/^#//}'
         /etc/bash.bashrc
+
+- name: Create /var/log/jwodder
+  file:
+    path: /var/log/jwodder
+    state: directory
+    group: syslog
+    mode: 0775
+
+- name: Configure popularity-contest
+  debconf:
+    name: popularity-contest
+    question: popularity-contest/participate
+    vtype: boolean
+    value: "{{popcon}}"
+  register: popcon_changed
+
+- name: Enable new popularity-contest settings
+  command: dpkg-reconfigure -f noninteractive popularity-contest
+  when: popcon_changed|changed
