@@ -1,4 +1,4 @@
-- Install crontab
+- Install personal crontab
 - Ensure everything in /opt/jwodder is world-readable and (when relevant)
   -executable
 - Set up Apache
@@ -9,10 +9,12 @@
  - Use the presence of /opt/jwodder/etc/domains to determine whether or not to
    run the SSL role?
 - Run external/setperms.sh?
-- Add an option for installing dropbox "normally" rather than in a virtualenv?
+- Set up tmpban
+- ssl: Add flags to letsencrypt-auto for automatically accepting the user
+  agreement
+- Set jwodder's password?
 - ???
 
-- ssl:
- - Add flags to letsencrypt-auto for automatically accepting the user agreement
- - If the domains in /opt/jwodder/etc/domains don't match those in the current
-   cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
+- ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
+  current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
+- Add an option for installing dropbox "normally" rather than in a virtualenv?

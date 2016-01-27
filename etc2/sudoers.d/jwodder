@@ -1,1 +1,0 @@
-jwodder ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw

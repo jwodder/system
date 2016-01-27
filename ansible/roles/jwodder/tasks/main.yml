@@ -26,3 +26,9 @@
   args:
     creates: /home/jwodder/.google_authenticator
   become_user: jwodder
+
+- name: Give jwodder permission to run `sudo ufw` without a password
+  lineinfile:
+    dest: /etc/sudoers
+    line: 'jwodder ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw'
+    validate: 'visudo -cf %s'
