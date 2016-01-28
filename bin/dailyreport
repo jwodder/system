@@ -202,6 +202,7 @@ def ban_ips(reason, ips):
         args += ['--dry-run']
     banned = subprocess.check_output(args + ips).splitlines()
     if banned:
+        banned.sort(key=socket.inet_aton)
         return 'IP addresses banned for excessive ' + reason + ':\n' + \
             ''.join('    ' + a + '\n' for a in banned)
 
