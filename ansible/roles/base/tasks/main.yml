@@ -94,3 +94,11 @@
 - name: Enable new popularity-contest settings
   command: dpkg-reconfigure -f noninteractive popularity-contest
   when: popcon_changed|changed
+
+- name: Set timezone to UTC
+  copy: dest=/etc/timezone content="Etc/UTC\n"
+  register: timezone_changed
+
+- name: Enable new timezone setting
+  command: dpkg-reconfigure -f noninteractive tzdata
+  when: timezone_changed|changed
