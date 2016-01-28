@@ -42,7 +42,7 @@ moreutils
 miscfiles
 bikeshed  # --no-install-recommends
 unicode
-transmission-cli
+wikipedia2text
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -54,6 +54,7 @@ mercurial
 postfix-doc
 python3-psycopg2
 rsyslog-doc
+transmission-cli
 
 # Installed by Let's Encrypt:
 dialog

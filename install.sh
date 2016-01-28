@@ -6,11 +6,13 @@ fi
 
 set -ex
 
-command -V apt-add-repository &> /dev/null || \
-    apt-get install -y software-properties-common
-apt-add-repository -y ppa:ansible/ansible
-apt-get update
-apt-get install -y ansible
+if ! command -V ansible-playbook &> /dev/null
+then command -V apt-add-repository &> /dev/null || \
+         apt-get install -y software-properties-common
+     apt-add-repository -y ppa:ansible/ansible
+     apt-get update
+     apt-get install -y ansible
+fi
 
 cd "$(dirname "$0")"
 if [ "$(pwd)" != /opt/jwodder ]
