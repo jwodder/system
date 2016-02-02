@@ -18,13 +18,26 @@
 - Install drop-backup
 - Set up dailyreport
  - Add personal cronjob "0 8 * * * dailyreport | sendmail -t"
+- Split the setup of Google 2FA into a separate role?
 - ???
 
 - Set up two possible modes of behavior: one for running against localhost,
   another for running against remote hosts
- - The remote mode should install this repository in /opt/jwodder (somehow),
-   while the local mode should require that it already be installed there
+ - The remote mode should install this repository in /opt/jwodder (with the
+   synchronize module?), while the local mode should require that it already be
+   installed there
 
 - ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
   current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
 - Add an option for installing dropbox "normally" rather than in a virtualenv?
+- Other packages to consider automatically installing:
+ - python-pip
+ - python-dev
+ - build-essential
+ - apt-file
+ - pwgen
+ - python-virtualenv
+ - python3-pip
+ - python3-dev
+ - jq [from source]
+ - python-requests

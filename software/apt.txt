@@ -25,7 +25,6 @@ postfix
 postgresql
 procmail
 pwgen
-python-apt-doc
 python-bitarray
 python-dev
 python-pip
@@ -43,6 +42,7 @@ miscfiles
 bikeshed  # --no-install-recommends
 unicode
 wikipedia2text
+youtube-dl  # --no-install-recommends
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -52,9 +52,11 @@ apt-doc
 ascii
 mercurial
 postfix-doc
+python-apt-doc
 python3-psycopg2
 rsyslog-doc
 transmission-cli
+pptp-linux
 
 # Installed by Let's Encrypt:
 dialog

@@ -2,7 +2,7 @@
 - stat: path=/opt/jwodder/etc/domains
   register: etc_domains
 
-- assert: that='etc_domains.exists'
+- assert: that='etc_domains.stat.exists and etc_domains.stat.size > 0'
 
 - stat: path=/usr/local/letsencrypt
   register: lenc

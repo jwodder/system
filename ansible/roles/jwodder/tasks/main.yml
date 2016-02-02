@@ -2,7 +2,7 @@
 - name: Create jwodder
   user:
     name: jwodder
-    groups: adm,staff,sudo,users
+    groups: adm,staff,sudo,users #,docker
     # `adm` membership lets me read files in `/var/log` without the need for
     # `sudo`.
     append: true
