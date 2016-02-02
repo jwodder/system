@@ -22,12 +22,13 @@ done
 
 if [ -x /etc/init.d/postgresql ]
 ### TODO: Look for a better way to test whether PostgreSQL is installed.
-then sudo -u postgres pg_dumpall -f "$ROOT/postgres.sql"
+then sudo -u postgres pg_dumpall > "$ROOT/postgres.sql"
+# Don't use `-f` here, as postgres can't write to $ROOT.
 else rm -rf "$ROOT/postgres.sql"
 fi
 
 cd "$ROOT"
-TARBALL=/var/backups/firefly-`date -u +%Y%m%dT%H%M%SZ`.tgz
+TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
 tar zcf "$TARBALL" .
 
 if [ ! -e "$VENV" ]
