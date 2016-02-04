@@ -43,6 +43,8 @@ bikeshed  # --no-install-recommends
 unicode
 wikipedia2text
 youtube-dl  # --no-install-recommends
+graphviz
+python-pygraph
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible

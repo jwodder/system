@@ -1,8 +1,12 @@
 #!/bin/bash
-# Run with sudo
 # Prerequisite: apt-get install python-virtualenv
 ROOT=/var/backups/jwodder
 VENV=/var/lib/jwodder/dropbox
+
+if ((EUID != 0))
+then echo This script must be run as root.
+     exit 1
+fi
 
 set -ex
 mkdir -p "$ROOT"
@@ -13,7 +17,7 @@ do if [ -e "$dir" ]
         then links=
         else links=--copy-unsafe-links
         fi
-        rsync -aR $links --delete --delete-excluded \
+        rsync -avR $links --delete --delete-excluded \
               --exclude-from=/opt/jwodder/etc/backup.exclude \
               "$dir" "$ROOT"
    else rm -rf "$ROOT$dir"
