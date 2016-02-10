@@ -1,5 +1,12 @@
 ---
-- pip:
+- name: Install prerequisites
+  apt: name={{item}} state=present update_cache=no
+  with_items:
+    - python-pip
+    - python-virtualenv
+
+- name: Install Python Dropbox package
+  pip:
     name: dropbox
     state: "{{update_dropbox|ternary('latest', 'present')}}"
     virtualenv: "{{dropbox_venv}}"
