@@ -4,7 +4,7 @@
 
 - assert: that='etc_domains.stat.exists and etc_domains.stat.size > 0'
 
-- stat: path=/usr/local/letsencrypt
+- stat: path={{letsencrypt_venv}}
   register: lenc
 
 - block:
@@ -15,7 +15,7 @@
     - command: /tmp/letsencrypt/letsencrypt-auto --help
       ### Flags need to be added to automatically accept the user agreement
       environment:
-        VENV_PATH: /usr/local/letsencrypt
+        VENV_PATH: "{{letsencrypt_venv}}"
   when: not lenc.stat.exists or update_letsencrypt
 
 - name: Get SSL certificates

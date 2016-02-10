@@ -1,0 +1,15 @@
+---
+- pip:
+    name: dropbox
+    state: "{{update_dropbox|ternary('latest', 'present')}}"
+    virtualenv: "{{dropbox_venv}}"
+
+- name: Create backup cronjob
+  copy:
+    dest: /etc/cron.weekly/backup
+    content: |
+        #!/bin/bash
+        # Run every other Sunday:
+        (( ($(date +%s) / 86400 - 3) % 14 )) || \
+            chronic /opt/jwodder/bin/drop-backup
+    mode: 0755

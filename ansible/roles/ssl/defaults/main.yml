@@ -1,2 +1,3 @@
 ---
 update_letsencrypt: false
+letsencrypt_venv: /usr/local/letsencrypt

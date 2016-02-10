@@ -1,0 +1,4 @@
+---
+update_dropbox: false
+#dropbox_venv: /usr/local/dropbox
+dropbox_venv: /var/lib/jwodder/dropbox
