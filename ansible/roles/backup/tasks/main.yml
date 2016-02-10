@@ -11,5 +11,5 @@
         #!/bin/bash
         # Run every other Sunday:
         (( ($(date +%s) / 86400 - 3) % 14 )) || \
-            chronic /opt/jwodder/bin/drop-backup
+            chronic /opt/jwodder/bin/drop-backup "{{dropbox_venv}}"
     mode: 0755

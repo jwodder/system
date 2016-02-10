@@ -1,7 +1,6 @@
 #!/bin/bash
-# Prerequisite: apt-get install python-virtualenv
 ROOT=/var/backups/jwodder
-VENV=/var/lib/jwodder/dropbox
+VENV_PATH="${1:-/var/lib/jwodder/dropbox}"
 
 if ((EUID != 0))
 then echo This script must be run as root.
@@ -11,7 +10,8 @@ fi
 set -ex
 mkdir -p "$ROOT"
 
-for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt /opt/jwodder
+for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
+           /opt/jwodder
 do if [ -e "$dir" ]
    then if [ "$dir" = /var/www ]
         then links=
@@ -35,12 +35,7 @@ cd "$ROOT"
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
 tar zcf "$TARBALL" .
 
-if [ ! -e "$VENV" ]
-then virtualenv "$VENV"
-     $VENV/bin/pip install dropbox
-fi
-
-$VENV/bin/python /opt/jwodder/bin/dropboxadd "$TARBALL" \
-                                             /Historical/Backups/Droplets/
+$VENV_PATH/bin/python /opt/jwodder/bin/dropboxadd "$TARBALL" \
+                                                  /Historical/Backups/Droplets/
 
 rm -f "$TARBALL"

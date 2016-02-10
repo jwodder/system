@@ -15,7 +15,6 @@
 - ssl: Add flags to letsencrypt-auto for automatically accepting the user
   agreement
 - Set jwodder's password?
-- Install drop-backup
 - Set up dailyreport
  - Add personal cronjob "0 8 * * * dailyreport | sendmail -t"
 - Split the setup of Google 2FA into a separate role?

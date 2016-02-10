@@ -5,12 +5,12 @@
 
 # Note that, as of 2016-01-09, wildcard certs are still not supported.
 
+VENV_PATH="${1:-/usr/local/letsencrypt}"
+
 if ((EUID != 0))
 then echo This script must be run as root.
      exit 1
 fi
-
-VENV_PATH=/usr/local/letsencrypt
 
 set -ex
 DOMAINS=$(paste -d, -s ${1:-/opt/jwodder/etc/domains})
