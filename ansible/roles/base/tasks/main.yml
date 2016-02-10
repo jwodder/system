@@ -50,7 +50,7 @@
 - name: Enable Google Authenticator in sshd_config
   lineinfile:
     dest: /etc/ssh/sshd_config
-    regexp: '^ChallengeResponseAuthentication\s+'
+    regexp: '^#?ChallengeResponseAuthentication\s+'
     line: 'ChallengeResponseAuthentication yes'
   notify:
     - Restart SSHd
@@ -63,7 +63,7 @@
 - name: Allow/forbid root login
   lineinfile:
     dest: /etc/ssh/sshd_config
-    regexp: '^PermitRootLogin\s+'
+    regexp: '^#?PermitRootLogin\s+'
     line: 'PermitRootLogin {{root_login|ternary("yes", "no")}}'
   notify:
     - Restart SSHd

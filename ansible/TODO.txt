@@ -9,7 +9,6 @@
  - Set up DNS?
  - Use the presence of /opt/jwodder/etc/domains to determine whether or not to
    run the SSL role?
-- Run external/setperms.sh?
 - Set up tmpban
  - Add personal cronjob "0 9 * * * untmpban --auto"
 - ssl: Add flags to letsencrypt-auto for automatically accepting the user
