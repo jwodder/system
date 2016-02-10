@@ -7,3 +7,4 @@ Sphinx
 sphinx-autobuild
 SQLAlchemy
 pyRFC3339
+habitica

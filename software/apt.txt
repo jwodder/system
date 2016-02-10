@@ -44,7 +44,6 @@ unicode
 wikipedia2text
 youtube-dl  # --no-install-recommends
 graphviz
-python-pygraph
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -58,7 +57,6 @@ python-apt-doc
 python3-psycopg2
 rsyslog-doc
 transmission-cli
-pptp-linux
 
 # Installed by Let's Encrypt:
 dialog
