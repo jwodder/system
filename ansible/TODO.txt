@@ -41,3 +41,4 @@
  - jq [from source]
  - python-requests
  - Docker?
+ - tree
