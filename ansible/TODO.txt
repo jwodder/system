@@ -13,7 +13,6 @@
  - Add personal cronjob "0 9 * * * untmpban --auto"
 - ssl: Add flags to letsencrypt-auto for automatically accepting the user
   agreement
-- Set jwodder's password?
 - Set up dailyreport
  - Add personal cronjob "0 8 * * * dailyreport | sendmail -t"
 - Split the setup of Google 2FA into a separate role?
@@ -25,6 +24,9 @@
  - The remote mode should install this repository in /opt/jwodder (with the
    synchronize module?), while the local mode should require that it already be
    installed there
+- Cron output should still be logged somehow/somewhere even when Postfix isn't
+  installed
+- Set up root's home directory
 
 - ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
   current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.

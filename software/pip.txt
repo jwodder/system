@@ -1,10 +1,12 @@
 beautifulsoup4
-docopt
 enum34
+habitica
 ijson
 pylint  # apt-get version is very out of date.
-Sphinx
-sphinx-autobuild
-SQLAlchemy
 pyRFC3339
-habitica
+Sphinx
+SQLAlchemy
+
+# No need to carry over to new/clean systems:
+docopt
+sphinx-autobuild

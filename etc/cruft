@@ -1,7 +1,9 @@
+.aptitude
 .distlib
 .gforth-history
 .landscape
 .lesshst
+.pip
 .psql_history
 .python-eggs
 .python_history

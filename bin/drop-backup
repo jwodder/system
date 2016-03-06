@@ -1,9 +1,10 @@
 #!/bin/bash
+# Usage: sudo ./drop-backup [--rsync-only]
 ROOT=/var/backups/jwodder
-VENV_PATH="${1:-/var/lib/jwodder/dropbox}"
+: "${VENV_PATH:=/var/lib/jwodder/dropbox}"
 
 if ((EUID != 0))
-then echo This script must be run as root.
+then echo "$0: This script must be run as root."
      exit 1
 fi
 
@@ -11,7 +12,7 @@ set -ex
 mkdir -p "$ROOT"
 
 for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
-           /opt/jwodder
+           /opt/jwodder /opt/jwodder-postfix
 do if [ -e "$dir" ]
    then if [ "$dir" = /var/www ]
         then links=
@@ -19,6 +20,7 @@ do if [ -e "$dir" ]
         fi
         rsync -avR $links --delete --delete-excluded \
               --exclude-from=/opt/jwodder/etc/backup.exclude \
+              --exclude-from=<(find "$dir" -type d -exec test -e {}/.norsync ';' -print) \
               "$dir" "$ROOT"
    else rm -rf "$ROOT$dir"
    fi
@@ -30,6 +32,8 @@ then sudo -u postgres pg_dumpall > "$ROOT/postgres.sql"
 # Don't use `-f` here, as postgres can't write to $ROOT.
 else rm -rf "$ROOT/postgres.sql"
 fi
+
+[ "$1" != "--rsync-only" ] || exit 0
 
 cd "$ROOT"
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz

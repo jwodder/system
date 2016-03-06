@@ -23,6 +23,7 @@ perl-doc
 popularity-contest
 postfix
 postgresql
+postgrey
 procmail
 pwgen
 python-bitarray
@@ -44,6 +45,7 @@ unicode
 wikipedia2text
 youtube-dl  # --no-install-recommends
 graphviz
+python-jsonschema
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible

@@ -6,3 +6,4 @@
 /root/.distlib
 /root/.local
 /root/.pylint.d
+venv
