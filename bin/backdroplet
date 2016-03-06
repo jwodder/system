@@ -1,7 +1,12 @@
 #!/bin/bash
-# Usage: sudo ./drop-backup [--rsync-only]
+# Usage: sudo ./backdroplet [--rsync-only] [VENV_PATH]
+if [ "$1" = "--rsync-only" ]
+then rsync_only=1
+     shift
+fi
+
 ROOT=/var/backups/jwodder
-: "${VENV_PATH:=/var/lib/jwodder/dropbox}"
+VENV_PATH="${1:-/usr/local/virtualenvs/dropbox}"
 
 if ((EUID != 0))
 then echo "$0: This script must be run as root."
@@ -33,7 +38,7 @@ then sudo -u postgres pg_dumpall > "$ROOT/postgres.sql"
 else rm -rf "$ROOT/postgres.sql"
 fi
 
-[ "$1" != "--rsync-only" ] || exit 0
+[ -z "$rsync_only" ] || exit 0
 
 cd "$ROOT"
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
