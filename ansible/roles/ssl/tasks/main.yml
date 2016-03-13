@@ -29,6 +29,6 @@
     content: |
         #!/bin/bash
         test -e /etc/letsencrypt -a \
-             -z "$(find /etc/letsencrypt/live/*/cert.pem -mtime 60 -print)" || \
+             -z "$(find /etc/letsencrypt/live/*/cert.pem -mtime +60 -print)" || \
             chronic /opt/jwodder/bin/letsencrypt "{{letsencrypt_venv}}"
     mode: 0755
