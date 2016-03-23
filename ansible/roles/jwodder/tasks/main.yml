@@ -2,7 +2,7 @@
 - name: Create jwodder
   user:
     name: jwodder
-    groups: adm,staff,sudo,users #,docker
+    groups: adm,staff,sudo,users  #,docker
     # `adm` membership lets me read files in `/var/log` without the need for
     # `sudo`.
     append: true
@@ -39,10 +39,11 @@
     name: "{{item.key}}"
     value: "{{item.value}}"
   with_dict:
+    CONTENT_TYPE: 'text/plain; charset="utf-8"'
+    CRONNING: 'true'
     LANG: en_US.UTF-8
     LC_ALL: en_US.UTF-8
     PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/jwodder/bin'
-    CRONNING: 'true'
 
 - name: Create cronjob for cleaning ~
   cron:
