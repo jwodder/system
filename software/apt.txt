@@ -46,6 +46,7 @@ wikipedia2text
 youtube-dl  # --no-install-recommends
 graphviz
 python-jsonschema
+ghostscript
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible

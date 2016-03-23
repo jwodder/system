@@ -26,6 +26,7 @@
    installed there
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
+ - cf. <http://unix.stackexchange.com/q/82093/11006>
 - Set up root's home directory
 
 - ssl: If the domains in /opt/jwodder/etc/domains don't match those in the

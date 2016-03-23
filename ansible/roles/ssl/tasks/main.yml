@@ -8,6 +8,7 @@
   register: lenc
 
 - block:
+    ### Could letsencrypt be installed directly via pip instead?
     - git:
         repo: https://github.com/letsencrypt/letsencrypt.git
         dest: /tmp/letsencrypt
