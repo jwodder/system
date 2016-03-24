@@ -1,0 +1,13 @@
+---
+- name: Install PostgreSQL
+  apt: name={{item}} state=present update_cache=no
+  with_items:
+    - postgresql
+    - python-psycopg2
+
+# This makes the pager always use -S when doing `sudo -u postgres psql`:
+- lineinfile:
+    dest: ~postgres/.psqlrc
+    regexp: '^\\setenv LESS\b'
+    line: '\setenv LESS -iS'
+    backup: true
