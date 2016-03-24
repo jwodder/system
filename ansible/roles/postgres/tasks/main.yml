@@ -11,3 +11,10 @@
     regexp: '^\\setenv LESS\b'
     line: '\setenv LESS -iS'
     backup: true
+
+# This lets me do `psql DATABASE` without needing `sudo` or an explicit login:
+- postgresql_user:
+    name: "{{admin_user}}"
+    role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
+  become_user: postgres
+  when: admin_user is defined
