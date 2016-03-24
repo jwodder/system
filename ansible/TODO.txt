@@ -17,6 +17,7 @@
  - Add personal cronjob "0 8 * * * dailyreport | sendmail -t"
 - Split the setup of Google 2FA into a separate role?
 - Make the name of the "jwodder" account configurable?
+- When Docker is installed, add jwodder to the docker group
 - ???
 
 - Set up two possible modes of behavior: one for running against localhost,
@@ -32,16 +33,9 @@
 - ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
   current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
 - Add an option for installing dropbox "normally" rather than in a virtualenv?
+- devel: Install jq, with an option for controlling whether to install from
+  source or apt
 - Other packages to consider automatically installing:
- - python-pip
- - python-dev
- - build-essential
  - apt-file
  - pwgen
- - python-virtualenv
- - python3-pip
- - python3-dev
- - jq [from source]
- - python-requests
- - Docker?
  - tree

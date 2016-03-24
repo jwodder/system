@@ -1,6 +1,7 @@
 apache2
 apt-file
 apt-transport-https
+bikeshed  # --no-install-recommends
 build-essential
 debconf-utils
 devscripts
@@ -10,13 +11,17 @@ fortunes-debian-hints
 fortunes-min
 fortunes-ubuntu-server
 gforth
+ghostscript
 git
+graphviz
 htop
 irssi
 libncurses5-dev
 libncursesw5-dev
 libpam-google-authenticator
 mailutils
+miscfiles
+moreutils
 mutt
 ncurses-doc
 perl-doc
@@ -28,6 +33,7 @@ procmail
 pwgen
 python-bitarray
 python-dev
+python-jsonschema
 python-pip
 python-psycopg2
 python-virtualenv
@@ -36,17 +42,12 @@ rs
 software-properties-common
 sqlite3
 tree
-unzip
-zip
-moreutils
-miscfiles
-bikeshed  # --no-install-recommends
 unicode
+units
+unzip
 wikipedia2text
 youtube-dl  # --no-install-recommends
-graphviz
-python-jsonschema
-ghostscript
+zip
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
