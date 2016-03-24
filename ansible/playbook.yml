@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-  sudo: yes
+  sudo: true
   roles:
     - base
     - jwodder

@@ -1,0 +1,14 @@
+---
+- postgresql_user:
+    name: logger
+    ### Assumes Ansible is running on localhost from /opt/jwodder/ansible
+    password: "{{ lookup('password', '/opt/jwodder/etc/localhost/logger length=32 chars=ascii_letters,digits') }}"
+    encrypted: true
+    role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
+  become_user: postgres
+
+- postgresql_db:
+    name: logs
+    owner: logger
+    encoding: utf8
+  become_user: postgres
