@@ -3,8 +3,8 @@ apt-file
 apt-transport-https
 bikeshed  # --no-install-recommends
 build-essential
-debconf-utils
-devscripts
+debconf-utils  # for `debconf-get-selections`
+devscripts  # for `rmadison`
 fail2ban
 fortune-mod
 fortunes-debian-hints
