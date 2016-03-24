@@ -1,11 +1,3 @@
--- This lets me do `psql DATABASE` without needing `sudo` or an explicit login:
-CREATE USER jwodder WITH NOSUPERUSER CREATEDB CREATEROLE;
-
-CREATE USER logger WITH NOSUPERUSER CREATEDB CREATEROLE
-                        ENCRYPTED PASSWORD '---REDACTED---';
-
-CREATE DATABASE logs WITH OWNER logger ENCODING 'utf8';
-
 \connect logs
 
 -- <http://stackoverflow.com/a/6454469>
@@ -65,23 +57,3 @@ CREATE TABLE inbox_tocc (
 ALTER TABLE public.inbox_contacts OWNER TO logger;
 ALTER TABLE public.inbox OWNER TO logger;
 ALTER TABLE public.inbox_tocc OWNER TO logger;
-
-
-CREATE USER tmpban WITH NOSUPERUSER CREATEDB CREATEROLE
-                        ENCRYPTED PASSWORD '---REDACTED---';
-
-CREATE DATABASE tmpban WITH OWNER tmpban ENCODING 'utf8';
-
-\connect tmpban
-
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO jwodder;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO jwodder;
-
-CREATE TABLE bans (
-    ip_addr inet PRIMARY KEY,
-    ban_start timestamp with time zone NOT NULL,
-    ban_end timestamp with time zone NOT NULL,
-    reason varchar(255)
-);
-
-ALTER TABLE public.bans OWNER TO tmpban;
