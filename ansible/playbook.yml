@@ -1,6 +1,10 @@
 ---
-- hosts: localhost
+- hosts: all
   sudo: true
   roles:
     - base
-    - jwodder
+
+- hosts: admin
+  sudo: true
+  roles:
+    - admin

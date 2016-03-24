@@ -38,10 +38,6 @@ tool = vimdiff
 [push]
 default = simple
 
-#[url "ssh://jwodder@meta.freeshell.org/arpa/gm/j/jwodder/"]
-## Yes, the trailing slash is very necessary.
-#insteadOf = sdf:
-
 #[user]
-#name = John T. Wodder II
-#email = jwodder@sdf.lonestar.org
+#name = ???
+#email = ???

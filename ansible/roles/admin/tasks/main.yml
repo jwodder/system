@@ -1,41 +1,45 @@
 ---
-- name: Create jwodder
+- set_fact:
+    # This makes the variable accessible to subsequent roles, right?
+    admin_user: "{{admin_user}}"
+
+- name: Create admin user
   user:
-    name: jwodder
+    name: "{{admin_user}}"
     groups: adm,staff,sudo,users  #,docker
     # `adm` membership lets me read files in `/var/log` without the need for
     # `sudo`.
     append: true
     shell: /bin/bash
-    home: /home/jwodder
+    home: "/home/{{admin_user}}"
     move_home: true
-    comment: 'John T. Wodder II'
+    comment: "{{admin_gecos}}"
     generate_ssh_key: true
     ssh_key_type: rsa
-    ssh_key_comment: "jwodder@{{ansible_hostname}}"
+    ssh_key_comment: "{{admin_user}}@{{ansible_hostname}}"
 
 - name: Fetch root's authorized_keys
   command: cat /root/.ssh/authorized_keys
   register: authkeys
 
-- name: Add root's authorized_keys to jwodder's
-  authorized_key: user=jwodder manage_dir=true key="{{authkeys.stdout}}"
+- name: Add root's authorized_keys to admin's
+  authorized_key: user={{admin_user}} manage_dir=true key="{{authkeys.stdout}}"
 
-- name: Set up Google Authenticator for jwodder
+- name: Set up Google Authenticator for admin
   shell: 'yes | google-authenticator'
   args:
-    creates: /home/jwodder/.google_authenticator
-  become_user: jwodder
+    creates: "/home/{{admin_user}}/.google_authenticator"
+  become_user: "{{admin_user}}"
 
-- name: Give jwodder permission to run `sudo ufw` without a password
+- name: Give admin permission to run `sudo ufw` without a password
   lineinfile:
     dest: /etc/sudoers
-    line: 'jwodder ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw'
+    line: '{{admin_user}} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw'
     validate: 'visudo -cf %s'
 
-- name: Set crontab variables
+- name: Set admin's crontab variables
   cronvar:
-    user: jwodder
+    user: "{{admin_user}}"
     name: "{{item.key}}"
     value: "{{item.value}}"
   with_dict:
@@ -45,9 +49,9 @@
     LC_ALL: en_US.UTF-8
     PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/jwodder/bin'
 
-- name: Create cronjob for cleaning ~
+- name: Create cronjob for cleaning admin's ~
   cron:
-    user: jwodder
+    user: "{{admin_user}}"
     name: purge
     minute: 0
     hour: 9
