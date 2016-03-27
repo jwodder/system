@@ -31,11 +31,18 @@
     creates: "/home/{{admin_user}}/.google_authenticator"
   become_user: "{{admin_user}}"
 
-- name: Give admin permission to run `sudo ufw` without a password
-  lineinfile:
-    dest: /etc/sudoers
-    line: '{{admin_user}} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw'
+- name: Give admin special sudo powers
+  template:
+    ### TODO: Files in /etc/sudoers.d are ignored if their names contain a
+    ### period.  Look for a way to handle this that doesn't cause problems when
+    ### both foo.bar and foo-bar are set up as admin users with this role.
+    dest: "/etc/sudoers.d/{{admin_user|replace('.', '-')}}"
+    src: sudoer
     validate: 'visudo -cf %s'
+    mode: 0440
+    owner: root
+    group: root
+    backup: true
 
 - name: Set admin's crontab variables
   cronvar:

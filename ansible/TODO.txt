@@ -32,7 +32,8 @@
  - cf. <http://unix.stackexchange.com/q/82093/11006>
 - Set up root's home directory
 - Set up the admin user's home directory with home.git?
-- Make the `/opt/jwodder` (and `/var/log/jwodder`?) path configurable
+- Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)
+  path configurable
 
 - ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
   current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
