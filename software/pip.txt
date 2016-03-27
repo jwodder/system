@@ -8,6 +8,7 @@ Sphinx
 SQLAlchemy
 
 docker-compose  # in a virtualenv
+youtube-dl  # in a virtualenv; apt-get version is out of date
 
 # No need to carry over to new/clean systems:
 docopt

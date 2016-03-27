@@ -17,6 +17,9 @@
  - Add personal cronjob "0 8 * * * dailyreport | sendmail -t"
 - Split the setup of Google 2FA into a separate role?
 - When Docker is installed, add jwodder to the docker group
+- devel: Install docker-compose
+- Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
+  `pip` & `pip3`?
 - ???
 
 - Set up two possible modes of behavior: one for running against localhost,

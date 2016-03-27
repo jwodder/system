@@ -104,3 +104,11 @@
 - name: Enable new timezone setting
   command: dpkg-reconfigure -f noninteractive tzdata
   when: timezone_changed|changed
+
+- name: Make `sudo` always reset $HOME
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: 'Defaults\s+always_set_home'
+    line: 'Defaults always_set_home'
+    # It doesn't seem to matter where the directive is placed in the file.
+    validate: 'visudo -cf %s'

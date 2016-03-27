@@ -46,7 +46,6 @@ unicode
 units
 unzip
 wikipedia2text
-youtube-dl  # --no-install-recommends
 zip
 
 # apt-add-repository -y ppa:ansible/ansible
