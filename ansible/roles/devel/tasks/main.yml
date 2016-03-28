@@ -26,3 +26,14 @@
 - name: Add admin user to `docker` group
   user: name={{admin_user}} groups=docker append=true
   when: admin_user is defined
+
+- name: Install docker-compose
+  pip:
+    name: docker-compose
+    state: "{{update_docker_compose|ternary('latest', 'present')}}"
+    virtualenv: "{{docker_compose_venv}}"
+
+- file:
+    path: /usr/local/bin/docker-compose
+    src: "{{docker_compose_venv}}/bin/docker-compose"
+    state: link

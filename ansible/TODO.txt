@@ -16,7 +16,6 @@
 - Set up dailyreport
  - Add personal cronjob "0 8 * * * dailyreport | sendmail -t"
 - Split the setup of Google 2FA into a separate role?
-- devel: Install docker-compose
 - Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
   `pip` & `pip3`?
 - ???
