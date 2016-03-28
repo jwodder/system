@@ -1,7 +1,11 @@
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
-notify_classes = 2bounce, delay, policy, protocol, resource, software
+notify_classes = bounce, 2bounce, data, delay, resource, software
+# Do NOT include 'protocol' in 'notify_classes' unless you want to be flooded
+# with notifications from easily-defeated script-kiddie break-in attempts.
+# Also, don't include 'policy' unless you want you be notified possibly
+# multiple times whenever greylisting delays something.
 readme_directory = /usr/share/doc/postfix
 html_directory = /usr/share/doc/postfix/html
 

@@ -1,0 +1,32 @@
+---
+- name: Install spf-tools
+  git:
+    repo: https://github.com/jsarenik/spf-tools
+    dest: /usr/local/spf-tools
+    update: false
+  notify:
+    - Run postwhite
+
+- name: Install postwhite
+  git:
+    repo: https://github.com/stevejenkins/postwhite
+    dest: /usr/local/postwhite
+    update: false
+  notify:
+    - Run postwhite
+
+- name: Configure postwhite
+  lineinfile:
+    dest: /usr/local/postwhite/postwhite
+    regexp: '^spfttoolspath='
+    line: 'spfttoolspath=/usr/local/spf-tools'
+  notify:
+    - Run postwhite
+
+- name: Create postwhite cronjob
+  copy:
+    dest: /etc/cron.daily/postwhite
+    content: |
+        #!/bin/bash
+        chronic /usr/local/postwhite/postwhite
+    mode: 0755

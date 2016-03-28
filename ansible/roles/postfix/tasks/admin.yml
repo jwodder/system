@@ -1,0 +1,27 @@
+---
+- file:
+    path: /home/{{admin_user}}/Mail
+    state: directory
+    owner: "{{admin_user}}"
+    group: "{{admin_user}}"
+
+- lineinfile:
+    dest: /home/{{admin_user}}/.procmailrc
+    regexp: '^DEFAULT='
+    line: 'DEFAULT=$HOME/Mail/INBOX'
+    insertbefore: BOF
+    backup: yes
+    create: true
+    owner: "{{admin_user}}"
+    group: "{{admin_user}}"
+
+- lineinfile:
+    dest: /home/{{admin_user}}/.profile
+    regexp: '^export MAIL='
+    line: 'export MAIL=$HOME/Mail/INBOX'
+    backup: yes
+
+- command: mv -n /var/mail/{{admin_user}} /home/{{admin_user}}/Mail/INBOX
+  args:
+    creates: /home/{{admin_user}}/Mail/INBOX
+    removes: /var/mail/{{admin_user}}

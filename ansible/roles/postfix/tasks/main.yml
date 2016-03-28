@@ -1,0 +1,95 @@
+---
+
+### Add a DNS A record (`mail.varonathe.org`) pointing to the mail server's IP
+
+### Add a DNS MX record pointing to `mail.varonathe.org`
+
+- name: Allow incoming SMTP connections
+  ufw: rule=allow to_ip=any to_port=25 proto=any direction=in
+
+- debconf:
+    name: postfix
+    question: postfix/main_mailer_type
+    vtype: select
+    value: Internet Site
+
+- debconf:
+    name: postfix
+    question: postfix/mailname
+    vtype: string
+    value: "{{domain}}"  ### Set to first line of etc/domains?
+
+- apt: name={{item}} state=present update_cache=no
+  with_items:
+    - postfix
+    - postgrey
+    - procmail
+
+- include: postwhite.yml
+
+- name: Add admin user to `mail` group
+  user: name={{admin_user}} groups=mail append=true
+
+- name: Create luser_relay user
+  user:
+    name: "{{luser}}"
+    groups: mail
+    append: true
+    shell: /bin/bash
+    home: "/home/{{luser}}"
+    move_home: true
+    comment: 'Mail Failure'
+
+- file: dest=/var/log/jwodder/{{item}} mode=0666 state=touch
+  with_items:
+    - maillog.err
+    - procmail.err
+    - fatal.email
+
+- name: Remove the contents of /etc/postgrey/whitelist_recipients
+  copy:
+    dest: /etc/postgrey/whitelist_recipients
+    content: ''
+
+###
+- Configure `/etc/postfix/main.cf` (and trigger a restart of Postfix)
+- Configure `/etc/aliases`
+- Run `newaliases` to update Postfix's knowledge of `/etc/aliases`
+###
+
+### Make this conditional on whether PostgreSQL is installed?
+### (Some sort of integration with PostgreSQL is needed here.)
+- copy: src=etc.procmailrc dest=/etc/procmailrc
+
+- copy:
+    src: luser.procmailrc
+    dest: /home/{{luser}}/.procmailrc
+    owner: "{{luser}}"
+    group: "{{luser}}"
+
+- include: admin.yml
+  when: admin_user is defined
+
+- name: Create /var/mail.old
+  file:
+    path: /var/mail.old
+    state: directory
+    owner: mail
+    group: mail
+    mode: 0775
+
+- copy:
+    src: mailboxes.logrotate
+    dest: /etc/logrotate.d/mailboxes
+    # The logrotate manpage doesn't mention that you need to chown root, but
+    # it's very necessary.
+    owner: root
+    group: root
+
+- name: Create cronjob for deleting old e-mails
+  copy:
+    dest: /etc/cron.weekly/purge-mail
+    content: |
+        #!/bin/bash
+        find /var/mail.old -type f -mtime +42 -delete
+    mode: 0755

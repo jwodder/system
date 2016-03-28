@@ -17,6 +17,8 @@ jtw:           jwodder
 mborogove:     jwodder
 mimsy:         jwodder
 minimiscience: jwodder
+nethack:       jwodder
+pypi:          jwodder
 wodder:        jwodder
 
 root:          jwodder

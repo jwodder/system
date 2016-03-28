@@ -6,6 +6,7 @@
     - libncurses5-dev
     - libncursesw5-dev
     - ncurses-doc
+    - patch
     - perl-doc
     - python-dev
     - python-pip

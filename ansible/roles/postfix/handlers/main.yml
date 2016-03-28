@@ -1,0 +1,6 @@
+---
+- name: Restart Postfix
+  service: name=postfix state=restarted
+
+- name: Run postwhite
+  command: /usr/local/postwhite/postwhite

@@ -17,7 +17,7 @@ set -ex
 mkdir -p "$ROOT"
 
 for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
-           /opt/jwodder /opt/jwodder-postfix
+           /opt/jwodder
 do if [ -e "$dir" ]
    then if [ "$dir" = /var/www ]
         then links=
