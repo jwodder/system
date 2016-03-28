@@ -27,9 +27,6 @@
 
 - include: postwhite.yml
 
-- name: Add admin user to `mail` group
-  user: name={{admin_user}} groups=mail append=true
-
 - name: Create luser_relay user
   user:
     name: "{{luser}}"

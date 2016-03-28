@@ -6,7 +6,7 @@
 - name: Create admin user
   user:
     name: "{{admin_user}}"
-    groups: adm,staff,sudo,users  #,docker
+    groups: adm,staff,sudo,users
     # `adm` membership lets me read files in `/var/log` without the need for
     # `sudo`.
     append: true

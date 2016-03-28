@@ -8,3 +8,5 @@
   sudo: true
   roles:
     - admin
+
+# The admin role must come before the following: devel, postfix

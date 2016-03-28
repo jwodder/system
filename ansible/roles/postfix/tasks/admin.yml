@@ -1,4 +1,7 @@
 ---
+- name: Add admin user to `mail` group
+  user: name={{admin_user}} groups=mail append=true
+
 - file:
     path: /home/{{admin_user}}/Mail
     state: directory
