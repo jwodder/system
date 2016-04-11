@@ -1,0 +1,11 @@
+---
+- name: Install vnstat
+  apt: name=vnstat state=present update_cache=no
+
+- name: Create dailyreport cronjob
+  cron:
+    user: "{{dailyreporter}}"
+    name: dailyreport
+    minute: 0
+    hour: 8
+    job: '/opt/jwodder/bin/dailyreport | sendmail -t'

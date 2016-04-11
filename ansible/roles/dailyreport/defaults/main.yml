@@ -1,0 +1,2 @@
+---
+dailyreporter: "{% if admin_user is defined %}{{admin_user}}{% else %}root{% endif %}"

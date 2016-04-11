@@ -1,0 +1,4 @@
+---
+dependencies:
+    - role: logsdb
+    - role: postfix
