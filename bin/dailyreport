@@ -19,6 +19,7 @@ from   psycopg2      import connect
 
 credsfile = '/opt/jwodder/etc/logger.json'
 mailbox = '/home/jwodder/Mail/INBOX'
+netdevice = 'eth0'
 disk_threshold = 50
 ssh_threshold = 20
 smtp_threshold = 2
@@ -241,12 +242,26 @@ def ban_http():
             baddies[ip_addr] += 1
     return ban_ips('bad HTTP requests', over_threshold(baddies, http_threshold))
 
+def check_vnstat():
+    vnstat = subprocess.check_output(['vnstat', '--dumpdb', '-i', netdevice])
+    yesterday = [s for s in vnstat.splitlines() if s.startswith('d;1;')]
+    assert len(yesterday) == 1
+    _, _, mrx, mtx, krx, ktx, _ = map(int, yesterday[0].split(';')[1:])
+    sent = longint(mtx * 1024 + ktx)
+    received = longint(mrx * 1024 + krx)
+    width = max(len(sent), len(received))
+    return 'Data sent yesterday:     %*s KiB\n' \
+           'Data received yesterday: %*s KiB\n' \
+           % (width, sent, width, received)
+
+
 body = ''
 for check in [
         check_mailbox,
         check_errlogs,
         check_reboot,
         check_load,
+        check_vnstat,
         check_disk,
         check_inbox,
         check_authfail,
