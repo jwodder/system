@@ -1,14 +1,28 @@
 - Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
   etc.) in `/opt/jwodder/etc/localhost/` outside of version control
-- Apply changed configurations back to firefly
+    - The installation procedure should populate this folder with default
+      config files, though
+    - The following should be configurable via these config files:
+        - `dailyreport`:
+            - the e-mail address to which dailyreport sends its report
+                - Minimize the amount of e-mail mistakenly sent to me
+            - `mailbox`
+            - `netdevice`
+            - thresholds
+        - what `backdroplet` should back up
 - Put on GitHub (after purging passwords from the repository, of course)
-    - Make the `dailyreport` recipient address configurable in such a way as to
-      minimize the amount of e-mail mistakenly sent to me
+- Make the database-using programs get the DB password from
+  `/opt/jwodder/etc/localhost/logger` instead of `/opt/jwodder/etc/logger.json`
 - Have `backdroplet` exclude files listed in `cruft`
 - Make the e-mail passed to `letsencrypt` configurable
-- Add a host-specific config file for specifying what `backdroplet` should back
-  up
 - Rename `/var/backups/jwodder` to `/var/backups/$HOSTNAME`?
+- Add a role or playbook that updates all available packages, including forcing
+  updates of virtualenvs
+- On Xenial+, install letsencrypt and/or docker-compose via apt-get?
+- Place the apache config in a file named `varonathe.org.conf` instead of using
+  the default config files
+- Make dailyreport automatically adjust if Apache isn't installed
+
 - Add a role for setting up Transmission:
     - Install `transmission-daemon` and `transmission-cli`
     - Configure `/etc/transmission-daemon/settings.json` (cf.
@@ -19,12 +33,6 @@
       `/etc/init/transmission-daemon.override` exists and contains the line
       "`manual`"
     - `sudo service transmission-daemon reload`
-- Add a role or playbook that updates all available packages, including forcing
-  updates of virtualenvs
-- On Xenial+, install letsencrypt and/or docker-compose via apt-get?
-- Place the apache config in a file named `varonathe.org.conf` instead of using
-  the default config files
-- Make dailyreport automatically adjust if Apache isn't installed
 
 - tmpban system:
     - Add support for IPv6
