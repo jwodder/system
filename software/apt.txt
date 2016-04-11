@@ -1,7 +1,7 @@
 apache2
 apt-file
 apt-transport-https
-bikeshed  # --no-install-recommends
+bikeshed  # --no-install-recommends; for `dman`
 build-essential
 debconf-utils  # for `debconf-get-selections`
 devscripts  # for `rmadison`
@@ -47,6 +47,10 @@ units
 unzip
 wikipedia2text
 zip
+rss2email
+dos2unix
+python-daemon
+vnstat
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -54,12 +58,14 @@ ansible
 # No need to carry over to new/clean systems:
 apt-doc
 ascii
+mailutils-doc
 mercurial
 postfix-doc
 python-apt-doc
 python3-psycopg2
 rsyslog-doc
 transmission-cli
+transmission-daemon
 
 # Installed by Let's Encrypt:
 dialog

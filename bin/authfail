@@ -42,7 +42,7 @@ with open(errorfile, 'a') as err:
                       r'(?: message repeated \d+ times: \[)?'
                       r' Failed (?:password|keyboard-interactive/pam) for'
                       r'(?: invalid user)? (\S+) from (\S+) port \d+ ssh2\]?$',
-		      line)
+                      line)
         if m:
             try:
                 cursor.execute('''

@@ -18,6 +18,8 @@
 - Split the setup of Google 2FA into a separate role?
 - Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
   `pip` & `pip3`?
+- Merge all of the roles into one, thereby ensuring that things are always run
+  in the correct order and allowing features to be toggled via variables?
 - ???
 
 - Set up two possible modes of behavior: one for running against localhost,
