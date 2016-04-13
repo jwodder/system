@@ -135,13 +135,18 @@ def check_inbox():
     if not inbox:
         return title + ' none\n'
     report = title + '\n---\n'
+    dests = subprocess.check_output(['postconf', '-hx', 'mydestination'])\
+                      .strip().lower().split(', ')
     for mid, sub, sender_name, sender_addr, size, date in inbox:
         cursor.execute('''
             SELECT c.realname, c.email_address
             FROM inbox_tocc AS t JOIN inbox_contacts AS c ON t.contact_id = c.id
-            WHERE t.msg_id = %s AND c.email_address LIKE '%%varonathe.org'
+            WHERE t.msg_id = %s
+                  AND lower(substring(c.email_address
+                                      FROM position('@' IN c.email_address)+1))
+                      = ANY(%s)
             ORDER BY c.realname ASC, c.email_address ASC
-        ''', (mid,))
+        ''', (mid, dests))
         recips = ','.join(map(formataddr, cursor.fetchall()))
         report += 'From:    ' + formataddr((sender_name, sender_addr)) + '\n' \
                   'To:      ' + recips + '\n' \
