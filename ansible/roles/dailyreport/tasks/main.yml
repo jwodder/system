@@ -2,6 +2,8 @@
 - name: Install vnstat
   apt: name=vnstat state=present update_cache=no
 
+### TODO: Make vnstat only monitor eth0?
+
 - name: Create dailyreport cronjob
   cron:
     user: "{{dailyreporter}}"
