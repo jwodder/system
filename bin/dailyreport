@@ -114,18 +114,6 @@ def check_apache_access():
     for reqline, qty in cursor.fetchall():
         tbl.add_row([qty, reqline])
     report += tbl.get_string() + '\n'
-
-    #cursor.execute('''
-    #    SELECT src_addr, count(*) AS qty FROM apache_today GROUP BY src_addr
-    #    ORDER BY qty DESC, src_addr ASC
-    #''')
-    #tbl = PrettyTable(["Visits", "IP Address"])
-    #tbl.align['Visits'] = 'r'
-    #tbl.align['IP Address'] = 'l'
-    #for addr, qty in cursor.fetchall():
-    #    tbl.add_row([qty, addr])
-    #report += tbl.get_string() + '\n\n'
-
     cursor.execute('SELECT sum(bytesIn), sum(bytesOut) FROM apache_today')
     bytesIn, bytesOut = map(longint, cursor.fetchone())
     width = max(len(bytesIn), len(bytesOut))
@@ -146,8 +134,6 @@ def check_inbox():
     inbox = cursor.fetchall()
     if not inbox:
         return title + ' none\n'
-    #tbl = PrettyTable(["From", "To", "Subject", "Date", "Size"])
-    #tbl.align = 'l'
     report = title + '\n---\n'
     for mid, sub, sender_name, sender_addr, size, date in inbox:
         cursor.execute('''
@@ -157,20 +143,12 @@ def check_inbox():
             ORDER BY c.realname ASC, c.email_address ASC
         ''', (mid,))
         recips = ','.join(map(formataddr, cursor.fetchall()))
-        #tbl.add_row([
-        #    formataddr((sender_name, sender_addr)),
-        #    recips,
-        #    sub, 
-        #    date.strftime(is8601),
-        #    size,
-        #])
         report += 'From:    ' + formataddr((sender_name, sender_addr)) + '\n' \
                   'To:      ' + recips + '\n' \
                   'Subject: ' + sub + '\n' \
                   'Date:    ' + date.strftime(iso8601) + '\n' \
                   'Size:    ' + str(size) + '\n' \
                   '---\n'
-    #return title + '\n' + tbl.get_string() + '\n'
     return report
 
 def check_mailbox():
@@ -253,7 +231,6 @@ def check_vnstat():
     return 'Data sent yesterday:     %*s KiB\n' \
            'Data received yesterday: %*s KiB\n' \
            % (width, sent, width, received)
-
 
 body = ''
 for check in [
