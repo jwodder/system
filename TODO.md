@@ -65,6 +65,8 @@ Ansible
   `pip` & `pip3`?
 - Merge all of the roles into one, thereby ensuring that things are always run
   in the correct order and allowing features to be toggled via variables?
+- Add an option for whether to install jq from source or apt
+- Add an option for whether to update jq
 
 - Set up two possible modes of behavior: one for running against localhost,
   another for running against remote hosts
@@ -82,8 +84,6 @@ Ansible
 - ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
   current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
 - Add an option for installing dropbox "normally" rather than in a virtualenv?
-- devel: Install jq, with an option for controlling whether to install from
-  source or apt
 - Other packages to consider automatically installing:
     - apt-file
     - pwgen

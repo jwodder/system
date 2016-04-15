@@ -37,3 +37,10 @@
     path: /usr/local/bin/docker-compose
     src: "{{docker_compose_venv}}/bin/docker-compose"
     state: link
+
+- name: Check whether jq is installed
+  get_bin_path: command=jq
+  register: jq
+
+- include: jq.yml
+  when: jq.path is none

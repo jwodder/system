@@ -19,8 +19,7 @@
     creates: /swapfile
   register: createdSwap
 
-- name: Set up swap space
-  block:
+- block:
     - file: path=/swapfile mode=0600
     - command: mkswap /swapfile
     - lineinfile: dest=/etc/fstab line="/swapfile none swap sw 0 0"

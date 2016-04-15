@@ -1,0 +1,37 @@
+---
+- name: Locate latest release of jq
+  uri:
+    url: https://api.github.com/repos/stedolan/jq/releases/latest
+    return_content: true
+  register: jqlatest
+
+- name: Download jq source
+  unarchive:
+    src: "{{jq_latest.json.tarball_url}}"
+    dest: /tmp
+    copy: false
+    list_files: true
+  register: jqsrc
+
+- set_fact:
+    build_dir: '/tmp/{{(jqsrc.files|map("dirname")|difference(["."])|sort)[0]}}'
+
+- name: Configure jq
+  command: ./configure
+  args:
+    chdir: "{{build_dir}}"
+
+- name: Build jq
+  command: make
+  args:
+    chdir: "{{build_dir}}"
+
+- name: Install jq
+  command: make install
+  args:
+    chdir: "{{build_dir}}"
+
+- name: Delete jq source
+  file:
+    path: "{{build_dir}}"
+    state: absent
