@@ -10,6 +10,7 @@
             - `netdevice`
             - thresholds
         - what `backdroplet` should back up
+        - the source & destination address for `xmission-done`
 - Put on GitHub (after purging passwords from the repository, of course)
 - Make the database-using programs get the DB password from
   `/opt/jwodder/etc/localhost/logger` instead of `/opt/jwodder/etc/logger.json`
@@ -22,17 +23,6 @@
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Make dailyreport automatically adjust if Apache isn't installed
-
-- Add a role for setting up Transmission:
-    - Install `transmission-daemon` and `transmission-cli`
-    - Configure `/etc/transmission-daemon/settings.json` (cf.
-      `settings.json.orig`)
-    - Create `/usr/local/bin/xmission-done`
-    - Open port 60069 (both TCP and UDP?)
-    - To keep Transmission from starting on system startup: Ensure
-      `/etc/init/transmission-daemon.override` exists and contains the line
-      "`manual`"
-    - `sudo service transmission-daemon reload`
 
 - tmpban system:
     - Add support for IPv6
