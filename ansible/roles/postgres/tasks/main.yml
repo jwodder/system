@@ -4,6 +4,7 @@
   with_items:
     - postgresql
     - python-psycopg2
+    - python3-psycopg2
 
 # This makes the pager always use -S when doing `sudo -u postgres psql`:
 - lineinfile:

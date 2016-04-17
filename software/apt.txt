@@ -51,6 +51,7 @@ rss2email
 dos2unix
 python-daemon
 vnstat
+python3-psycopg2
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -62,7 +63,6 @@ mailutils-doc
 mercurial
 postfix-doc
 python-apt-doc
-python3-psycopg2
 rsyslog-doc
 transmission-cli
 transmission-daemon
