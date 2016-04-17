@@ -1,11 +1,14 @@
-#!/usr/bin/python
-from   datetime    import datetime
+#!/usr/bin/python3
+# Only Python 3's decode_header decodes RFC2047-encoded e-mail addresses.
+from   datetime     import datetime
 import email
-from   email.utils import getaddresses, mktime_tz, parseaddr, parsedate_tz
+from   email.header import decode_header, make_header
+from   email.utils  import getaddresses, mktime_tz, parseaddr, parsedate_tz
 import json
 import logging
 import sys
-from   psycopg2    import connect
+from   psycopg2     import connect
+from   six          import text_type
 
 errorfile = '/var/log/jwodder/maillog.err'
 credsfile = '/opt/jwodder/etc/logger.json'
@@ -27,6 +30,11 @@ except Exception as e:
     #raise
     sys.exit(1)
 
+def get_header(msg, hdr):
+    # Why doesn't Python do this automatically?!?
+    return [text_type(make_header(decode_header(h)))
+            for h in msg.get_all(hdr, [])]
+
 def contactID(contact):
     # `contact` is a `(realname, email_address)` pair.
     cursor.execute('SELECT id FROM inbox_contacts WHERE realname = %s AND'
@@ -42,14 +50,14 @@ try:
     rawmsg = sys.stdin.read()
     size = len(rawmsg)
     msg = email.message_from_string(rawmsg)
-    subject = '\n'.join(msg.get_all('Subject', []))[:2048]
+    subject = '\n'.join(get_header(msg, 'Subject'))[:2048]
     #if '[DIE]' in subject:
     #	raise RuntimeError('Dying as requested')
-    sender = contactID(parseaddr(msg['From']))
-    date = datetime.utcfromtimestamp(mktime_tz(parsedate_tz(msg['Date'])))\
+    sender = contactID(parseaddr(get_header(msg, 'From')[0]))
+    date = datetime.utcfromtimestamp(mktime_tz(parsedate_tz(get_header(msg, 'Date')[0])))\
                    .strftime('%Y-%m-%dT%H:%M:%SZ')
-    recips = set(map(contactID, getaddresses(msg.get_all('To', [])
-                                           + msg.get_all('CC', []))))
+    recips = set(map(contactID, getaddresses(get_header(msg, 'To')
+                                           + get_header(msg, 'CC'))))
     cursor.execute('INSERT INTO inbox (timestamp, subject, sender, size,'
                    ' date) VALUES (statement_timestamp(), %s, %s, %s, %s)'
                    ' RETURNING id', (subject, sender, size, date))
