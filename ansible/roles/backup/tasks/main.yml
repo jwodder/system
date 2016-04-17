@@ -5,7 +5,7 @@
     - python-pip
     - python-virtualenv
 
-- name: Install Python Dropbox package
+- name: Install Python Dropbox SDK
   pip:
     name: dropbox
     state: "{{update_dropbox|ternary('latest', 'present')}}"
