@@ -58,8 +58,8 @@ try:
                    .strftime('%Y-%m-%dT%H:%M:%SZ')
     recips = set(map(contactID, getaddresses(get_header(msg, 'To')
                                            + get_header(msg, 'CC'))))
-    cursor.execute('INSERT INTO inbox (timestamp, subject, sender, size,'
-                   ' date) VALUES (statement_timestamp(), %s, %s, %s, %s)'
+    cursor.execute('INSERT INTO inbox (timestamp, subject, sender, size, date)'
+                   ' VALUES (statement_timestamp(), %s, %s, %s, %s)'
                    ' RETURNING id', (subject, sender, size, date))
     mid = cursor.fetchone()[0]
     cursor.executemany('INSERT INTO inbox_tocc (msg_id, contact_id)'
