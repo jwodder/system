@@ -47,9 +47,9 @@ def contactID(contact):
     return cid[0]
 
 try:
-    rawmsg = sys.stdin.read()
+    rawmsg = sys.stdin.buffer.read()
     size = len(rawmsg)
-    msg = email.message_from_string(rawmsg)
+    msg = email.message_from_bytes(rawmsg)
     subject = '\n'.join(get_header(msg, 'Subject'))[:2048]
     #if '[DIE]' in subject:
     #	raise RuntimeError('Dying as requested')
