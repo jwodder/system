@@ -33,6 +33,7 @@
     - Write all activity to a json-seq logfile
     - Replace with something based on <http://serverfault.com/a/303121/94797>?
     - Give up?
+    - Replace with fail2ban?
 
 Ansible
 -------
@@ -66,6 +67,7 @@ Ansible
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
+    - Use nullmailer?
 - Set up root's home directory
 - Set up the admin user's home directory with home.git?
 - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)

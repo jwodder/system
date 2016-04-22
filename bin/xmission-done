@@ -1,7 +1,12 @@
 #!/bin/bash
-export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+FROM_ADDR='xmission@varonathe.org'
+TO_ADDR='jwodder@gmail.com'
 
-jq -nS --indent 4 'env | with_entries(select(.key|startswith("TR_")))' | \
-    mail -r xmission@varonathe.org \
-         -s "Download complete: $TR_TORRENT_NAME" \
-         -t jwodder@gmail.com
+curl --mail-from "$FROM_ADDR" --mail-rcpt "$TO_ADDR" -T- \
+    smtp://localhost:25 <<EOT
+Subject: Download complete: $TR_TORRENT_NAME
+From: $FROM_ADDR
+To: $TO_ADDR
+
+$(jq -nS --indent 4 'env | with_entries(select(.key|startswith("TR_")))')
+EOT
