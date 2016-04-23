@@ -67,6 +67,7 @@ python-apt-doc
 rsyslog-doc
 transmission-cli
 transmission-daemon
+transmission-remote-cli
 
 # Installed by Let's Encrypt:
 dialog

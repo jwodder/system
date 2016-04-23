@@ -68,7 +68,7 @@ Ansible
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
-    - Use nullmailer?
+    - Use nullmailer? dma?
 - Set up root's home directory
 - Set up the admin user's home directory with home.git?
 - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)

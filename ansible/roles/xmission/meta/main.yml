@@ -1,4 +1,3 @@
 ---
 dependencies:
-    - role: devel  # for jq
     - role: postfix

@@ -7,5 +7,10 @@ Subject: Download complete: $TR_TORRENT_NAME
 From: $FROM_ADDR
 To: $TO_ADDR
 
-$(jq -nS --indent 4 'env | with_entries(select(.key|startswith("TR_")))')
+$TR_TORRENT_NAME
+Torrent #$TR_TORRENT_ID ($TR_TORRENT_HASH)
+Download dir: $TR_TORRENT_DIR
+
+-- 
+Transmission $TR_APP_VERSION
 EOT
