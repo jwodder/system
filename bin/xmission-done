@@ -2,8 +2,7 @@
 FROM_ADDR='xmission@varonathe.org'
 TO_ADDR='jwodder@gmail.com'
 
-curl --mail-from "$FROM_ADDR" --mail-rcpt "$TO_ADDR" -T- \
-    smtp://localhost:25 <<EOT
+sendmail -t <<EOT
 Subject: Download complete: $TR_TORRENT_NAME
 From: $FROM_ADDR
 To: $TO_ADDR
