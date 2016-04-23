@@ -8,7 +8,8 @@
     - htop
     - libpam-google-authenticator
     - moreutils  # chronic
-    - software-properties-common
+    - software-properties-common  # apt-add-repository
+      # also depends on unattended-upgrades
     - unzip
     - ufw
     - zip
@@ -111,3 +112,20 @@
     line: 'Defaults always_set_home'
     # It doesn't seem to matter where the directive is placed in the file.
     validate: 'visudo -cf %s'
+
+- name: Enable unattended upgrades
+  debconf:
+    name: unattended-upgrades
+    question: unattended-upgrades/enable_auto_updates
+    vtype: boolean
+    value: true
+  register: unattup
+
+- name: Enable new unattended-upgrades settings
+  command: dpkg-reconfigure -f noninteractive unattended-upgrades
+  when: unattup|changed
+
+- name: Configure unattended-upgrades
+  template:
+    src: apt.conf
+    dest: /etc/apt/apt.conf.d/99jwodder

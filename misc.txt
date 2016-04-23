@@ -1,10 +1,2 @@
-- Enabled unattended-upgrades with `sudo dpkg-reconfigure unattended-upgrades`
-    - Set the following values in `/etc/apt/apt.conf.d/50unattended-upgrades`:
-
-            Unattended-Upgrade::InstallOnShutdown "false";
-            Unattended-Upgrade::Mail "jwodder";
-            Unattended-Upgrade::MailOnlyOnError "false";
-            Unattended-Upgrade::Automatic-Reboot "false";
-
 - Uncommented the `trusty-backports` lines in `/etc/apt/sources.list` (Doable
   with `apt-add-repository`?)

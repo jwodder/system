@@ -19,7 +19,7 @@
 - Rename `/var/backups/jwodder` to `/var/backups/$HOSTNAME`?
 - Add a role or playbook that updates all available packages, including forcing
   updates of virtualenvs
-- On Xenial+, install letsencrypt and/or docker-compose via apt-get?
+- On Xenial+, install letsencrypt via apt-get?
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Make dailyreport automatically adjust if Apache isn't installed
@@ -58,6 +58,7 @@ Ansible
   in the correct order and allowing features to be toggled via variables?
 - Add an option for whether to install jq from source or apt
 - Add an option for whether to update jq
+- Replace `get_bin_path` with just a call to `which`?
 
 - Set up two possible modes of behavior: one for running against localhost,
   another for running against remote hosts

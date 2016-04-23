@@ -21,7 +21,7 @@
     - 'session [default=1] pam_lastlog.so nowtmp showfailed'
 
 - name: Disable cruft in login message
-- file:
+  file:
     ### TODO: This will fail when the file doesn't exist; fix this!
     path: "/etc/update-motd.d/{{item}}"
     mode: 0644
@@ -34,3 +34,4 @@
     dest: /etc/update-motd.d/50-landscape-sysinfo
     regexp: 'landscape-sysinfo(?! --exclude-sysinfo-plugins)'
     replace: 'landscape-sysinfo --exclude-sysinfo-plugins=LandscapeLink'
+    backup: true
