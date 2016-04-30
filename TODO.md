@@ -23,6 +23,7 @@
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Make dailyreport automatically adjust if Apache isn't installed
+- Replace dropboxadd with <https://github.com/andreafabrizi/Dropbox-Uploader>
 
 - tmpban system:
     - Add support for IPv6
@@ -68,7 +69,7 @@ Ansible
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
-    - Use nullmailer? dma?
+    - Use nullmailer? dma? Mailgun?
 - Set up root's home directory
 - Set up the admin user's home directory with home.git?
 - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)

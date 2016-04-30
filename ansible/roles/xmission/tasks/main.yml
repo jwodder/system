@@ -19,12 +19,12 @@
         script-torrent-done-enabled: true
         script-torrent-done-filename: "/opt/jwodder/bin/xmission-done"
         seed-queue-enabled: true
-        speed-limit-down: 300
+        speed-limit-down: 200
         speed-limit-down-enabled: true
-        speed-limit-up: 300
+        speed-limit-up: 200
         speed-limit-up-enabled: true
         trash-original-torrent-files: true
-        watch-dir: "/home/debian-transmission/watch"
+        watch-dir: "/var/lib/transmission-daemon/watch"
         watch-dir-enabled: false
   notify:
     - Reload Transmission
@@ -40,3 +40,15 @@
     create: true
     owner: root
     group: root
+
+- name: Create watch dir
+  file:
+    path: /var/lib/transmission-daemon/watch
+    state: directory
+    owner: debian-transmission
+    group: debian-transmission
+    mode: 0775
+
+- name: Add admin user to `debian-transmission` group
+  user: name={{admin_user}} groups=debian-transmission append=true
+  when: admin_user is defined

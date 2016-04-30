@@ -1,3 +1,6 @@
+*.egg-info/
+*.pyc
+.*.swp
 /home/*/.cache
 /home/*/.distlib
 /home/*/.local
@@ -6,4 +9,5 @@
 /root/.distlib
 /root/.local
 /root/.pylint.d
+_build/
 venv
