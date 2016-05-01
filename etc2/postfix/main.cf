@@ -37,6 +37,7 @@ myorigin = varonathe.org
 mydomain = varonathe.org
 mydestination = varonathe.org,
                 mail.varonathe.org,
+                mg.varonathe.org,
                 firefly,
                 firefly.varonathe.org,
                 localhost,

@@ -24,6 +24,10 @@
   the default config files
 - Make dailyreport automatically adjust if Apache isn't installed
 - Replace dropboxadd with <https://github.com/andreafabrizi/Dropbox-Uploader>
+- Rewrite bin/letsencrypt to use the webroot and `renew` features:
+    - <https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04>
+    - <https://letsencrypt.readthedocs.io/en/latest/using.html#webroot>
+    - <https://letsencrypt.readthedocs.org/en/latest/using.html#renewal>
 
 - tmpban system:
     - Add support for IPv6
@@ -60,6 +64,9 @@ Ansible
 - Add an option for whether to install jq from source or apt
 - Add an option for whether to update jq
 - Replace `get_bin_path` with just a call to `which`?
+- Don't set up Google Authenticator for root?
+- Instead of checking out the entire Letsencrypt repository, only download a
+  zipfile/tarball of master
 
 - Set up two possible modes of behavior: one for running against localhost,
   another for running against remote hosts

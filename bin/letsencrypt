@@ -9,7 +9,7 @@ function installed {
 }
 
 set -ex
-DOMAINS="$(paste -d, -s ${1:-/opt/jwodder/etc/domains})"
+DOMAINS="$(paste -d, -s /opt/jwodder/etc/domains)"
 
 if installed apache2
 then service apache2 stop
