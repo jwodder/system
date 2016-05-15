@@ -19,7 +19,7 @@
     - python3-six
 
 - name: Install Docker
-  shell: 'wget -O- https://get.docker.io | bash -'
+  shell: 'wget -qO- https://get.docker.io | bash -'
   args:
     creates: /usr/bin/docker
 

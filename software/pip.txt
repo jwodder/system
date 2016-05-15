@@ -6,6 +6,7 @@ pylint  # apt-get version is very out of date.
 pyRFC3339
 Sphinx
 SQLAlchemy
+tox
 
 docker-compose  # in a virtualenv
 youtube-dl  # in a virtualenv; apt-get version is out of date

@@ -20,7 +20,7 @@ do if [ -e "$dir" ]
         then links=
         else links=--copy-unsafe-links
         fi
-        rsync -avR $links --delete --delete-excluded \
+        rsync -avRF $links --delete --delete-excluded \
               --exclude-from=/opt/jwodder/etc/backup.exclude \
               --exclude-from=<(find "$dir" -type d -exec test -e {}/.norsync ';' -print) \
               "$dir" "$ROOT"

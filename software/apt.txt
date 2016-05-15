@@ -39,7 +39,7 @@ python-psycopg2
 python-virtualenv
 python3-pip
 rs
-software-properties-common
+software-properties-common  # apt-add-repository
 sqlite3
 tree
 unicode

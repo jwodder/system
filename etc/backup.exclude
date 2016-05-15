@@ -9,5 +9,6 @@
 /root/.distlib
 /root/.local
 /root/.pylint.d
+__pycache__/
 _build/
 venv

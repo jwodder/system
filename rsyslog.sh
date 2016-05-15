@@ -14,7 +14,7 @@ sudo install -d -g syslog -m 0775 /var/log/jwodder
 sudo tee /etc/rsyslog.d/99-authfail.conf > /dev/null <<'EOT'
 module(load="omprog")
 
-if ($syslogfacility-text == "auth" or $syslogfacility-text == "authpriv") and $msg contains "Failed" and $programname == "sshd" then action(type="omprog" binary="/usr/local/bin/authfail" template="RSYSLOG_FileFormat")
+if ($syslogfacility-text == "auth" or $syslogfacility-text == "authpriv") and $msg contains "Failed" and $programname == "sshd" then action(type="omprog" binary="/opt/jwodder/bin/authfail" template="RSYSLOG_FileFormat")
 EOT
 
 sudo service rsyslog restart

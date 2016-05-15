@@ -28,6 +28,8 @@
     - <https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04>
     - <https://letsencrypt.readthedocs.io/en/latest/using.html#webroot>
     - <https://letsencrypt.readthedocs.org/en/latest/using.html#renewal>
+- Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
+  using SQLAlchemy
 
 - tmpban system:
     - Add support for IPv6
@@ -55,7 +57,7 @@ Ansible
 - Set up tmpban
     - Add personal cronjob "0 9 * * * untmpban --auto"
 - ssl: Add flags to letsencrypt-auto for automatically accepting the user
-  agreement
+  agreement (`--agree-tos`?)
 - Split the setup of Google 2FA into a separate role?
 - Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
   `pip` & `pip3`?
