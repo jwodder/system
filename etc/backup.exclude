@@ -1,11 +1,13 @@
 *.egg-info/
+*.hi
+*.o
 *.pyc
 .*.swp
-/home/*/.cache
+.cache
+.tox
 /home/*/.distlib
 /home/*/.local
 /home/*/.pylint.d
-/root/.cache
 /root/.distlib
 /root/.local
 /root/.pylint.d

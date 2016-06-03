@@ -5,6 +5,7 @@ bikeshed  # --no-install-recommends; for `dman`
 build-essential
 debconf-utils  # for `debconf-get-selections`
 devscripts  # for `rmadison`
+dos2unix
 fail2ban
 fortune-mod
 fortunes-debian-hints
@@ -31,28 +32,28 @@ postgresql
 postgrey
 procmail
 pwgen
+pyflakes
 python-bitarray
+python-daemon
 python-dev
 python-jsonschema
 python-pip
 python-psycopg2
 python-virtualenv
 python3-pip
+python3-psycopg2
 rs
+rss2email
 software-properties-common  # apt-add-repository
 sqlite3
 tree
 unicode
 units
 unzip
+vnstat
 wikipedia2text
 zip
-rss2email
-dos2unix
-python-daemon
-vnstat
-python3-psycopg2
-pyflakes
+apache2-utils  # htpasswd
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
