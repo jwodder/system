@@ -15,11 +15,11 @@
 - Make the database-using programs get the DB password from
   `/opt/jwodder/etc/localhost/logger` instead of `/opt/jwodder/etc/logger.json`
 - Have `backdroplet` exclude files listed in `cruft`
-- Make the e-mail passed to `letsencrypt` configurable
+- Don't back up `/root` with `backdroplet`?
+- Make the e-mail address passed to `letsencrypt` configurable
 - Rename `/var/backups/jwodder` to `/var/backups/$HOSTNAME`?
 - Add a role or playbook that updates all available packages, including forcing
   updates of virtualenvs
-- On Xenial+, install letsencrypt via apt-get?
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Make dailyreport automatically adjust if Apache isn't installed
@@ -27,9 +27,11 @@
 - Rewrite bin/letsencrypt to use the webroot and `renew` features:
     - <https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04>
     - <https://letsencrypt.readthedocs.io/en/latest/using.html#webroot>
-    - <https://letsencrypt.readthedocs.org/en/latest/using.html#renewal>
+    - <https://letsencrypt.readthedocs.io/en/latest/using.html#renewal>
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
+- Update the `ssl` role to use [certbot](https://github.com/certbot/certbot)
+  instead of letsencrypt
 
 - tmpban system:
     - Add support for IPv6
@@ -38,9 +40,9 @@
     - Add a command for listing current bans
     - Give `syncbans` a dry run option
     - Write all activity to a json-seq logfile
-    - Replace with something based on <http://serverfault.com/a/303121/94797>?
     - Give up?
     - Replace with fail2ban?
+        - cf. <http://serverfault.com/a/303121/94797>
 
 Ansible
 -------
@@ -80,7 +82,6 @@ Ansible
     - cf. <http://unix.stackexchange.com/q/82093/11006>
     - Use nullmailer? dma? Mailgun?
 - Set up root's home directory
-- Set up the admin user's home directory with home.git?
 - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)
   path configurable
 

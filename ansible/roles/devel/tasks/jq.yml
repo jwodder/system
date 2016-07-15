@@ -1,4 +1,10 @@
 ---
+- name: Install jq build dependencies
+  apt: name={{item}} state=present
+  with_items:
+    - libonig-dev
+    - libonig2  # marked as manually installed
+
 - name: Locate latest release of jq
   uri:
     url: https://api.github.com/repos/stedolan/jq/releases/latest
@@ -7,7 +13,7 @@
 
 - name: Download jq source
   unarchive:
-    src: "{{jq_latest.json.tarball_url}}"
+    src: "{{jqlatest.json.tarball_url}}"
     dest: /tmp
     copy: false
     list_files: true
@@ -35,3 +41,6 @@
   file:
     path: "{{build_dir}}"
     state: absent
+
+- name: Remove jq build-only dependencies
+  apt: name=libonig-dev state=absent purge=true
