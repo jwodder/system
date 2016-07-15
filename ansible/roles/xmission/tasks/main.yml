@@ -13,7 +13,7 @@
     backup: true
     update:
         download-queue-size: 10
-        peer-port: 60069
+        peer-port: "{{xmission_port}}"
         rpc-authentication-required: false
         rpc-bind-address: "127.0.0.1"
         script-torrent-done-enabled: true
