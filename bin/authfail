@@ -41,7 +41,7 @@ with open(errorfile, 'a') as err:
         m = re.search(r'^(\S+) \S+ sshd\[\d+\]:'
                       r'(?: message repeated \d+ times: \[)?'
                       r' Failed (?:password|keyboard-interactive/pam|none) for'
-                      r'(?: invalid user)? (\S+) from (\S+) port \d+ ssh2\]?$',
+                      r'(?: invalid user)? (.+?) from (\S+) port \d+ ssh2\]?$',
                       line)
         if m:
             try:
