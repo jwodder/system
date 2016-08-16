@@ -4,6 +4,7 @@
 *.pyc
 .*.swp
 .cache
+.eggs
 .tox
 /home/*/.distlib
 /home/*/.local

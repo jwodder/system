@@ -1,6 +1,8 @@
 apache2
+apache2-utils  # htpasswd
 apt-file
 apt-transport-https
+aptitude
 bikeshed  # --no-install-recommends; for `dman`
 build-essential
 debconf-utils  # for `debconf-get-selections`
@@ -16,15 +18,16 @@ ghostscript
 git
 graphviz
 htop
-irssi
 libncurses5-dev
 libncursesw5-dev
+libonig2
 libpam-google-authenticator
 mailutils
 miscfiles
 moreutils
 mutt
 ncurses-doc
+pandoc
 perl-doc
 popularity-contest
 postfix
@@ -33,15 +36,24 @@ postgrey
 procmail
 pwgen
 pyflakes
+pylint
+pylint3
 python-bitarray
+python-bs4
 python-daemon
 python-dev
 python-jsonschema
 python-pip
+python-prettytable
 python-psycopg2
 python-virtualenv
+python3-bs4
+python3-daemon
+python3-ijson
 python3-pip
+python3-prettytable
 python3-psycopg2
+python3-yaml
 rs
 rss2email
 software-properties-common  # apt-add-repository
@@ -53,21 +65,14 @@ unzip
 vnstat
 wikipedia2text
 zip
-apache2-utils  # htpasswd
-python3-prettytable
-python3-yaml
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
 
 # No need to carry over to new/clean systems:
-apt-doc
-ascii
-mailutils-doc
-mercurial
+irssi
 postfix-doc
 python-apt-doc
-rsyslog-doc
 transmission-cli
 transmission-daemon
 transmission-remote-cli

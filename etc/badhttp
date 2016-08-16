@@ -1,7 +1,8 @@
 /admin
 :\)
+\.asp
 \.php
-^(?!GET|POST|HEAD)
+^(?!GET|POST|HEAD|OPTIONS)
 cgi-bin
 https?:
 myadmin

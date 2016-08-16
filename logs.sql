@@ -12,7 +12,7 @@ CREATE TABLE apache_access (
     authuser varchar(255) NOT NULL,
     bytesIn integer NOT NULL,
     bytesOut integer NOT NULL,
-    microsecs integer NOT NULL,
+    microsecs bigint NOT NULL,
     status integer NOT NULL,
     reqline varchar(2048) NOT NULL,
     method varchar(255) NOT NULL,

@@ -34,12 +34,7 @@
   ufw: rule=allow to_ip=any to_port={{xmission_port}} proto=any direction=in
 
 - name: Don't start Transmission automatically on system startup
-  lineinfile:
-    dest: /etc/init/transmission-daemon.override
-    line: manual
-    create: true
-    owner: root
-    group: root
+  service: name=transmission-daemon enabled=false
 
 - name: Create watch dir
   file:

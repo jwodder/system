@@ -52,7 +52,7 @@ with open(errorfile, 'a') as err:
             status = int(status)
             authuser, reqline, method, path, protocol, referer, user_agent \
                 = ast.literal_eval(strs)
-        except ValueError as e:
+        except (ValueError, SyntaxError) as e:
             logError(e, line=line, about='Error parsing logfile entry')
             continue
 

@@ -1,19 +1,13 @@
 beautifulsoup4
 enum34
-habitica
-ijson
-mongoengine
+
 purepng
-pylint  # apt-get version is very out of date.
 pyRFC3339
 Sphinx
 SQLAlchemy
 tox
+habitica  # git+https://github.com/synacktic/habitica.git
 
 docker-compose  # in a virtualenv
-youtube-dl  # in a virtualenv; apt-get version is out of date
-twine  # in a virtualenv; apt-get version is out of date
-
-# No need to carry over to new/clean systems:
-docopt
-sphinx-autobuild
+twine           # in a virtualenv
+youtube-dl      # in a virtualenv
