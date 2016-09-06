@@ -9,10 +9,6 @@ debconf-utils  # for `debconf-get-selections`
 devscripts  # for `rmadison`
 dos2unix
 fail2ban
-fortune-mod
-fortunes-debian-hints
-fortunes-min
-fortunes-ubuntu-server
 gforth
 ghostscript
 git
@@ -20,7 +16,7 @@ graphviz
 htop
 libncurses5-dev
 libncursesw5-dev
-libonig2
+libonig2  # needed for jq
 libpam-google-authenticator
 mailutils
 miscfiles
@@ -65,17 +61,23 @@ unzip
 vnstat
 wikipedia2text
 zip
+python-rfc3339
+python-dateutil
+pgpdump
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
 
 # No need to carry over to new/clean systems:
-irssi
+fortune-mod
+fortunes-debian-hints
+fortunes-min
+fortunes-ubuntu-server
 postfix-doc
 python-apt-doc
 transmission-cli
 transmission-daemon
-transmission-remote-cli
+openjdk-8-jdk
 
 # Installed by Let's Encrypt:
 dialog
