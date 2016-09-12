@@ -1,6 +1,10 @@
 - Don't store this repository in `/opt/jwodder`; instead, have it always act
   like the target system is remote and install `bin/`, `etc/`, and `lib/` in
   `/opt/jwodder`
+    - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)
+      path configurable (`{{jwodder_root}}`?)
+    - If `bin/apachelogs` is changed by the `copy` task, restart Apache
+    - If `bin/authfail` is changed by the `copy` task, restart rsyslog
 
 - Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
   etc.) in `/opt/jwodder/etc/localhost/` outside of version control
@@ -29,6 +33,7 @@
 - Replace dropboxadd with <https://github.com/andreafabrizi/Dropbox-Uploader>
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
+- Combine `etc/localhost/certbot_*` into a single shell variables file?
 
 - tmpban system:
     - Add support for IPv6
@@ -60,18 +65,11 @@ Ansible
 - Replace `get_bin_path` with just a call to `which`?
 - Don't set up Google Authenticator for root?
 
-- Set up two possible modes of behavior: one for running against localhost,
-  another for running against remote hosts
-    - The remote mode should install this repository in /opt/jwodder (with the
-      synchronize module?), while the local mode should require that it already
-      be installed there
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
     - Use nullmailer? dma? Mailgun?
 - Set up root's home directory
-- Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)
-  path configurable
 - ssl: If the domains in `/opt/jwodder/etc/localhost/certbot_domains` don't
   match those in the current cert(s) in `/etc/letsencrypt`, rerun
   `/opt/jwodder/bin/certbot`.
@@ -79,3 +77,4 @@ Ansible
 - Other packages to consider automatically installing:
     - pwgen
     - tree
+    - [devel] pyflakes

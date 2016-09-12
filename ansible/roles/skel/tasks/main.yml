@@ -1,0 +1,10 @@
+---
+- name: Create jwodder package skeleton
+  file:
+    path: "{{item}}"
+    state: directory
+  with_items:
+    - "{{jwodder_root}}/bin"
+    - "{{jwodder_root}}/etc"
+    - "{{jwodder_root}}/etc/localhost"
+    - "{{jwodder_root}}/lib"
