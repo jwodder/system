@@ -64,6 +64,7 @@ zip
 python-rfc3339
 python-dateutil
 pgpdump
+xmlstarlet
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible

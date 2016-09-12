@@ -28,7 +28,7 @@ map \= :exe "normal " . (81-col("$")) . "A=\e"<CR>
 cmap <C-A> <C-B>
 
 let loaded_matchparen=1
-syntax off
+"syntax off
 
 hi String ctermfg=DarkBlue
 hi! link Character String

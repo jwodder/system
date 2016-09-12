@@ -11,3 +11,4 @@
 .rnd
 .sqlite_history
 .tox
+.wget-hsts

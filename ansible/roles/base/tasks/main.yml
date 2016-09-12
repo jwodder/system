@@ -97,6 +97,7 @@
   command: dpkg-reconfigure -f noninteractive popularity-contest
   when: popcon_changed|changed
 
+# cf. <http://docs.ansible.com/ansible/timezone_module.html> (Ansible 2.2+)
 - name: Set timezone to UTC
   copy: dest=/etc/timezone content="Etc/UTC\n"
   register: timezone_changed

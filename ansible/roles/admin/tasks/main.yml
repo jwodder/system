@@ -74,4 +74,5 @@
     name: purge
     minute: 0
     hour: 9
+    ### Assumes Ansible is running on localhost from /opt/jwodder/ansible
     job: 'cd ~; xargs -a /opt/jwodder/etc/cruft -r rm -rf'
