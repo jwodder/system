@@ -1,11 +1,11 @@
 ---
 - hosts: all
-  sudo: true
+  become: true
   roles:
     - base
 
 - hosts: admin
-  sudo: true
+  become: true
   roles:
     - admin
 

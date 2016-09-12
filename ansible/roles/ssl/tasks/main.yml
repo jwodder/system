@@ -1,35 +1,54 @@
 ---
-- stat: path=/opt/jwodder/etc/domains
-  register: etc_domains
+- assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
-- assert: that='etc_domains.stat.exists and etc_domains.stat.size > 0'
+- copy:
+    dest: /opt/jwodder/etc/localhost/certbot_domains
+    content: "{% for domain in certbot_domains %}{{domain}}\n{% endfor %}"
 
-- stat: path={{letsencrypt_venv}}
+- copy:
+    dest: /opt/jwodder/etc/localhost/certbot_venv
+    content: "{{certbot_venv}}\n"
+
+- copy:
+    dest: /opt/jwodder/etc/localhost/certbot_email
+    content: "{{certbot_email}}\n"
+
+- stat: path={{certbot_venv}}
   register: lenc
 
-- block:
-    ### Could letsencrypt be installed directly via pip instead?
-    - git:
-        repo: https://github.com/letsencrypt/letsencrypt.git
-        dest: /tmp/letsencrypt
-        update: true
-    - command: /tmp/letsencrypt/letsencrypt-auto --help
-      ### Flags need to be added to automatically accept the user agreement
-      environment:
-        VENV_PATH: "{{letsencrypt_venv}}"
-  when: not lenc.stat.exists or update_letsencrypt
+- get_url:
+    url: https://dl.eff.org/certbot-auto
+    dest: /tmp/certbot-auto
+    mode: 0755
+    force: true
+
+# Because of the way certbot-auto is written (as of 2016-09-11), using `wget
+# -O-` to download & pipe the script to bash in a single task does not work.
+
+- command: /tmp/certbot-auto --noninteractive --version
+  when: not lenc.stat.exists or update_certbot
+  environment:
+    VENV_PATH: "{{certbot_venv}}"
+
+- copy:
+    src: "{{item}}"
+    dest: "{{item}}"
+    mode: 0755
+  with_items:
+    - /opt/jwodder/bin/certbot
+    - /opt/jwodder/bin/certbot-renew
+    - /opt/jwodder/lib/certbot-common
 
 - name: Get SSL certificates
-  command: /opt/jwodder/bin/letsencrypt
+  command: /opt/jwodder/bin/certbot
   args:
     creates: /etc/letsencrypt
+  ### Force a run if certbot_domains changed?  Always run?
 
-- name: Create letsencrypt cronjob
+- name: Create Certbot cronjob
   copy:
-    dest: /etc/cron.weekly/letsencrypt
+    dest: /etc/cron.weekly/certbot
     content: |
         #!/bin/bash
-        test -e /etc/letsencrypt -a \
-             -z "$(find /etc/letsencrypt/live/*/cert.pem -mtime +60 -print)" || \
-            chronic /opt/jwodder/bin/letsencrypt "{{letsencrypt_venv}}"
+        chronic /opt/jwodder/bin/certbot-renew
     mode: 0755

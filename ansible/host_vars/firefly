@@ -1,0 +1,13 @@
+---
+ansible_host: 104.236.121.96
+
+#update_certbot: false
+certbot_venv: /usr/local/virtualenvs/certbot
+certbot_email: jwodder+letsencrypt@gmail.com
+
+certbot_domains:
+    - varonathe.org
+    - www.varonathe.org
+    - mail.varonathe.org
+    - mg.varonathe.org
+    - local.varonathe.org

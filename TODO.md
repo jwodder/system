@@ -1,3 +1,7 @@
+- Don't store this repository in `/opt/jwodder`; instead, have it always act
+  like the target system is remote and install `bin/`, `etc/`, and `lib/` in
+  `/opt/jwodder`
+
 - Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
   etc.) in `/opt/jwodder/etc/localhost/` outside of version control
     - The installation procedure should populate this folder with default
@@ -26,16 +30,6 @@
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
 
-- Make the e-mail address passed to `letsencrypt` configurable
-- Rewrite bin/letsencrypt to use the webroot and `renew` features:
-    - <https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04>
-    - <https://letsencrypt.readthedocs.io/en/latest/using.html#webroot>
-    - <https://letsencrypt.readthedocs.io/en/latest/using.html#renewal>
-    - Problem: It seems that webroot won't work with local.varonathe.org's
-      demands for authentication
-- Update the `ssl` role to use [certbot](https://github.com/certbot/certbot)
-  instead of letsencrypt
-
 - tmpban system:
     - Add support for IPv6
     - Rewrite to use a `Ban` class
@@ -55,26 +49,16 @@ Ansible
 - Set up Apache
     - Set up Apache access monitoring
 - Configure rsyslog
-- Handle setting up /opt/jwodder/etc/domains
-    - Set up DNS?
-    - Use the presence of /opt/jwodder/etc/domains to determine whether or not
-      to run the SSL role?
+- Set up DNS?
 - Set up tmpban
     - Add personal cronjob "0 9 * * * untmpban --auto"
 - Split the setup of Google 2FA into a separate role?
 - Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
   `pip` & `pip3`?
-- Merge all of the roles into one, thereby ensuring that things are always run
-  in the correct order and allowing features to be toggled via variables?
 - Add an option for whether to install jq from source or apt
 - Add an option for whether to update jq
 - Replace `get_bin_path` with just a call to `which`?
 - Don't set up Google Authenticator for root?
-
-- ssl: Add flags to letsencrypt-auto for automatically accepting the user
-  agreement (`--agree-tos`?)
-- Instead of checking out the entire Letsencrypt repository, only download a
-  zipfile/tarball of master
 
 - Set up two possible modes of behavior: one for running against localhost,
   another for running against remote hosts
@@ -88,10 +72,10 @@ Ansible
 - Set up root's home directory
 - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)
   path configurable
+- ssl: If the domains in `/opt/jwodder/etc/localhost/certbot_domains` don't
+  match those in the current cert(s) in `/etc/letsencrypt`, rerun
+  `/opt/jwodder/bin/certbot`.
 
-- ssl: If the domains in /opt/jwodder/etc/domains don't match those in the
-  current cert(s) in /etc/letsencrypt, rerun /opt/jwodder/bin/letsencrypt.
-- Add an option for installing dropbox "normally" rather than in a virtualenv?
 - Other packages to consider automatically installing:
     - pwgen
     - tree
