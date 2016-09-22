@@ -1,0 +1,2 @@
+:0:
+/var/mail/`{{jwodder_root}}/bin/mailuser "$ORIGINAL_RECIPIENT"`

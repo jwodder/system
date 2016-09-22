@@ -17,7 +17,7 @@
         rpc-authentication-required: false
         rpc-bind-address: "127.0.0.1"
         script-torrent-done-enabled: true
-        script-torrent-done-filename: "/opt/jwodder/bin/xmission-done"
+        script-torrent-done-filename: "{{jwodder_root}}/bin/xmission-done"
         seed-queue-enabled: true
         speed-limit-down: 200
         speed-limit-down-enabled: true
@@ -28,6 +28,12 @@
         watch-dir-enabled: false
   notify:
     - Reload Transmission
+
+- name: Install xmission-done
+  copy:
+    src: bin/xmission-done
+    dest: "{{jwodder_root}}/bin/xmission-done"
+    mode: 0755
 
 - name: Allow incoming connections to Transmission
   ### TODO: Does this need to allow both TCP and UDP?

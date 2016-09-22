@@ -13,15 +13,17 @@ VENV_PATH="${1:-/usr/local/virtualenvs/dropbox}"
 set -ex
 mkdir -p "$ROOT"
 
+JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
+
 for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
-           /opt/jwodder
+           "$JWODDER_ROOT"
 do if [ -e "$dir" ]
    then if [ "$dir" = /var/www ]
         then links=
         else links=--copy-unsafe-links
         fi
         rsync -avRF $links --delete --delete-excluded \
-              --exclude-from=/opt/jwodder/etc/backup.exclude \
+              --exclude-from="$JWODDER_ROOT/etc/backup.exclude" \
               --exclude-from=<(find "$dir" -type d -exec test -e {}/.norsync ';' -print) \
               "$dir" "$ROOT"
    else rm -rf "$ROOT$dir"
@@ -40,7 +42,7 @@ cd "$ROOT"
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
 tar zcf "$TARBALL" .
 
-$VENV_PATH/bin/python /opt/jwodder/bin/dropboxadd "$TARBALL" \
+$VENV_PATH/bin/python "$JWODDER_ROOT/bin/dropboxadd" "$TARBALL" \
                                                   /Historical/Backups/Droplets/
 
 rm -f "$TARBALL"

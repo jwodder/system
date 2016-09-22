@@ -2,15 +2,15 @@
 - assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
 - copy:
-    dest: /opt/jwodder/etc/localhost/certbot_domains
+    dest: "{{jwodder_root}}/etc/localhost/certbot_domains"
     content: "{% for domain in certbot_domains %}{{domain}}\n{% endfor %}"
 
 - copy:
-    dest: /opt/jwodder/etc/localhost/certbot_venv
+    dest: "{{jwodder_root}}/etc/localhost/certbot_venv"
     content: "{{certbot_venv}}\n"
 
 - copy:
-    dest: /opt/jwodder/etc/localhost/certbot_email
+    dest: "{{jwodder_root}}/etc/localhost/certbot_email"
     content: "{{certbot_email}}\n"
 
 - stat: path={{certbot_venv}}
@@ -30,17 +30,19 @@
   environment:
     VENV_PATH: "{{certbot_venv}}"
 
-- copy:
+- name: Install Certbot scripts
+  copy:
+    ### Use synchronize instead?
     src: "{{item}}"
-    dest: "{{item}}"
+    dest: "{{jwodder_root}}/{{item}}"
     mode: 0755
   with_items:
-    - /opt/jwodder/bin/certbot
-    - /opt/jwodder/bin/certbot-renew
-    - /opt/jwodder/lib/certbot-common
+    - bin/certbot
+    - bin/certbot-renew
+    - lib/certbot-common
 
 - name: Get SSL certificates
-  command: /opt/jwodder/bin/certbot
+  command: "{{jwodder_root}}/bin/certbot"
   args:
     creates: /etc/letsencrypt
   ### Force a run if certbot_domains changed?  Always run?
@@ -50,5 +52,5 @@
     dest: /etc/cron.weekly/certbot
     content: |
         #!/bin/bash
-        chronic /opt/jwodder/bin/certbot-renew
+        chronic "{{jwodder_root}}/bin/certbot-renew"
     mode: 0755

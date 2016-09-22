@@ -57,9 +57,22 @@
 
 ### Make this conditional on whether PostgreSQL is installed?
 ### (Some sort of integration with PostgreSQL is needed here.)
-- copy: src=etc.procmailrc dest=/etc/procmailrc
 
-- copy:
+- name: Install bin/maillog
+  copy:
+    src: bin/maillog
+    dest: "{{jwodder_root}}/bin/maillog"
+    mode: 0755
+
+- name: Install bin/mailuser
+  copy:
+    src: bin/mailuser
+    dest: "{{jwodder_root}}/bin/mailuser"
+    mode: 0755
+
+- template: src=etc.procmailrc dest=/etc/procmailrc
+
+- template:
     src: luser.procmailrc
     dest: /home/{{luser}}/.procmailrc
     owner: "{{luser}}"

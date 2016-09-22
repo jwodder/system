@@ -1,10 +1,8 @@
-- Don't store this repository in `/opt/jwodder`; instead, have it always act
-  like the target system is remote and install `bin/`, `etc/`, and `lib/` in
-  `/opt/jwodder`
-    - Make the `/opt/jwodder` (and `/var/log/jwodder`? `/var/backups/jwodder`?)
-      path configurable (`{{jwodder_root}}`?)
-    - If `bin/apachelogs` is changed by the `copy` task, restart Apache
-    - If `bin/authfail` is changed by the `copy` task, restart rsyslog
+- Make the `/var/log/jwodder` path configurable?
+    - Alternatively, move it to `{{jwodder_root}}/var/logs`
+- Make the `/var/backups/jwodder` path configurable?
+- If `bin/apachelogs` is changed by the `copy` task, restart Apache
+- If `bin/authfail` is changed by the `copy` task, restart rsyslog
 
 - Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
   etc.) in `/opt/jwodder/etc/localhost/` outside of version control
@@ -16,6 +14,7 @@
                 - Minimize the amount of e-mail mistakenly sent to me
             - `mailbox`
             - `netdevice`
+            - `mail_daemon`
             - thresholds
         - what `backdroplet` should back up
         - the source & destination address for `xmission-done`
@@ -34,6 +33,7 @@
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
 - Combine `etc/localhost/certbot_*` into a single shell variables file?
+- Install virtualenvs in `/opt/jwodder/virtualenvs`?
 
 - tmpban system:
     - Add support for IPv6
@@ -64,6 +64,10 @@ Ansible
 - Add an option for whether to update jq
 - Replace `get_bin_path` with just a call to `which`?
 - Don't set up Google Authenticator for root?
+- Add an `update_all` variable that, when set (default: false), sets the
+  default for all other `update_*` variables and (if true) causes `apt-get
+  upgrade` to be run at the beginning of the playbook
+- Convert `mailuser` to a shell script?
 
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed

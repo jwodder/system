@@ -3,10 +3,7 @@
   become: true
   roles:
     - base
-
-- hosts: admin
-  become: true
-  roles:
-    - admin
+    - role: admin
+      when: "{{admin_user is defined}}"
 
 # The admin role must come before the following: devel, postfix

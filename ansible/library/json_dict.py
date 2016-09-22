@@ -28,12 +28,15 @@ def main():
         if k in data:
             del data[k]
             changed = True
-    if changed and not module.check_mode:
-        if module.params["backup"]:
-            module.backup_local(dest)
-        with open(dest, 'w') as fp:
-            fp.write(module.jsonify(data))
-    changed = module.set_fs_attributes_if_different(file_args, changed)
+    try:
+        if changed and not module.check_mode:
+            if module.params["backup"]:
+                module.backup_local(dest)
+            with open(dest, 'w') as fp:
+                fp.write(module.jsonify(data))
+        changed = module.set_fs_attributes_if_different(file_args, changed)
+    except Exception:
+        module.fail_json(msg=traceback.format_exc())
     module.exit_json(dest=dest, changed=changed)
 
 from ansible.module_utils.basic import *

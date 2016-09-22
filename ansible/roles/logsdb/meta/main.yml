@@ -1,3 +1,4 @@
 ---
 dependencies:
     - role: postgres
+    - role: skel

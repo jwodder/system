@@ -17,7 +17,9 @@ import time
 from   prettytable   import PrettyTable
 from   psycopg2      import connect
 
-credsfile = '/opt/jwodder/etc/logger.json'
+jwodder_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+
+credsfile = os.path.join(jwodder_root, 'etc', 'localhost', 'logger')
 mailbox = '/home/jwodder/Mail/INBOX'
 netdevice = 'eth0'
 disk_threshold = 50
@@ -220,7 +222,7 @@ def ban_smtp():
     return ban_ips('SMTP shenanigans', over_threshold(baddies, smtp_threshold))
 
 def ban_http():
-    with open('/opt/jwodder/etc/badhttp') as fp:
+    with open(os.path.join(jwodder_root, 'etc', 'badhttp')) as fp:
         badhttp = [re.compile(line.strip()) for line in fp]
     cursor.execute('''
         SELECT reqline, src_addr FROM apache_access

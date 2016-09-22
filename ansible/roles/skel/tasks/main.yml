@@ -1,4 +1,8 @@
 ---
+- set_fact:
+    # This makes the variable accessible to subsequent roles, right?
+    jwodder_root: "{{jwodder_root}}"
+
 - name: Create jwodder package skeleton
   file:
     path: "{{item}}"

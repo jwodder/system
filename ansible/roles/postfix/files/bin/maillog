@@ -11,7 +11,7 @@ from   psycopg2     import connect
 from   six          import text_type
 
 errorfile = '/var/log/jwodder/maillog.err'
-credsfile = '/opt/jwodder/etc/logger.json'
+credsfile = os.path.join(jwodder_root, 'etc', 'localhost', 'logger')
 
 sys.stderr = open(errorfile, 'a')
 

@@ -11,6 +11,23 @@
     state: "{{update_dropbox|ternary('latest', 'present')}}"
     virtualenv: "{{dropbox_venv}}"
 
+- name: Install bin/backdroplet
+  copy:
+    src: bin/backdroplet
+    dest: "{{jwodder_root}}/bin/backdroplet"
+    mode: 0755
+
+- name: Install bin/dropboxadd
+  copy:
+    src: bin/backdroplet
+    dest: "{{jwodder_root}}/bin/dropboxadd"
+    mode: 0755
+
+- name: Install etc/backup.exclude
+  copy:
+    src: etc/backup.exclude
+    dest: "{{jwodder_root}}/etc/backup.exclude"
+
 - name: Create backup cronjob
   copy:
     dest: /etc/cron.daily/backdroplet
@@ -18,5 +35,5 @@
         #!/bin/bash
         # Run every other Sunday:
         (( ($(date +%s) / 86400 - 3) % 14 )) || \
-            chronic /opt/jwodder/bin/backdroplet "{{dropbox_venv}}"
+            chronic {{jwodder_root|quote}}/bin/backdroplet {{dropbox_venv|quote}}
     mode: 0755

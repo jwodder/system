@@ -4,10 +4,16 @@
 
 ### TODO: Make vnstat only monitor eth0?
 
+- name: Install bin/dailyreport
+  copy:
+    src: bin/dailyreport.py
+    dest: "{{jwodder_root}}/bin/dailyreport"
+    mode: 0755
+
 - name: Create dailyreport cronjob
   cron:
     user: "{{dailyreporter}}"
     name: dailyreport
     minute: 0
     hour: 8
-    job: '/opt/jwodder/bin/dailyreport | sendmail -t'
+    job: '{{jwodder_root}}/bin/dailyreport | sendmail -t'

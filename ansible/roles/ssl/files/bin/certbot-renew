@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # For renewing previously-obtained certs only; can be used as a cron script
 # directly
 
@@ -7,8 +6,9 @@
 ((EUID == 0)) || exec sudo "$0" "$@"
 
 set -ex
+JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
 
-. /opt/jwodder/lib/certbot-common
+. "$JWODDER_ROOT/lib/certbot-common"
 
 $VENV_PATH/bin/certbot renew \
     --quiet \

@@ -9,8 +9,8 @@ def main():
                 "required": True,
                 "aliases": ["binary", "bin", "cmd", "program"],
             },
-            "required": {"type": "bool", "default": False}
-            "opt_dirs": {"type": "list", "default": []}
+            "required": {"type": "bool", "default": False},
+            "opt_dirs": {"type": "list", "default": []},
         },
         supports_check_mode=True,
     )

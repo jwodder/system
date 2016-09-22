@@ -25,6 +25,7 @@ mutt
 ncurses-doc
 pandoc
 perl-doc
+pgpdump
 popularity-contest
 postfix
 postgresql
@@ -37,11 +38,13 @@ pylint3
 python-bitarray
 python-bs4
 python-daemon
+python-dateutil
 python-dev
 python-jsonschema
 python-pip
 python-prettytable
 python-psycopg2
+python-rfc3339
 python-virtualenv
 python3-bs4
 python3-daemon
@@ -60,11 +63,8 @@ units
 unzip
 vnstat
 wikipedia2text
-zip
-python-rfc3339
-python-dateutil
-pgpdump
 xmlstarlet
+zip
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -74,6 +74,7 @@ fortune-mod
 fortunes-debian-hints
 fortunes-min
 fortunes-ubuntu-server
+make-doc
 postfix-doc
 python-apt-doc
 transmission-cli

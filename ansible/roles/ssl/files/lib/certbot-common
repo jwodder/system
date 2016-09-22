@@ -1,4 +1,6 @@
-VENV_PATH="$(< /opt/jwodder/etc/localhost/certbot_venv)"
+JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
+
+VENV_PATH="$(< "$JWODDER_ROOT/etc/localhost/certbot_venv")"
 : "${VENV_PATH:?Location of Certbot virtualenv not defined}"
 
 function installed {
