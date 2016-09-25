@@ -18,4 +18,4 @@
     name: "{{admin_user}}"
     role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
   become_user: postgres
-  when: admin_user is defined
+  when: "{{admin_user is defined}}"

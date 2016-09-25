@@ -1,15 +1,11 @@
 #!/usr/bin/python
 from   __future__    import division, unicode_literals
-from   collections   import Counter
 import email.charset
 from   email.message import Message
 from   email.utils   import formataddr
 from   errno         import ENOENT
-from   itertools     import takewhile
-import json
 import os
 import os.path
-import re
 import socket
 import subprocess
 import sys
@@ -23,9 +19,6 @@ credsfile = os.path.join(jwodder_root, 'etc', 'localhost', 'logger')
 mailbox = '/home/jwodder/Mail/INBOX'
 netdevice = 'eth0'
 disk_threshold = 50
-ssh_threshold = 20
-smtp_threshold = 2
-http_threshold = 3
 
 mail_daemon = 'MAILER-DAEMON@mail.varonathe.org'
 
@@ -35,8 +28,8 @@ tagseq = 'DISK LOGERR REBOOT MAIL'.split()
 tagged = set()
 
 with open(credsfile) as fp:
-    creds = json.load(fp)
-db = connect(**creds)
+    dbpass = fp.read().strip()
+db = connect(host='localhost', database='logs', user='logger', password=dbpass)
 cursor = db.cursor()
 
 def longint(n):
@@ -185,55 +178,6 @@ def check_reboot():
             report += ' UNKNOWN\n'
         return report
 
-def over_threshold(cntr, threshold):
-    return [val for val,_ in takewhile(lambda p: p[1] >= threshold,
-                                       cntr.most_common())]
-
-def ban_ips(reason, ips):
-    args = ['tmpban', '-q', '-r', reason]
-    if 'CRONNING' not in os.environ:
-        args += ['--dry-run']
-    banned = subprocess.check_output(args + ips).splitlines()
-    if banned:
-        banned.sort(key=socket.inet_aton)
-        return 'IP addresses banned for excessive ' + reason + ':\n' + \
-            ''.join('    ' + a + '\n' for a in banned)
-
-def ban_ssh():
-    cursor.execute('''
-        SELECT src_addr FROM authfail
-        WHERE timestamp >= (now() - interval '1 day')
-        GROUP BY src_addr HAVING COUNT(*) >= %s
-    ''', (ssh_threshold,))
-    return ban_ips('SSH login failures', [a for (a,) in cursor.fetchall()])
-
-def ban_smtp():
-    cursor.execute('''
-        SELECT subject FROM inbox
-        WHERE sender = (SELECT id FROM inbox_contacts WHERE email_address = %s)
-        AND timestamp >= (now() - interval '1 day')
-    ''', (mail_daemon,))
-    baddies = Counter()
-    for subject, in cursor.fetchall():
-        m = re.search(r'^Postfix SMTP server: errors from'
-                      r' .*\[(\d+(\.\d+){3})\]$', subject)
-        if m:
-            baddies[m.group(1)] += 1
-    return ban_ips('SMTP shenanigans', over_threshold(baddies, smtp_threshold))
-
-def ban_http():
-    with open(os.path.join(jwodder_root, 'etc', 'badhttp')) as fp:
-        badhttp = [re.compile(line.strip()) for line in fp]
-    cursor.execute('''
-        SELECT reqline, src_addr FROM apache_access
-        WHERE status != 200 AND timestamp >= (now() - interval '1 day')
-    ''')
-    baddies = Counter()
-    for reqline, ip_addr in cursor.fetchall():
-        if any(rx.search(reqline) for rx in badhttp):
-            baddies[ip_addr] += 1
-    return ban_ips('bad HTTP requests', over_threshold(baddies, http_threshold))
-
 def check_vnstat():
     vnstat = subprocess.check_output(['vnstat', '--dumpdb', '-i', netdevice])
     yesterday = [s for s in vnstat.splitlines() if s.startswith('d;1;')]
@@ -257,9 +201,6 @@ for check in [
         check_inbox,
         check_authfail,
         check_apache_access,
-        ban_smtp,
-        ban_ssh,
-        ban_http,
     ]:
     report = check()
     if report is not None and report != '':

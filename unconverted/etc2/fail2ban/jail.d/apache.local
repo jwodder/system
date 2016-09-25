@@ -1,0 +1,23 @@
+[apache-auth]
+enabled = true
+
+[apache-badbots]
+enabled = true
+
+[apache-fakegooglebot]
+enabled = true
+
+[apache-nohome]
+enabled = true
+
+[apache-noscript]
+enabled = true
+maxretry = 3
+
+[apache-overflows]
+enabled = true
+
+[apache-shellshock]
+enabled = true
+
+# vim:set ft=cfg:

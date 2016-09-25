@@ -48,7 +48,6 @@ python-rfc3339
 python-virtualenv
 python3-bs4
 python3-daemon
-python3-ijson
 python3-pip
 python3-prettytable
 python3-psycopg2
@@ -77,6 +76,7 @@ fortunes-ubuntu-server
 make-doc
 postfix-doc
 python-apt-doc
+python3-ijson
 transmission-cli
 transmission-daemon
 openjdk-8-jdk

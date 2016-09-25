@@ -5,7 +5,7 @@
 - If `bin/authfail` is changed by the `copy` task, restart rsyslog
 
 - Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
-  etc.) in `/opt/jwodder/etc/localhost/` outside of version control
+  etc.) in `/opt/jwodder/etc/localhost/`
     - The installation procedure should populate this folder with default
       config files, though
     - The following should be configurable via these config files:
@@ -35,19 +35,6 @@
 - Combine `etc/localhost/certbot_*` into a single shell variables file?
 - Install virtualenvs in `/opt/jwodder/virtualenvs`?
 
-- tmpban system:
-    - Add support for IPv6
-    - Rewrite to use a `Ban` class
-    - Rewrite into a single script?
-    - Add a command for listing current bans
-    - Give `syncbans` a dry run option
-    - Write all activity to a json-seq logfile
-    - Give up?
-    - Replace with fail2ban?
-        - cf. <http://serverfault.com/a/303121/94797>
-
-Ansible
--------
 - Do everything in misc.txt
 - Ensure everything in /opt/jwodder is world-readable and (when relevant)
   -executable
@@ -55,8 +42,6 @@ Ansible
     - Set up Apache access monitoring
 - Configure rsyslog
 - Set up DNS?
-- Set up tmpban
-    - Add personal cronjob "0 9 * * * untmpban --auto"
 - Split the setup of Google 2FA into a separate role?
 - Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
   `pip` & `pip3`?

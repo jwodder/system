@@ -6,6 +6,7 @@ sudo sed -i 's/^#& \(~\|stop\)$/\& ~/' /etc/rsyslog.d/20-ufw.conf
 sudo sed -i -e '/^#cron\.\*[ \t]\+\/var\/log\/cron.log$/s/^#//' \
             -e '/^#user\.\*[ \t]\+-\/var\/log\/user.log$/s/^#//' \
             /etc/rsyslog.d/50-default.conf
+            ### Also uncomment the mail.warn and mail.info lines?
 
 sudo install -d -g syslog -m 0775 /var/log/jwodder
 

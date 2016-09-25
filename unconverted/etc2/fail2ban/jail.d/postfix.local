@@ -1,0 +1,6 @@
+[postfix]
+enabled = true
+maxretry = 2
+logpath = /var/log/mail.log
+
+# vim:set ft=cfg:
