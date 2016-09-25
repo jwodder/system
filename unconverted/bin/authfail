@@ -2,11 +2,14 @@
 import json
 import re
 import sys
+import os.path
 import time
 from   psycopg2 import connect
 
+jwodder_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+
 errorfile = '/var/log/jwodder/authfail.err'
-credsfile = '/opt/jwodder/etc/logger.json'
+credsfile = os.path.join(jwodder_root, 'etc', 'localhost', 'logger')
 
 with open(errorfile, 'a') as err:
 
@@ -23,8 +26,13 @@ with open(errorfile, 'a') as err:
 
     try:
         with open(credsfile) as fp:
-            creds = json.load(fp)
-        db = connect(**creds)
+            dbpass = fp.read().strip()
+        db = connect(
+            host='localhost',
+            database='logs',
+            user='logger',
+            password=dbpass,
+        )
         db.autocommit = True
         cursor = db.cursor()
     except Exception as e:

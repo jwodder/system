@@ -4,11 +4,12 @@ from   datetime     import datetime
 import email
 from   email.header import decode_header, make_header
 from   email.utils  import getaddresses, mktime_tz, parseaddr, parsedate_tz
-import json
 import logging
+import os.path
 import sys
 from   psycopg2     import connect
-from   six          import text_type
+
+jwodder_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
 
 errorfile = '/var/log/jwodder/maillog.err'
 credsfile = os.path.join(jwodder_root, 'etc', 'localhost', 'logger')
@@ -22,8 +23,13 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
 
 try:
     with open(credsfile) as fp:
-        creds = json.load(fp)
-    db = connect(**creds)
+        dbpass = fp.read().strip()
+    db = connect(
+        host='localhost',
+        database='logs',
+        user='logger',
+        password=dbpass,
+    )
     cursor = db.cursor()
 except Exception as e:
     logging.exception('Error connecting to database')
@@ -32,8 +38,7 @@ except Exception as e:
 
 def get_header(msg, hdr):
     # Why doesn't Python do this automatically?!?
-    return [text_type(make_header(decode_header(h)))
-            for h in msg.get_all(hdr, [])]
+    return [str(make_header(decode_header(h))) for h in msg.get_all(hdr, [])]
 
 def contactID(contact):
     # `contact` is a `(realname, email_address)` pair.
