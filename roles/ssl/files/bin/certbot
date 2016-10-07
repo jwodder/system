@@ -9,9 +9,6 @@
 
 set -ex
 JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
-DOMAINS="$(paste -d, -s "$JWODDER_ROOT/etc/localhost/certbot_domains")"
-EMAIL="$(< "$JWODDER_ROOT/etc/localhost/certbot_email")"
-
 . "$JWODDER_ROOT/lib/certbot-common"
 
 $VENV_PATH/bin/certbot certonly \

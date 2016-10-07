@@ -1,7 +1,5 @@
-JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
-
-VENV_PATH="$(< "$JWODDER_ROOT/etc/localhost/certbot_venv")"
-: "${VENV_PATH:?Location of Certbot virtualenv not defined}"
+#!/bin/bash
+. "$JWODDER_ROOT/etc/localhost/certbot"
 
 function installed {
     test "$(dpkg-query -Wf '${db:Status-Abbrev}' "$1" 2>/dev/null)" = "ii "

@@ -7,7 +7,6 @@
 
 set -ex
 JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
-
 . "$JWODDER_ROOT/lib/certbot-common"
 
 $VENV_PATH/bin/certbot renew \

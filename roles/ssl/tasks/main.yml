@@ -2,16 +2,11 @@
 - assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
 - copy:
-    dest: "{{jwodder_root}}/etc/localhost/certbot_domains"
-    content: "{% for domain in certbot_domains %}{{domain}}\n{% endfor %}"
-
-- copy:
-    dest: "{{jwodder_root}}/etc/localhost/certbot_venv"
-    content: "{{certbot_venv}}\n"
-
-- copy:
-    dest: "{{jwodder_root}}/etc/localhost/certbot_email"
-    content: "{{certbot_email}}\n"
+    dest: "{{jwodder_root}}/etc/localhost/certbot"
+    content: |+
+        DOMAINS={{certbot_domains|join(',')|quote}}
+        EMAIL={{certbot_email|quote}}
+        VENV_PATH={{certbot_venv|quote}}
 
 - stat: path={{certbot_venv}}
   register: lenc
@@ -35,7 +30,7 @@
     ### Use synchronize instead?
     src: "{{item}}"
     dest: "{{jwodder_root}}/{{item}}"
-    mode: 0755
+    mode: 0755  ### TODO: lib/certbot-common should not be executable
   with_items:
     - bin/certbot
     - bin/certbot-renew
@@ -52,5 +47,5 @@
     dest: /etc/cron.weekly/certbot
     content: |
         #!/bin/bash
-        chronic "{{jwodder_root}}/bin/certbot-renew"
+        chronic "{{jwodder_root|quote}}/bin/certbot-renew"
     mode: 0755

@@ -46,7 +46,6 @@ Changes & New Features
 - Replace dropboxadd with <https://github.com/andreafabrizi/Dropbox-Uploader>
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
-- Combine `etc/localhost/certbot_*` into a single shell variables file?
 - Set up DNS?
 - Split the setup of Google 2FA into a separate role?
 - Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
@@ -63,9 +62,10 @@ Changes & New Features
     - cf. <http://unix.stackexchange.com/q/82093/11006>
     - Use nullmailer? dma? Mailgun?
 - Set up root's home directory
-- ssl: If the domains in `/opt/jwodder/etc/localhost/certbot_domains` don't
-  match those in the current cert(s) in `/etc/letsencrypt`, rerun
-  `/opt/jwodder/bin/certbot`.
+- ssl: If the domains in `{{certbot_domains}}` don't match those in the current
+  cert(s) in `/etc/letsencrypt`, rerun `/opt/jwodder/bin/certbot`.
+- Try to combine `bin/certbot`, `bin/certbot-renew`, and `lib/certbot-common`
+  into a single script
 
 - Other packages to consider automatically installing:
     - pwgen
