@@ -10,5 +10,5 @@
   with_items:
     - "{{jwodder_root}}/bin"
     - "{{jwodder_root}}/etc"
-    - "{{jwodder_root}}/etc/localhost"
     - "{{jwodder_root}}/lib"
+    - "{{jwodder_root}}/share"

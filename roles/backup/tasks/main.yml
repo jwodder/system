@@ -23,10 +23,10 @@
     dest: "{{jwodder_root}}/bin/dropboxadd"
     mode: 0755
 
-- name: Install etc/backup.exclude
+- name: Install share/backup.exclude
   copy:
-    src: etc/backup.exclude
-    dest: "{{jwodder_root}}/etc/backup.exclude"
+    src: share/backup.exclude
+    dest: "{{jwodder_root}}/share/backup.exclude"
 
 - name: Create backup cronjob
   copy:

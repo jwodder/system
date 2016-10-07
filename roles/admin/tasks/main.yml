@@ -68,8 +68,8 @@
     LC_ALL: en_US.UTF-8
     PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
-- name: Install etc/cruft
-  copy: src=etc/cruft dest="{{jwodder_root}}/etc/cruft"
+- name: Install share/cruft
+  copy: src=share/cruft dest="{{jwodder_root}}/share/cruft"
 
 - name: Create cronjob for cleaning admin's ~
   cron:
@@ -77,4 +77,4 @@
     name: purge
     minute: 0
     hour: 9
-    job: 'cd ~; xargs -a {{jwodder_root|quote}}/etc/cruft -r rm -rf'
+    job: 'cd ~; xargs -a {{jwodder_root|quote}}/share/cruft -r rm -rf'

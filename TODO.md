@@ -18,9 +18,7 @@ Structure & Configuration
 - Make the `/var/backups/jwodder` path configurable?
     - Rename `/var/backups/jwodder` to `/var/backups/$HOSTNAME`?
 - Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
-  etc.) in `/opt/jwodder/etc/localhost/`
-    - The installation procedure should populate this folder with default
-      config files, though
+  etc.) in `/opt/jwodder/etc`
     - The following should be configurable via these config files:
         - `dailyreport`:
             - the e-mail address to which dailyreport sends its report
@@ -30,8 +28,6 @@ Structure & Configuration
             - `mail_daemon`
         - what `backdroplet` should back up
         - the source & destination address for `xmission-done`
-    - Alternatively, store host-specific data in `/opt/jwodder/etc` and store
-      non-host-specific config data in `/opt/jwodder/share`?
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Install virtualenvs in `/opt/jwodder/virtualenvs`?

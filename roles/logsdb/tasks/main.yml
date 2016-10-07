@@ -1,6 +1,6 @@
 ---
 - password_file:
-    dest: "{{jwodder_root}}/etc/localhost/logger"
+    dest: "{{jwodder_root}}/etc/logger"
     length: 32
   register: logpass
 

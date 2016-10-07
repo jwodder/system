@@ -1,5 +1,5 @@
 #!/bin/bash
-. "$JWODDER_ROOT/etc/localhost/certbot"
+. "$JWODDER_ROOT/etc/certbot"
 
 function installed {
     test "$(dpkg-query -Wf '${db:Status-Abbrev}' "$1" 2>/dev/null)" = "ii "

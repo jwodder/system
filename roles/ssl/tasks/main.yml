@@ -2,7 +2,7 @@
 - assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
 - copy:
-    dest: "{{jwodder_root}}/etc/localhost/certbot"
+    dest: "{{jwodder_root}}/etc/certbot"
     content: |+
         DOMAINS={{certbot_domains|join(',')|quote}}
         EMAIL={{certbot_email|quote}}
