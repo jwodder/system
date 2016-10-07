@@ -8,14 +8,14 @@
 
 - Added "ServerName www.varonathe.org" to /etc/apache2/apache2.conf
 - Edited `/etc/apache2/sites-available/000-default.conf`
-- Added `minsize 512k` to `/etc/logrotate.d/apache2`
+- Added `minsize 512k` and set `rotate 10` in `/etc/logrotate.d/apache2`
 - Edited `/etc/apache2/conf-*/other-vhosts-access-log.conf`:
  - Changed the basename of the logfile from `other_vhosts_access.log` to
    `access.log`
- - Added the below line after writing a script `/usr/local/bin/apachelogs` for
-   storing log entries in PostgreSQL (also, `mkdir /var/log/jwodder`):
+ - Added the below line after writing a script `/opt/jwodder/bin/apachelogs`
+   for storing log entries in PostgreSQL (also, `mkdir /var/log/jwodder`):
 
-    CustomLog "||/usr/local/bin/apachelogs" "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
+    CustomLog "||/opt/jwodder/bin/apachelogs" "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
 
 - Added the following settings to `/etc/apache2/mods-available/ssl.conf`:
 

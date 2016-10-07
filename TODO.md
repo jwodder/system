@@ -30,6 +30,8 @@ Structure & Configuration
             - `mail_daemon`
         - what `backdroplet` should back up
         - the source & destination address for `xmission-done`
+    - Alternatively, store host-specific data in `/opt/jwodder/etc` and store
+      non-host-specific config data in `/opt/jwodder/share`?
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Install virtualenvs in `/opt/jwodder/virtualenvs`?
@@ -56,7 +58,6 @@ Changes & New Features
 - Add an `update_all` variable that, when set (default: false), sets the
   default for all other `update_*` variables and (if true) causes `apt-get
   upgrade` to be run at the beginning of the playbook
-- Convert `mailuser` to a shell script?
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>

@@ -1,11 +1,10 @@
 beautifulsoup4
 enum34
 
+habitica
 purepng
 Sphinx
-SQLAlchemy
 tox
-habitica  # git+https://github.com/synacktic/habitica.git
 
 docker-compose  # in a virtualenv
 twine           # in a virtualenv

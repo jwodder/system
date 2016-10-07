@@ -79,7 +79,6 @@ python-apt-doc
 python3-ijson
 transmission-cli
 transmission-daemon
-openjdk-8-jdk
 
 # Installed by Let's Encrypt:
 dialog
