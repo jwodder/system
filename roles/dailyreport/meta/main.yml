@@ -1,5 +1,5 @@
 ---
 dependencies:
     - role: logsdb
-    - role: postfix
+    - role: mail
     - role: skel

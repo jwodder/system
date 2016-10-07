@@ -6,4 +6,4 @@
     - role: admin
       when: "{{admin_user is defined}}"
 
-# The admin role must come before the following: devel, postfix
+# The admin role must come before the following: devel, mail
