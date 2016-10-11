@@ -12,3 +12,11 @@
     - "{{jwodder_root}}/etc"
     - "{{jwodder_root}}/lib"
     - "{{jwodder_root}}/share"
+
+- name: Create secrets directory
+  file:
+    path: "{{jwodder_root}}/etc/secret"
+    state: directory
+    mode: 0700
+    owner: root
+    group: root

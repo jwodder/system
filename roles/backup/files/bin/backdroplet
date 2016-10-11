@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage: sudo ./backdroplet [--rsync-only] [VENV_PATH]
+# Usage: sudo ./backdroplet [--rsync-only]
 ((EUID == 0)) || exec sudo "$0" "$@"
 
 if [ "$1" = "--rsync-only" ]
@@ -8,7 +8,6 @@ then rsync_only=1
 fi
 
 ROOT=/var/backups/jwodder
-VENV_PATH="${1:-/usr/local/virtualenvs/dropbox}"
 
 set -ex
 mkdir -p "$ROOT"
@@ -23,6 +22,7 @@ do if [ -e "$dir" ]
         else links=--copy-unsafe-links
         fi
         rsync -avRF $links --delete --delete-excluded \
+              --exclude="$JWODDER_ROOT/etc/secret" \
               --exclude-from="$JWODDER_ROOT/etc/backup.exclude" \
               --exclude-from=<(find "$dir" -type d -exec test -e {}/.norsync ';' -print) \
               "$dir" "$ROOT"
@@ -42,7 +42,8 @@ cd "$ROOT"
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
 tar zcf "$TARBALL" .
 
-$VENV_PATH/bin/python "$JWODDER_ROOT/bin/dropboxadd" "$TARBALL" \
-                                                  /Historical/Backups/Droplets/
+/usr/local/bin/dropbox_uploader \
+    -f "$JWODDER_ROOT/etc/secret/dropbox_uploader" \
+    upload "$TARBALL" /Historical/Backups/Droplets/
 
 rm -f "$TARBALL"

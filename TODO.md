@@ -17,8 +17,8 @@ Structure & Configuration
     - Alternatively, move it to `{{jwodder_root}}/var/logs`
 - Make the `/var/backups/jwodder` path configurable?
     - Rename `/var/backups/jwodder` to `/var/backups/$HOSTNAME`?
-- Store host-specific files (domains, PostgreSQL passwords, `software/*`?,
-  etc.) in `/opt/jwodder/etc`
+- Store host-specific files (domains, PostgreSQL passwords, etc.) in
+  `/opt/jwodder/etc`
     - The following should be configurable via these config files:
         - `dailyreport`:
             - the e-mail address to which dailyreport sends its report
@@ -27,6 +27,7 @@ Structure & Configuration
             - `netdevice`
             - `mail_daemon`
         - what `backdroplet` should back up
+        - the Dropbox path to which `backdroplet` should upload the backup
         - the source & destination address for `xmission-done`
 - Place the apache config in a file named `varonathe.org.conf` instead of using
   the default config files
@@ -39,7 +40,6 @@ Changes & New Features
 - Add a role or playbook that updates all available packages, including forcing
   updates of virtualenvs
 - Make dailyreport automatically adjust if Apache isn't installed
-- Replace dropboxadd with <https://github.com/andreafabrizi/Dropbox-Uploader>
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
 - Set up DNS?

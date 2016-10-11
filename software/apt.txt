@@ -64,6 +64,7 @@ vnstat
 wikipedia2text
 xmlstarlet
 zip
+libpq-dev  # so psycopg2 can be installed via pip
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -76,7 +77,6 @@ fortunes-ubuntu-server
 make-doc
 postfix-doc
 python-apt-doc
-python3-ijson
 transmission-cli
 transmission-daemon
 

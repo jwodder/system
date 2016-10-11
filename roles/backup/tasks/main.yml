@@ -1,15 +1,9 @@
 ---
-- name: Install prerequisites
-  apt: name={{item}} state=present update_cache=no
-  with_items:
-    - python-pip
-    - python-virtualenv
-
-- name: Install Python Dropbox SDK
-  pip:
-    name: dropbox
-    state: "{{update_dropbox|ternary('latest', 'present')}}"
-    virtualenv: "{{dropbox_venv}}"
+- get_url:
+    url: https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh
+    dest: /usr/local/bin/dropbox_uploader
+    mode: 0755
+    force: "{{update_dropbox_uploader}}"
 
 - name: Install bin/backdroplet
   copy:
@@ -17,16 +11,23 @@
     dest: "{{jwodder_root}}/bin/backdroplet"
     mode: 0755
 
-- name: Install bin/dropboxadd
-  copy:
-    src: bin/backdroplet
-    dest: "{{jwodder_root}}/bin/dropboxadd"
-    mode: 0755
-
 - name: Install share/backup.exclude
   copy:
     src: share/backup.exclude
     dest: "{{jwodder_root}}/share/backup.exclude"
+
+- name: Store Dropbox credentials
+  copy:
+    dest: "{{jwodder_root}}/etc/secret/dropbox_uploader"
+    content: |
+        APPKEY={{dropbox_appkey|quote}}
+        APPSECRET={{dropbox_appsecret|quote}}
+        ACCESS_LEVEL={{dropbox_access_level|quote}}
+        OAUTH_ACCESS_TOKEN={{dropbox_oauth_access_token|quote}}
+        OAUTH_ACCESS_TOKEN_SECRET={{dropbox_oauth_access_token_secret|quote}}
+    mode: 0600
+    owner: root
+    group: root
 
 - name: Create backup cronjob
   copy:
@@ -35,5 +36,5 @@
         #!/bin/bash
         # Run every other Sunday:
         (( ($(date +%s) / 86400 - 3) % 14 )) || \
-            chronic {{jwodder_root|quote}}/bin/backdroplet {{dropbox_venv|quote}}
+            chronic {{jwodder_root|quote}}/bin/backdroplet
     mode: 0755
