@@ -14,18 +14,18 @@ ghostscript
 git
 graphviz
 htop
+libapache2-mod-wsgi-py3
 libncurses5-dev
 libncursesw5-dev
 libonig2  # needed for jq
 libpam-google-authenticator
+libpq-dev  # so psycopg2 can be installed via pip
 mailutils
 miscfiles
 moreutils
 mutt
 ncurses-doc
-pandoc
 perl-doc
-pgpdump
 popularity-contest
 postfix
 postgresql
@@ -57,14 +57,11 @@ rss2email
 software-properties-common  # apt-add-repository
 sqlite3
 tree
-unicode
-units
 unzip
 vnstat
 wikipedia2text
 xmlstarlet
 zip
-libpq-dev  # so psycopg2 can be installed via pip
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
@@ -75,10 +72,13 @@ fortunes-debian-hints
 fortunes-min
 fortunes-ubuntu-server
 make-doc
-postfix-doc
+pandoc
+pgpdump
 python-apt-doc
 transmission-cli
 transmission-daemon
+unicode
+units
 
 # Installed by Let's Encrypt:
 dialog

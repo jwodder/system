@@ -18,6 +18,8 @@
     - python3-pip
     - python3-requests
     - python3-six
+    - python3-virtualenv
+    - tox
 
 - name: Install Docker
   ### TODO: Convert the get.docker.io script to Ansible tasks?

@@ -25,7 +25,7 @@
         speed-limit-up-enabled: true
         trash-original-torrent-files: true
         watch-dir: "/var/lib/transmission-daemon/watch"
-        watch-dir-enabled: false
+        watch-dir-enabled: true
   notify:
     - Reload Transmission
 

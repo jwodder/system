@@ -62,8 +62,8 @@ Changes & New Features
   cert(s) in `/etc/letsencrypt`, rerun `/opt/jwodder/bin/certbot`.
 - Try to combine `bin/certbot`, `bin/certbot-renew`, and `lib/certbot-common`
   into a single script
+- Use Ansible 2.2's `include_role` module
 
 - Other packages to consider automatically installing:
     - pwgen
     - tree
-    - [devel] pyflakes

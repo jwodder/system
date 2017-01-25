@@ -149,7 +149,7 @@ def check_inbox():
             sender_name = sender_name.decode('utf-8')
             sender_addr = sender_addr.decode('utf-8')
             recips = [(r.decode('utf-8'), e.decode('utf-8')) for r,e in recips]
-        recips = ','.join(map(formataddr, recips))
+        recips = ', '.join(map(formataddr, recips))
         report += 'From:    ' + formataddr((sender_name, sender_addr)) + '\n' \
                   'To:      ' + recips + '\n' \
                   'Subject: ' + sub + '\n' \
