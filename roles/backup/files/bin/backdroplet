@@ -30,10 +30,9 @@ do if [ -e "$dir" ]
    fi
 done
 
+rm -rf "$ROOT/postgres.sql" "$ROOT/postgres.sql.gz"
 if [ "$(dpkg-query -Wf '${db:Status-Abbrev}' postgresql 2>/dev/null)" = "ii " ]
-then sudo -u postgres pg_dumpall > "$ROOT/postgres.sql"
-# Don't use `-f` here, as postgres can't write to $ROOT.
-else rm -rf "$ROOT/postgres.sql"
+then sudo -u postgres pg_dumpall | gzip > "$ROOT/postgres.sql.gz"
 fi
 
 [ -z "$rsync_only" ] || exit 0
