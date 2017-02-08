@@ -1,2 +1,4 @@
 ---
 luser: muffins
+mail_origin: varonathe.org
+mail_hostname: "mail.{{mail_origin}}"

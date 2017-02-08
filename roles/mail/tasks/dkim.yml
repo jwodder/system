@@ -1,0 +1,77 @@
+---
+- name: Configure OpenDKIM
+  lineinfile:
+    dest: /etc/opendkim.conf
+    regexp: '^{{item.key}}(\s+|$)'
+    line: '{{item.key}} {{item.value}}'
+    backup: true
+  with_dict:
+    AutoRestart:        'yes'
+    AutoRestartRate:    '10/1h'
+    UMask:              '002'
+    Syslog:             'yes'
+    SyslogSuccess:      'yes'
+    LogWhy:             'yes'
+    Canonicalization:   relaxed/simple
+    ExternalIgnoreList: 'refile:/etc/opendkim/TrustedHosts'
+    InternalHosts:      'refile:/etc/opendkim/TrustedHosts'
+    KeyTable:           'refile:/etc/opendkim/KeyTable'
+    SigningTable:       'refile:/etc/opendkim/SigningTable'
+    Mode:               sv
+    PidFile:            /var/run/opendkim/opendkim.pid
+    SignatureAlgorithm: rsa-sha256
+    UserID:             opendkim:opendkim
+    Socket:             'inet:12301@localhost'
+  notify:
+    - Restart OpenDKIM
+
+- name: Configure OpenDKIM socket
+  lineinfile:
+    dest: /etc/default/opendkim
+    regexp: '^SOCKET='
+    line: 'SOCKET="inet:12301@localhost"'
+    backup: true
+  notify:
+    - Restart OpenDKIM
+
+- file:
+    path: /etc/opendkim/keys/{{mail_origin}}
+    state: directory
+
+- copy:
+    dest: /etc/opendkim/TrustedHosts
+    content: |
+        127.0.0.1
+        localhost
+        192.168.0.1/24
+        *.{{mail_origin}}
+  notify:
+    - Restart OpenDKIM
+
+- copy:
+    dest: /etc/opendkim/KeyTable
+    content: |
+        mail._domainkey.{{mail_origin}} {{mail_origin}}:mail:/etc/opendkim/keys/{{mail_origin}}/mail.private
+  notify:
+    - Restart OpenDKIM
+
+- copy:
+    dest: /etc/opendkim/SigningTable
+    content: |
+        *@{{mail_origin}} mail._domainkey.{{mail_origin}}
+  notify:
+    - Restart OpenDKIM
+
+- command: opendkim-genkey -s mail -d {{mail_origin}}
+  args:
+    chdir: /etc/opendkim/keys/{{mail_origin}}
+    creates: /etc/opendkim/keys/{{mail_origin}}/mail.private
+  notify:
+    - Restart OpenDKIM
+
+- file:
+    dest: /etc/opendkim/keys/{{mail_origin}}/mail.private
+    owner: opendkim
+    group: opendkim
+
+### Use /etc/opendkim/keys/{{mail_origin}}/mail.txt to create a DNS TXT entry named "mail._domainkey"

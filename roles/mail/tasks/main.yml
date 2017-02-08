@@ -22,10 +22,13 @@
 - apt: name={{item}} state=present update_cache=no
   with_items:
     - mailutils
+    - opendkim
+    - opendkim-tools
     - postfix
     - postgrey
     - procmail
 
+- include: dkim.yml
 - include: postwhite.yml
 
 - name: Create luser_relay user
