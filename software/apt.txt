@@ -62,6 +62,8 @@ vnstat
 wikipedia2text
 xmlstarlet
 zip
+opendkim
+opendkim-tools
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible

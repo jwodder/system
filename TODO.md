@@ -29,7 +29,7 @@ Structure & Configuration
         - what `backdroplet` should back up
         - the Dropbox path to which `backdroplet` should upload the backup
         - the source & destination address for `xmission-done`
-- Place the apache config in a file named `varonathe.org.conf` instead of using
+- Place the Apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Install virtualenvs in `/opt/jwodder/virtualenvs`?
 

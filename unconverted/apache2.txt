@@ -25,5 +25,6 @@
 
 - `a2enmod ssl`
 - `a2enmod rewrite`
+- `a2enmod cgi`
 - Set `LogLevel` to `info` in /etc/apache2/apache2.conf (Needed for fail2ban to
   detect 404's)
