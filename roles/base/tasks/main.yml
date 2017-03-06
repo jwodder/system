@@ -129,7 +129,7 @@
   command: dpkg-reconfigure -f noninteractive unattended-upgrades
   when: unattup|changed
 
-- name: Configure unattended-upgrades
+- name: Configure APT
   copy:
     src: apt.conf
     dest: /etc/apt/apt.conf.d/99jwodder
