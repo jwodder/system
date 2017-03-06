@@ -5,14 +5,11 @@ apt-transport-https
 aptitude
 bikeshed  # --no-install-recommends; for `dman`
 build-essential
-debconf-utils  # for `debconf-get-selections`
 devscripts  # for `rmadison`
 dos2unix
 fail2ban
 gforth
-ghostscript
 git
-graphviz
 htop
 libapache2-mod-wsgi-py3
 libncurses5-dev
@@ -24,7 +21,6 @@ mailutils
 miscfiles
 moreutils
 mutt
-ncurses-doc
 perl-doc
 popularity-contest
 postfix
@@ -44,15 +40,12 @@ python-jsonschema
 python-pip
 python-prettytable
 python-psycopg2
-python-rfc3339
 python-virtualenv
 python3-bs4
 python3-daemon
 python3-pip
 python3-prettytable
 python3-psycopg2
-python3-yaml
-rs
 rss2email
 software-properties-common  # apt-add-repository
 sqlite3
@@ -69,18 +62,23 @@ opendkim-tools
 ansible
 
 # No need to carry over to new/clean systems:
+debconf-utils
 fortune-mod
 fortunes-debian-hints
 fortunes-min
 fortunes-ubuntu-server
 make-doc
-pandoc
+ncurses-doc
+openvpn
 pgpdump
 python-apt-doc
+python-rfc3339
+python3-yaml
+rs
 transmission-cli
 transmission-daemon
-unicode
 units
+graphviz
 
 # Installed by Let's Encrypt:
 dialog

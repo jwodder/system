@@ -10,6 +10,7 @@
     - libpam-google-authenticator
     - moreutils  # chronic
     - software-properties-common  # apt-add-repository
+    - tree
     - unattended-upgrades
     - unzip
     - ufw

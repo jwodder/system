@@ -63,7 +63,3 @@ Changes & New Features
 - Try to combine `bin/certbot`, `bin/certbot-renew`, and `lib/certbot-common`
   into a single script
 - Use Ansible 2.2's `include_role` module
-
-- Other packages to consider automatically installing:
-    - pwgen
-    - tree

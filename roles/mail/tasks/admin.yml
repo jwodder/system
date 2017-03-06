@@ -13,7 +13,7 @@
     regexp: '^DEFAULT='
     line: 'DEFAULT=$HOME/Mail/INBOX'
     insertbefore: BOF
-    backup: yes
+    backup: true
     create: true
     owner: "{{admin_user}}"
     group: "{{admin_user}}"
@@ -22,7 +22,7 @@
     dest: /home/{{admin_user}}/.profile
     regexp: '^export MAIL='
     line: 'export MAIL=$HOME/Mail/INBOX'
-    backup: yes
+    backup: true
 
 - command: mv -n /var/mail/{{admin_user}} /home/{{admin_user}}/Mail/INBOX
   args:

@@ -3,10 +3,10 @@
   gather_facts: false
   serial: 1
   tasks:
-   - known_hosts:
-       name: "{{ansible_host}}"
-       key: "{{lookup('pipe', 'ssh-keyscan ' ~ ansible_host)}}"
-     delegate_to: localhost
+    - known_hosts:
+        name: "{{ansible_host}}"
+        key: "{{lookup('pipe', 'ssh-keyscan ' ~ ansible_host)}}"
+      delegate_to: localhost
 
 - hosts: all
   gather_facts: false
