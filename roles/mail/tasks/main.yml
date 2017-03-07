@@ -52,6 +52,11 @@
     dest: /etc/postgrey/whitelist_recipients
     content: ''
 
+- name: Whitelist e-mails sent via Mandrill
+  copy:
+    dest: /etc/postgrey/whitelist_clients.local
+    content: 'mandrillapp.com\n'
+
 ###
 - Configure `/etc/postfix/main.cf` (and trigger a restart of Postfix)
 - Configure `/etc/aliases`
