@@ -17,11 +17,7 @@ JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
 for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
            "$JWODDER_ROOT"
 do if [ -e "$dir" ]
-   then if [ "$dir" = /var/www ]
-        then links=
-        else links=--copy-unsafe-links
-        fi
-        rsync -avRF $links --delete --delete-excluded \
+   then rsync -avRF --delete --delete-excluded \
               --exclude="$JWODDER_ROOT/etc/secret" \
               --exclude-from="$JWODDER_ROOT/etc/backup.exclude" \
               --exclude-from=<(find "$dir" -type d -exec test -e {}/.norsync ';' -print) \
