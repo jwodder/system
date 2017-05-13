@@ -1,2 +1,5 @@
 - Uncommented the `trusty-backports` lines in `/etc/apt/sources.list` (Doable
   with `apt-add-repository`?)
+- Work around <https://bugs.mutt.org/trac/ticket/2953> by replacing `source
+  /usr/lib/mutt/source-muttrc.d|` in /etc/Muttrc with `source
+  /etc/Muttrc.d/$FILE` lines for each file in /etc/Muttrc.d
