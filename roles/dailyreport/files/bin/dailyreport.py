@@ -64,6 +64,7 @@ def check_load():
 
 def check_disk():
     # <http://stackoverflow.com/a/12327880/744178>
+    ### TODO: Switch to Python 3.3+ and use `shutil.disk_usage` instead
     usage   = os.statvfs('/')
     fssize  = usage.f_blocks * usage.f_frsize
     #fsavail = usage.f_bavail * usage.f_frsize

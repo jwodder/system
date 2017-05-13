@@ -56,7 +56,7 @@ Changes & New Features
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
-    - Use nullmailer? dma? Mailgun?
+    - Use nullmailer? dma? Mailgun? ssmtp?
 - Set up root's home directory
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
   cert(s) in `/etc/letsencrypt`, rerun `/opt/jwodder/bin/certbot`.

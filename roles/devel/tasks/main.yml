@@ -3,11 +3,11 @@
   apt: name={{item}} state=present update_cache=no
   with_items:
     - build-essential
-    - libncurses5-dev
-    - libncursesw5-dev
-    - ncurses-doc
+    #- libncurses5-dev
+    #- libncursesw5-dev
+    #- ncurses-doc
     - patch
-    - perl-doc
+    #- perl-doc
     - pyflakes
     - python-dev
     - python-pip

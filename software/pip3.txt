@@ -2,4 +2,8 @@ click            # --user
 flake8           # --user
 flake8-bugbear   # --user; provides 'B' checks
 flake8-builtins  # --user; also provides 'B' checks
+packaging        # --user
 pipdeptree       # --user
+pytz             # --user
+readme_renderer  # --user
+rwt              # --user
