@@ -9,6 +9,7 @@
 .local/
 .pylint.d/
 .tox/
+.viminfo
 __pycache__/
 _build/
 venv/
