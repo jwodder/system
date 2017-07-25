@@ -16,4 +16,5 @@
       `/usr/local/etc/profile.d/bash_completion.sh`
     - Edit `/etc/bash.bashrc` to change
       `/usr/share/bash-completion/bash_completion` to
-      `/usr/local/share/bash-completion/bash_completion`
+      `/usr/local/share/bash-completion/bash_completion` and set
+      `BASH_COMPLETION_COMPAT_DIR=/etc/bash_completion.d` just before it
