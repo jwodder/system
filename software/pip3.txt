@@ -1,9 +1,14 @@
 click            # --user
+colorama         # --user
 flake8           # --user
 flake8-bugbear   # --user; provides 'B' checks
 flake8-builtins  # --user; also provides 'B' checks
+nox-automation   # --user
 packaging        # --user
 pipdeptree       # --user
+ptyprocess       # --user
+python-dateutil  # --user
 pytz             # --user
 readme_renderer  # --user
 rwt              # --user
+twine            # --user

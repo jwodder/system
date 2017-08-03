@@ -32,6 +32,7 @@ Structure & Configuration
 - Place the Apache config in a file named `varonathe.org.conf` instead of using
   the default config files
 - Install virtualenvs in `/opt/jwodder/virtualenvs`?
+- Install Certbot via `ppa:certbot/certbot`?
 
 Changes & New Features
 ======================
@@ -44,8 +45,6 @@ Changes & New Features
   using SQLAlchemy
 - Set up DNS?
 - Split the setup of Google 2FA into a separate role?
-- Restrict the `always_set_home` option in `/etc/sudoers` to only apply to
-  `pip` & `pip3`?
 - Add an option for whether to install jq from source or apt
 - Add an option for whether to update jq
 - Replace `get_bin_path` with just a call to `which`?
