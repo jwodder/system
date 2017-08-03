@@ -1,0 +1,5 @@
+[Definition]
+# Update regex to match `vhost_combined` entries instead of `combined`:
+failregex = ^[-\w.:]+ <HOST> -.*"(GET|POST|HEAD).*HTTP.*"(?:%(badbots)s|%(badbotscustom)s)"$
+# (Note that "<HOST> <HOST>" won't work because that would result in the regex
+# having two named capturing groups with the same name.)

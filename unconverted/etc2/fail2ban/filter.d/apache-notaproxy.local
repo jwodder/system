@@ -1,0 +1,6 @@
+[INCLUDES]
+before = apache-common.conf
+
+[Definition]
+failregex = ^[-\w.:]+ <HOST> -.*"(GET|POST|HEAD)\s+https?://.*\s+HTTP.*" \d+ \d+ ".*" ".*"
+ignoreregex =

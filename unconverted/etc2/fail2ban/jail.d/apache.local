@@ -14,6 +14,12 @@ enabled = true
 enabled = true
 maxretry = 3
 
+[apache-notaproxy]
+enabled  = true
+port     = http,https
+logpath  = %(apache_access_log)s
+maxretry = 1
+
 [apache-overflows]
 enabled = true
 
