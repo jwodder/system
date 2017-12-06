@@ -2,7 +2,5 @@ click     # --user
 habitica  # --user
 psutil
 purepng
-Sphinx
-tox
 
 docker-compose  # in a virtualenv

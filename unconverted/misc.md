@@ -13,7 +13,8 @@
     - Install the latest release (2.7 at time of writing) from
       <https://github.com/scop/bash-completion>
     - Replace `/etc/profile.d/bash_completion.sh` with a symlink to
-      `/usr/local/etc/profile.d/bash_completion.sh`
+      `/usr/local/etc/profile.d/bash_completion.sh` (or get rid of it
+      altogether?)
     - Edit `/etc/bash.bashrc` to change
       `/usr/share/bash-completion/bash_completion` to
       `/usr/local/share/bash-completion/bash_completion` and set

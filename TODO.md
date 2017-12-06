@@ -33,6 +33,7 @@ Structure & Configuration
   the default config files
 - Install virtualenvs in `/opt/jwodder/virtualenvs`?
 - Install Certbot via `ppa:certbot/certbot`?
+- devel: Install Python packages via pip (with `--user`) instead of via apt
 
 Changes & New Features
 ======================
@@ -40,18 +41,17 @@ Changes & New Features
 - Don't back up `/root` with `backdroplet`?
 - Add a role or playbook that updates all available packages, including forcing
   updates of virtualenvs
+- Add an `update_all` variable that, when set (default: false), sets the
+  default for all other `update_*` variables and (if true) causes `apt-get
+  upgrade` to be run at the beginning of the playbook
 - Make dailyreport automatically adjust if Apache isn't installed
 - Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
   using SQLAlchemy
 - Set up DNS?
 - Split the setup of Google 2FA into a separate role?
 - Add an option for whether to install jq from source or apt
-- Add an option for whether to update jq
 - Replace `get_bin_path` with just a call to `which`?
 - Don't set up Google Authenticator for root?
-- Add an `update_all` variable that, when set (default: false), sets the
-  default for all other `update_*` variables and (if true) causes `apt-get
-  upgrade` to be run at the beginning of the playbook
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>

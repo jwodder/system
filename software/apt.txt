@@ -8,6 +8,7 @@ build-essential
 devscripts  # for `rmadison`
 dos2unix
 fail2ban
+fortune-mod  # --no-install-recommends; needed for `catsig`
 gforth
 git
 htop
@@ -21,6 +22,9 @@ mailutils
 miscfiles
 moreutils
 mutt
+ncdu
+opendkim
+opendkim-tools
 perl-doc
 popularity-contest
 postfix
@@ -40,7 +44,6 @@ python-jsonschema
 python-pip
 python-prettytable
 python-psycopg2
-python-virtualenv
 python3-bs4
 python3-daemon
 python3-pip
@@ -55,16 +58,16 @@ vnstat
 wikipedia2text
 xmlstarlet
 zip
-opendkim
-opendkim-tools
-ncdu
-fortune-mod  # --no-install-recommends; needed for `catsig`
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
 
+# apt-add-repository -y ppa:deadsnakes/ppa
+python3.4
+
 # No need to carry over to new/clean systems:
 debconf-utils
+ghostscript
 graphviz
 make-doc
 ncurses-doc

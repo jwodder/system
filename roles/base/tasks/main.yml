@@ -109,6 +109,7 @@
   command: dpkg-reconfigure -f noninteractive tzdata
   when: timezone_changed|changed
 
+### TODO: Don't do this?  It was only added for pip.
 - name: Make `sudo` always reset $HOME
   lineinfile:
     dest: /etc/sudoers

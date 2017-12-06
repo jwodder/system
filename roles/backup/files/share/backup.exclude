@@ -6,6 +6,7 @@
 .cache/
 .distlib/
 .eggs/
+.imageio/
 .local/
 .pylint.d/
 .tox/
