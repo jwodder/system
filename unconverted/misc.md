@@ -19,3 +19,4 @@
       `/usr/share/bash-completion/bash_completion` to
       `/usr/local/share/bash-completion/bash_completion` and set
       `BASH_COMPLETION_COMPAT_DIR=/etc/bash_completion.d` just before it
+- Uncomment `de_DE.UTF-8 UTF-8` in `/etc/locale.gen` and rerun `locale-gen`

@@ -9,8 +9,10 @@
 .imageio/
 .local/
 .pylint.d/
+.pytest_cache/
 .tox/
 .viminfo
+.virtualenvs
 __pycache__/
 _build/
 venv/

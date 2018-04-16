@@ -37,7 +37,6 @@ pylint
 pylint3
 python-bitarray
 python-bs4
-python-daemon
 python-dateutil
 python-dev
 python-jsonschema
@@ -74,6 +73,7 @@ ncurses-doc
 openvpn
 pgpdump
 python-apt-doc
+python-daemon
 python-rfc3339
 python3-yaml
 rs
