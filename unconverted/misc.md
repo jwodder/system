@@ -15,8 +15,7 @@
     - Replace `/etc/profile.d/bash_completion.sh` with a symlink to
       `/usr/local/etc/profile.d/bash_completion.sh` (or get rid of it
       altogether?)
-    - Edit `/etc/bash.bashrc` to change
-      `/usr/share/bash-completion/bash_completion` to
+    - [Per user] Change bash completion enablement code to source
       `/usr/local/share/bash-completion/bash_completion` and set
       `BASH_COMPLETION_COMPAT_DIR=/etc/bash_completion.d` just before it
 - Uncomment `de_DE.UTF-8 UTF-8` in `/etc/locale.gen` and rerun `locale-gen`

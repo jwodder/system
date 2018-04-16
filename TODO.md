@@ -1,4 +1,5 @@
 - Put on GitHub (after purging passwords from the repository, of course)
+- Update/redo `/etc/skel`
 
 Completeness
 ============

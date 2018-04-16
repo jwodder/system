@@ -72,14 +72,9 @@
     - Restart SSHd
 
 - name: Set /etc/skel
-  ### Do I also need to delete /etc/skel/.bash_logout?
-  ### Use `synchronize` with `delete: true`?
+  ### TODO: Do I also need to delete /etc/skel/.bash_logout?
+  ### TODO: Use `synchronize` with `delete: true`?
   copy: src=skel/ dest=/etc/skel owner=root group=root
-
-- name: Enable Bash completion globally
-  command: >
-    sed -i~ -e '/^# enable bash completion/,/^$/{/^# enable/b; s/^#//}'
-        /etc/bash.bashrc
 
 - name: Create /var/log/jwodder
   file:
