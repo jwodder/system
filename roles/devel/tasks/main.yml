@@ -31,16 +31,18 @@
   user: name={{admin_user}} groups=docker append=true
   when: admin_user is defined
 
-- name: Install docker-compose
-  pip:
-    name: docker-compose
-    state: "{{update_docker_compose|ternary('latest', 'present')}}"
-    virtualenv: "{{docker_compose_venv}}"
+- name: Determine latest release of Docker Compose
+  uri:
+    url: https://api.github.com/repos/docker/compose/releases/latest
+    return_content: true
+  register: compose_latest
 
-- file:
-    path: /usr/local/bin/docker-compose
-    src: "{{docker_compose_venv}}/bin/docker-compose"
-    state: link
+- name: Install Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{compose_latest.json.tag_name}}/docker-compose-{{ansible_system}}-{{ansible_machine}}
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+    force: "{{update_docker_compose}}"
 
 - name: Check whether jq is installed
   get_bin_path: command=jq

@@ -1,3 +1,2 @@
 ---
 update_docker_compose: false
-docker_compose_venv: /usr/local/virtualenvs/docker-compose
