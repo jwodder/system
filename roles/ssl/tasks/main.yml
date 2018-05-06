@@ -6,35 +6,41 @@
 
 - include: certbot_{{certbot_source}}.yml
 
-- name: Create etc/certbot
-  copy:
-    dest: "{{jwodder_root}}/etc/certbot"
-    content: |+
-        DOMAINS={{certbot_domains|join(',')|quote}}
-        EMAIL={{certbot_email|quote}}
-
-- name: Install Certbot scripts
+- name: Install Certbot hooks
   copy:
     ### TODO: Use synchronize instead?
     src: "{{item}}"
     dest: "{{jwodder_root}}/{{item}}"
     mode: 0755
   with_items:
-    - bin/certbot
     - bin/certbot-post-hook
     - bin/certbot-pre-hook
-    - bin/certbot-renew
 
 - name: Get SSL certificates
-  command: "{{jwodder_root}}/bin/certbot"
+  ### TODO: Is this idempotent?
+  ### TODO: Force a run if certbot_domains changed?  Always run?
+  command: |
+    certbot certonly
+        --standalone
+        --rsa-key-size 4096
+        --expand
+        --email {{certbot_email|quote}}
+        --domains {{certbot_domains|join(',')|quote}}
+        --non-interactive
+        --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook
+        --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
+        --agree-tos
   args:
     creates: /etc/letsencrypt
-  ### TODO: Force a run if certbot_domains changed?  Always run?
 
-- name: Create Certbot cronjob
+- name: Create certificate renewal cronjob
   copy:
     dest: /etc/cron.weekly/certbot
     content: |
         #!/bin/bash
-        chronic "{{jwodder_root|quote}}/bin/certbot-renew"
+        chronic certbot renew \
+            --quiet \
+            --non-interactive \
+            --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook \
+            --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
     mode: 0755
