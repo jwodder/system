@@ -1,6 +1,6 @@
 ---
 update_certbot: false
-certbot_venv: /usr/local/virtualenvs/certbot
+certbot_venv: "{{jwodder_root}}/venvs/certbot"
 certbot_email: jwodder+letsencrypt@gmail.com
 
 # Required: certbot_domains (list of strings)
