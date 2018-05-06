@@ -2,14 +2,14 @@
 # For first acquiring certs for domains (including adding a domain to the set
 # of cert'ed domains)
 
-# Idempotent?
+# Is this idempotent?
 
 # Note that, as of 2016-01-09, wildcard certs are still not supported.
 ((EUID == 0)) || exec sudo "$0" "$@"
 
 set -ex
 JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
-. "$JWODDER_ROOT/lib/certbot-common"
+. "$JWODDER_ROOT/etc/certbot"
 
 $VENV_PATH/bin/certbot certonly \
     --standalone \
@@ -18,8 +18,6 @@ $VENV_PATH/bin/certbot certonly \
     --email "$EMAIL" \
     --domains "$DOMAINS" \
     --non-interactive \
-    --pre-hook "$pre_hook" \
-    --post-hook "$post_hook" \
+    --pre-hook "$JWODDER_ROOT/bin/certbot-pre-hook" \
+    --post-hook "$JWODDER_ROOT/bin/certbot-post-hook" \
     --agree-tos
-
-    #--force-renewal \

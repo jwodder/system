@@ -27,14 +27,15 @@
 
 - name: Install Certbot scripts
   copy:
-    ### Use synchronize instead?
+    ### TODO: Use synchronize instead?
     src: "{{item}}"
     dest: "{{jwodder_root}}/{{item}}"
-    mode: 0755  ### TODO: lib/certbot-common should not be executable
+    mode: 0755
   with_items:
     - bin/certbot
+    - bin/certbot-post-hook
+    - bin/certbot-pre-hook
     - bin/certbot-renew
-    - lib/certbot-common
 
 - name: Get SSL certificates
   command: "{{jwodder_root}}/bin/certbot"

@@ -32,16 +32,15 @@ Structure & Configuration
         - the source & destination address for `xmission-done`
 - Place the Apache config in a file named `varonathe.org.conf` instead of using
   the default config files
-- Install virtualenvs in `/opt/jwodder/virtualenvs`?
-- Install Certbot via `ppa:certbot/certbot`?
+- Install Certbot via `ppa:certbot/certbot`
+    - cf. <https://certbot.eff.org/lets-encrypt/ubuntuxenial-apache>
 - devel: Install Python packages via pip (with `--user`) instead of via apt
 
 Changes & New Features
 ======================
 - Make `backdroplet` exclude files listed in `cruft`
 - Don't back up `/root` with `backdroplet`?
-- Add a role or playbook that updates all available packages, including forcing
-  updates of virtualenvs
+- Add a role or playbook that updates all available packages
 - Add an `update_all` variable that, when set (default: false), sets the
   default for all other `update_*` variables and (if true) causes `apt-get
   upgrade` to be run at the beginning of the playbook
@@ -60,8 +59,7 @@ Changes & New Features
 - Set up root's home directory
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
   cert(s) in `/etc/letsencrypt`, rerun `/opt/jwodder/bin/certbot`.
-- Try to combine `bin/certbot`, `bin/certbot-renew`, and `lib/certbot-common`
-  into a single script
+- Try to combine the certbot scripts into a single script
 - Use Ansible 2.2's `include_role` module
 - Install pip via <https://bootstrap.pypa.io/get-pip.py> instead of APT?
     - Install with `--user`?

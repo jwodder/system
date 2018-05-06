@@ -7,10 +7,10 @@
 
 set -ex
 JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
-. "$JWODDER_ROOT/lib/certbot-common"
+. "$JWODDER_ROOT/etc/certbot"
 
 $VENV_PATH/bin/certbot renew \
     --quiet \
     --non-interactive \
-    --pre-hook "$pre_hook" \
-    --post-hook "$post_hook"
+    --pre-hook "$JWODDER_ROOT/bin/certbot-pre-hook" \
+    --post-hook "$JWODDER_ROOT/bin/certbot-post-hook"
