@@ -9,7 +9,7 @@ set -ex
 JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
 . "$JWODDER_ROOT/etc/certbot"
 
-$VENV_PATH/bin/certbot renew \
+certbot renew \
     --quiet \
     --non-interactive \
     --pre-hook "$JWODDER_ROOT/bin/certbot-pre-hook" \

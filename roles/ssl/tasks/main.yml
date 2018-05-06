@@ -1,29 +1,17 @@
 ---
 - assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
-- copy:
+- assert:
+    that: 'certbot_source == "auto" or certbot_source == "ppa"'
+
+- include: certbot_{{certbot_source}}.yml
+
+- name: Create etc/certbot
+  copy:
     dest: "{{jwodder_root}}/etc/certbot"
     content: |+
         DOMAINS={{certbot_domains|join(',')|quote}}
         EMAIL={{certbot_email|quote}}
-        VENV_PATH={{certbot_venv|quote}}
-
-- stat: path={{certbot_venv}}
-  register: lenc
-
-- get_url:
-    url: https://dl.eff.org/certbot-auto
-    dest: /tmp/certbot-auto
-    mode: 0755
-    force: true
-
-# Because of the way certbot-auto is written (as of 2016-09-11), using `wget
-# -O-` to download & pipe the script to bash in a single task does not work.
-
-- command: /tmp/certbot-auto --noninteractive --version
-  when: not lenc.stat.exists or update_certbot
-  environment:
-    VENV_PATH: "{{certbot_venv}}"
 
 - name: Install Certbot scripts
   copy:
@@ -41,7 +29,7 @@
   command: "{{jwodder_root}}/bin/certbot"
   args:
     creates: /etc/letsencrypt
-  ### Force a run if certbot_domains changed?  Always run?
+  ### TODO: Force a run if certbot_domains changed?  Always run?
 
 - name: Create Certbot cronjob
   copy:

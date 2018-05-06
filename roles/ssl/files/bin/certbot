@@ -11,7 +11,7 @@ set -ex
 JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
 . "$JWODDER_ROOT/etc/certbot"
 
-$VENV_PATH/bin/certbot certonly \
+certbot certonly \
     --standalone \
     --rsa-key-size 4096 \
     --expand \

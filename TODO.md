@@ -32,8 +32,6 @@ Structure & Configuration
         - the source & destination address for `xmission-done`
 - Place the Apache config in a file named `varonathe.org.conf` instead of using
   the default config files
-- Install Certbot via `ppa:certbot/certbot`
-    - cf. <https://certbot.eff.org/lets-encrypt/ubuntuxenial-apache>
 - devel: Install Python packages via pip (with `--user`) instead of via apt
 
 Changes & New Features
