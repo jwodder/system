@@ -104,15 +104,6 @@
   command: dpkg-reconfigure -f noninteractive tzdata
   when: timezone_changed|changed
 
-### TODO: Don't do this?  It was only added for pip.
-- name: Make `sudo` always reset $HOME
-  lineinfile:
-    dest: /etc/sudoers
-    regexp: 'Defaults\s+always_set_home'
-    line: 'Defaults always_set_home'
-    # It doesn't seem to matter where the directive is placed in the file.
-    validate: 'visudo -cf %s'
-
 - name: Enable unattended upgrades
   debconf:
     name: unattended-upgrades

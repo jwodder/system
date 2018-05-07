@@ -11,9 +11,13 @@
 
 - name: Grant sudmin group sudo powers
   lineinfile:
-    dest: /etc/sudoers
+    dest: /etc/sudoers.d/jwodder
     line: '%sudmin ALL=(ALL:ALL) ALL'
     validate: 'visudo -cf %s'
+    mode: 0440
+    owner: root
+    group: root
+    backup: true
 
 - name: Create admin user
   user:
@@ -44,12 +48,9 @@
   become_user: "{{admin_user}}"
 
 - name: Give admin special sudo powers
-  template:
-    ### TODO: Files in /etc/sudoers.d are ignored if their names contain a
-    ### period.  Look for a way to handle this that doesn't cause problems when
-    ### both foo.bar and foo-bar are set up as admin users with this role.
-    dest: "/etc/sudoers.d/{{admin_user|replace('.', '-')}}"
-    src: sudoer
+  lineinfile:
+    dest: /etc/sudoers.d/jwodder
+    line: '{{admin_user}} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw, /usr/bin/less'
     validate: 'visudo -cf %s'
     mode: 0440
     owner: root

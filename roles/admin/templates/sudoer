@@ -1,1 +1,0 @@
-{{admin_user}} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw, /usr/bin/less
