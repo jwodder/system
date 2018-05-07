@@ -45,8 +45,8 @@
     force: "{{update_docker_compose}}"
 
 - name: Check whether jq is installed
-  get_bin_path: command=jq
+  command: which jq
   register: jq
 
 - include: jq.yml
-  when: jq.path is none
+  when: jq|failed

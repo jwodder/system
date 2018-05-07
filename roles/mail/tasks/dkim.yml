@@ -74,4 +74,4 @@
     owner: opendkim
     group: opendkim
 
-### Use /etc/opendkim/keys/{{mail_origin}}/mail.txt to create a DNS TXT entry named "mail._domainkey"
+### TODO: Use /etc/opendkim/keys/{{mail_origin}}/mail.txt to create a DNS TXT entry named "mail._domainkey"

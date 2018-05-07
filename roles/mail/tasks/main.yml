@@ -1,8 +1,8 @@
 ---
 
-### Add a DNS A record (`mail.varonathe.org`) pointing to the mail server's IP
+### TODO: Add a DNS A record (`mail.varonathe.org`) pointing to the mail server's IP
 
-### Add a DNS MX record pointing to `mail.varonathe.org`
+### TODO: Add a DNS MX record pointing to `mail.varonathe.org`
 
 - name: Allow incoming SMTP connections
   ufw: rule=allow to_ip=any to_port=25 proto=any direction=in
@@ -17,7 +17,7 @@
     name: postfix
     question: postfix/mailname
     vtype: string
-    value: "{{domain}}"  ### Set to first line of etc/domains?
+    value: "{{domain}}"  ### TODO: Set to first line of etc/domains?
 
 - apt: name={{item}} state=present update_cache=no
   with_items:
@@ -57,9 +57,7 @@
     dest: /etc/postgrey/whitelist_clients.local
     content: 'mandrillapp.com\n'
 
-###
-- Configure `/etc/postfix/main.cf` (and trigger a restart of Postfix)
-###
+!!! TODO: Configure `/etc/postfix/main.cf` (and trigger a restart of Postfix)
 
 - name: Configure /etc/aliases
   template:

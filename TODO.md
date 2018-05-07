@@ -14,8 +14,6 @@ Completeness
 
 Structure & Configuration
 =========================
-- Make the `/var/log/jwodder` path configurable?
-    - Alternatively, move it to `{{jwodder_root}}/var/logs`
 - Make the `/var/backups/jwodder` path configurable?
     - Rename `/var/backups/jwodder` to `/var/backups/$HOSTNAME`?
 - Store host-specific files (domains, PostgreSQL passwords, etc.) in
@@ -32,7 +30,6 @@ Structure & Configuration
         - the source & destination address for `xmission-done`
 - Place the Apache config in a file named `varonathe.org.conf` instead of using
   the default config files
-- devel: Install Python packages via pip (with `--user`) instead of via apt
 
 Changes & New Features
 ======================
@@ -48,7 +45,6 @@ Changes & New Features
 - Set up DNS?
 - Split the setup of Google 2FA into a separate role?
 - Add an option for whether to install jq from source or apt
-- Replace `get_bin_path` with just a call to `which`?
 - Don't set up Google Authenticator for root?
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
@@ -61,3 +57,6 @@ Changes & New Features
 - Install pip via <https://bootstrap.pypa.io/get-pip.py> instead of APT?
     - Install with `--user`?
 - ssl: Use the `--cert-name` option in newer versions of Certbot
+- Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs`
+- Convert all Python scripts to Python 3
+- devel: Install Python packages via pip (with `--user`) instead of via apt
