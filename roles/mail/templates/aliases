@@ -1,0 +1,15 @@
+mailer-daemon: {{luser}}
+postmaster:    {{luser}}
+{% if admin_user is defined %}
+abuse:         admin
+contact:       admin
+hostmaster:    admin
+root:          admin
+webmaster:     admin
+{% if admin_user != 'admin' %}
+admin:         {{admin_user}}
+{% endif %}
+{% for alias in admin_aliases %}
+{{alias}}: {{admin_user}}
+{% endfor %}
+{% endif %}

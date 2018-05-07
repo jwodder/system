@@ -56,8 +56,8 @@ Changes & New Features
     - Use nullmailer? dma? Mailgun? ssmtp?
 - Set up root's home directory
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
-  cert(s) in `/etc/letsencrypt`, rerun `/opt/jwodder/bin/certbot`.
-- Try to combine the certbot scripts into a single script
+  cert(s) in `/etc/letsencrypt`, rerun the Certbot command
 - Use Ansible 2.2's `include_role` module
 - Install pip via <https://bootstrap.pypa.io/get-pip.py> instead of APT?
     - Install with `--user`?
+- ssl: Use the `--cert-name` option in newer versions of Certbot

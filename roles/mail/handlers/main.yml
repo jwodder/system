@@ -5,5 +5,8 @@
 - name: Restart OpenDKIM
   service: name=opendkim state=restarted
 
+- name: Run newaliases
+  command: newaliases
+
 - name: Run postwhite
   command: /usr/local/postwhite/postwhite

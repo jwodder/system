@@ -2,7 +2,6 @@
 ansible_host: 104.236.121.96
 
 #update_certbot: false
-certbot_venv: /usr/local/virtualenvs/certbot
 certbot_email: jwodder+letsencrypt@gmail.com
 
 certbot_domains:
@@ -11,3 +10,27 @@ certbot_domains:
     - mail.varonathe.org
     - mg.varonathe.org
     - local.varonathe.org
+
+admin_aliases:
+    - borogove
+    - daemail
+    - doapi
+    - git
+    - guildorn
+    - ifttt
+    - john.wodder
+    - john
+    - jtw
+    - launchpad
+    - mailgun
+    - mborogove
+    - mimsy
+    - minimiscience
+    - nethack
+    - pypi
+    - readthedocs
+    - steam
+    - trello
+    - wodder
+
+# vim:set syntax=yaml:

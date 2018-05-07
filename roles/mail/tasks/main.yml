@@ -59,9 +59,14 @@
 
 ###
 - Configure `/etc/postfix/main.cf` (and trigger a restart of Postfix)
-- Configure `/etc/aliases`
-- Run `newaliases` to update Postfix's knowledge of `/etc/aliases`
 ###
+
+- name: Configure /etc/aliases
+  template:
+    src: aliases
+    dest: /etc/aliases
+  notify:
+    - Run newaliases
 
 ### Make this conditional on whether PostgreSQL is installed?
 ### (Some sort of integration with PostgreSQL is needed here.)
