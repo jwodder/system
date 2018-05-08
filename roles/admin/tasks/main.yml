@@ -42,7 +42,15 @@
   authorized_key: user={{admin_user}} manage_dir=true key="{{authkeys.stdout}}"
 
 - name: Set up Google Authenticator for admin
-  shell: 'yes | google-authenticator'
+  command: |
+    google-authenticator
+        --disallow-reuse
+        --force
+        --quiet
+        --rate-limit=3
+        --rate-time=30
+        --time-based
+        --window-size=3
   args:
     creates: "/home/{{admin_user}}/.google_authenticator"
   become_user: "{{admin_user}}"

@@ -59,7 +59,15 @@
     - Restart SSHd
 
 - name: Set up Google Authenticator for root
-  shell: 'yes | google-authenticator'
+  command: |
+    google-authenticator
+        --disallow-reuse
+        --force
+        --quiet
+        --rate-limit=3
+        --rate-time=30
+        --time-based
+        --window-size=3
   args:
     creates: /root/.google_authenticator
 
