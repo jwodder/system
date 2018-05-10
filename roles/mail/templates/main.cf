@@ -14,8 +14,8 @@ append_dot_mydomain = no
 
 # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
 # information on enabling SSL in the smtp client.
-smtpd_tls_cert_file = /etc/letsencrypt/live/varonathe.org/fullchain.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/varonathe.org/privkey.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/{{certbot_cert_name}}/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/{{certbot_cert_name}}/privkey.pem
 smtpd_use_tls = yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
@@ -32,27 +32,26 @@ postscreen_access_list = permit_mynetworks,
                          # Postwhite:
                          cidr:/etc/postfix/postscreen_spf_whitelist.cidr,
 
-myhostname = mail.varonathe.org
-myorigin = varonathe.org
-mydomain = varonathe.org
-mydestination = varonathe.org,
-                mail.varonathe.org,
-                mg.varonathe.org,
-                firefly,
-                firefly.varonathe.org,
-                localhost,
-                localhost.$mydomain,
-                localhost.localdomain
+myhostname = {{mail_hostname}}
+myorigin = {{mail_origin}}
+mydomain = {{mail_origin}}
+mydestination =
+    {% for dest in mail_destinations %}
+    {{dest}},
+    {% endfor %}
+    localhost,
+    localhost.$mydomain,
+    localhost.localdomain
 mynetworks_style = host
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-relayhost = 
+relayhost =
 inet_interfaces = all
 inet_protocols = all
 
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 local_recipient_maps =
-luser_relay = muffins@varonathe.org
+luser_relay = {{luser}}@{{mail_origin}}
 mailbox_command = procmail -a "$EXTENSION" ORIGINAL_RECIPIENT="$ORIGINAL_RECIPIENT"
 mailbox_size_limit = 0
 recipient_delimiter = +
@@ -62,5 +61,3 @@ milter_protocol = 2
 milter_default_action = accept
 smtpd_milters = inet:localhost:12301
 non_smtpd_milters = inet:localhost:12301
-
-# vim:set et:

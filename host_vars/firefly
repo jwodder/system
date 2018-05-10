@@ -33,4 +33,13 @@ admin_aliases:
     - trello
     - wodder
 
+certbot_cert_name: varonathe.org
+
+mail_destinations:
+    - varonathe.org
+    - mail.varonathe.org
+    - mg.varonathe.org
+    - firefly
+    - firefly.varonathe.org
+
 # vim:set syntax=yaml:

@@ -17,7 +17,7 @@
     name: postfix
     question: postfix/mailname
     vtype: string
-    value: "{{domain}}"  ### TODO: Set to first line of etc/domains?
+    value: "{{mail_origin}}"
 
 - apt: name={{item}} state=present update_cache=no
   with_items:
@@ -57,7 +57,12 @@
     dest: /etc/postgrey/whitelist_clients.local
     content: 'mandrillapp.com\n'
 
-!!! TODO: Configure `/etc/postfix/main.cf` (and trigger a restart of Postfix)
+- name: Configure Postfix
+  template:
+    src: main.cf
+    dest: /etc/postfix/main.cf
+  notify:
+    - Restart Postfix
 
 - name: Configure /etc/aliases
   template:
@@ -66,7 +71,7 @@
   notify:
     - Run newaliases
 
-### Make this conditional on whether PostgreSQL is installed?
+### TODO: Make this conditional on whether PostgreSQL is installed?
 ### (Some sort of integration with PostgreSQL is needed here.)
 
 - name: Install bin/maillog
