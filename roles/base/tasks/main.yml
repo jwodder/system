@@ -129,20 +129,15 @@
     src: apt.conf
     dest: /etc/apt/apt.conf.d/99jwodder
 
-- copy:
-    src: dbpurgeage.local
-    dest: /etc/fail2ban/fail2ban.d/dbpurgeage.local
-    backup: true
-  notify:
-    - Restart fail2ban
-
-- copy:
-    src: "{{item}}"
-    dest: "/etc/fail2ban/jail.d/{{item}}"
+- name: Configure fail2ban
+  copy:
+    src: "fail2ban/{{item}}"
+    dest: "/etc/fail2ban/{{item}}"
     backup: true
   with_items:
-    - defaults.local
-    - recidive.local
-    - sshd.local
+    - fail2ban.d/dbpurgeage.local
+    - jail.d/defaults.local
+    - jail.d/recidive.local
+    - jail.d/sshd.local
   notify:
     - Restart fail2ban
