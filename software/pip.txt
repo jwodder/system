@@ -2,5 +2,3 @@ click     # --user
 habitica  # --user
 psutil
 purepng
-
-docker-compose  # in a virtualenv
