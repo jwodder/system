@@ -120,3 +120,11 @@
         #!/bin/bash
         find /var/mail.old -type f -mtime +42 -delete
     mode: 0755
+
+- name: Configure fail2ban
+  copy:
+    src: postfix.local
+    dest: /etc/fail2ban/jail.d/postfix.local
+    backup: true
+  notify:
+    - Restart fail2ban

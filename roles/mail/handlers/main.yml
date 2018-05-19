@@ -1,9 +1,12 @@
 ---
-- name: Restart Postfix
-  service: name=postfix state=restarted
+- name: Restart fail2ban
+  service: name=fail2ban state=restarted
 
 - name: Restart OpenDKIM
   service: name=opendkim state=restarted
+
+- name: Restart Postfix
+  service: name=postfix state=restarted
 
 - name: Run newaliases
   command: newaliases
