@@ -8,7 +8,6 @@
 
 - name: Install Certbot hooks
   copy:
-    ### TODO: Use synchronize instead?
     src: "{{item}}"
     dest: "{{jwodder_root}}/{{item}}"
     mode: 0755
@@ -24,6 +23,7 @@
         --standalone
         --rsa-key-size 4096
         --expand
+        --cert-name {{certbot_cert_name|quote}}
         --email {{certbot_email|quote}}
         --domains {{certbot_domains|join(',')|quote}}
         --non-interactive
@@ -41,6 +41,7 @@
         chronic certbot renew \
             --quiet \
             --non-interactive \
+            --cert-name {{certbot_cert_name|quote}} \
             --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook \
             --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
     mode: 0755

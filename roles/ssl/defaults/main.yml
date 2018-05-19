@@ -2,6 +2,7 @@
 update_certbot: false
 certbot_venv: "{{jwodder_root}}/venvs/certbot"
 certbot_email: jwodder+letsencrypt@gmail.com
+certbot_cert_name: jwodder
 
 # Must be 'auto' or 'ppa':
 certbot_source: auto

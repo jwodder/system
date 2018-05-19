@@ -30,6 +30,7 @@ Structure & Configuration
         - the source & destination address for `xmission-done`
 - Place the Apache config in a file named `varonathe.org.conf` instead of using
   the default config files
+- Align the two `certbot_cert_name` variables
 
 Changes & New Features
 ======================
@@ -46,6 +47,7 @@ Changes & New Features
 - Split the setup of Google 2FA into a separate role?
 - Add an option for whether to install jq from source or apt
 - Don't set up Google Authenticator for root?
+    - Only set up Google Authenticator for root when there's no `admin_user`?
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
@@ -56,7 +58,10 @@ Changes & New Features
 - Use Ansible 2.2's `include_role` module
 - Install pip via <https://bootstrap.pypa.io/get-pip.py> instead of APT?
     - Install with `--user`?
-- ssl: Use the `--cert-name` option in newer versions of Certbot
+        - Install in `admin_user`'s home if defined, otherwise under root's?
+        - Add the Python user base `bin` directory to the affected user's PATH
+          by editing eir `~/.profile`
 - Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs`
 - Convert all Python scripts to Python 3
 - devel: Install Python packages via pip (with `--user`) instead of via apt
+    - Install in `admin_user`'s home if defined, otherwise under root's?
