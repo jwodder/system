@@ -20,7 +20,7 @@ def main():
         module.fail_json(msg=traceback.format_exc())
     if not isinstance(data, dict):
         module.fail_json(msg='File must contain a JSON object/dictionary')
-    for k,v in module.params["update"].iteritems():
+    for k,v in module.params["update"].items():
         if k not in data or data[k] != v:
             data[k] = v
             changed = True

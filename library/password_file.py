@@ -30,7 +30,7 @@ def main():
     try:
         if pwd is None or pwd == '' or (force and len(pwd) != length):
             pwd = ''.join(random.choice(string.ascii_letters + string.digits)
-                          for _ in xrange(length))
+                          for _ in range(length))
             if not module.check_mode:
                 #if module.params["backup"]:
                 #    module.backup_local(dest)
