@@ -103,14 +103,8 @@
   command: dpkg-reconfigure -f noninteractive popularity-contest
   when: popcon_changed|changed
 
-# cf. <http://docs.ansible.com/ansible/timezone_module.html> (Ansible 2.2+)
 - name: Set timezone to UTC
-  copy: dest=/etc/timezone content="Etc/UTC\n"
-  register: timezone_changed
-
-- name: Enable new timezone setting
-  command: dpkg-reconfigure -f noninteractive tzdata
-  when: timezone_changed|changed
+  timezone: name=Etc/UTC
 
 - name: Enable unattended upgrades
   debconf:
