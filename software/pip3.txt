@@ -8,6 +8,7 @@ flake8-bugbear   # provides 'B' checks
 flake8-builtins  # also provides 'B' checks
 nox-automation
 packaging
+pip
 pipdeptree
 pipenv
 property-manager
@@ -20,3 +21,4 @@ reportlab
 rwt
 tox
 twine
+wheel

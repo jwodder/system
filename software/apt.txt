@@ -33,21 +33,8 @@ postgrey
 procmail
 pwgen
 pyflakes
-pylint
-pylint3
-python-bitarray
-python-bs4
-python-dateutil
 python-dev
-python-jsonschema
-python-pip
-python-prettytable
-python-psycopg2
-python3-bs4
-python3-daemon
-python3-pip
-python3-prettytable
-python3-psycopg2
+python3-dev
 rss2email
 software-properties-common  # apt-add-repository
 sqlite3
@@ -73,12 +60,20 @@ ncurses-doc
 openvpn
 pgpdump
 python-apt-doc
+python-bitarray
 python-daemon
+python-dateutil
+python-jsonschema
+python-prettytable
 python-rfc3339
+python3-daemon
+python3-prettytable
 python3-yaml
 rs
 transmission-cli
 transmission-daemon
+python-psycopg2
+python3-psycopg2
 
 # Installed by Let's Encrypt:
 dialog

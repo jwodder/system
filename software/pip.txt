@@ -1,4 +1,5 @@
-click     # --user
-habitica  # --user
-psutil
-purepng
+# All installed with --user:
+click
+habitica
+pip
+wheel
