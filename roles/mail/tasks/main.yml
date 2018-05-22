@@ -95,7 +95,6 @@
     group: "{{luser}}"
 
 - include: admin.yml
-  when: admin_user is defined
 
 - name: Create /var/mail.old
   file:

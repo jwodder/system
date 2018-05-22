@@ -29,7 +29,6 @@
 
 - name: Add admin user to `docker` group
   user: name={{admin_user}} groups=docker append=true
-  when: admin_user is defined
 
 - name: Determine latest release of Docker Compose
   uri:

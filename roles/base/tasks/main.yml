@@ -59,24 +59,11 @@
   notify:
     - Restart SSHd
 
-- name: Set up Google Authenticator for root
-  command: |
-    google-authenticator
-        --disallow-reuse
-        --force
-        --quiet
-        --rate-limit=3
-        --rate-time=30
-        --time-based
-        --window-size=3
-  args:
-    creates: /root/.google_authenticator
-
-- name: Allow/forbid root login
+- name: Forbid root login
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^#?PermitRootLogin\s+'
-    line: 'PermitRootLogin {{root_login|ternary("yes", "no")}}'
+    line: 'PermitRootLogin no'
   notify:
     - Restart SSHd
 
@@ -85,12 +72,10 @@
   ### TODO: Use `synchronize` with `delete: true`?
   copy: src=skel/ dest=/etc/skel owner=root group=root
 
-- name: Create /var/log/jwodder
-  file:
-    path: /var/log/jwodder
-    state: directory
-    group: syslog
-    mode: 0775
+- name: Configure APT
+  copy:
+    src: apt.conf
+    dest: /etc/apt/apt.conf.d/99jwodder
 
 - name: Configure popularity-contest
   debconf:
@@ -118,11 +103,6 @@
 - name: Enable new unattended-upgrades settings
   command: dpkg-reconfigure -f noninteractive unattended-upgrades
   when: unattup|changed
-
-- name: Configure APT
-  copy:
-    src: apt.conf
-    dest: /etc/apt/apt.conf.d/99jwodder
 
 - name: Configure fail2ban
   copy:

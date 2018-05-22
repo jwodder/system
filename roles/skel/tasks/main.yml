@@ -20,3 +20,10 @@
     mode: 0700
     owner: root
     group: root
+
+- name: Create /var/log/jwodder
+  file:
+    path: /var/log/jwodder
+    state: directory
+    group: syslog
+    mode: 0775

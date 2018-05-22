@@ -53,4 +53,3 @@
 
 - name: Add admin user to `debian-transmission` group
   user: name={{admin_user}} groups=debian-transmission append=true
-  when: admin_user is defined

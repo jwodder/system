@@ -1,4 +1,7 @@
 ---
+- assert:
+    that: 'admin_user != "root"'
+
 - set_fact:
     # This makes the variable accessible to subsequent roles, right?
     admin_user: "{{admin_user}}"

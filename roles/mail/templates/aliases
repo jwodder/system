@@ -1,6 +1,5 @@
 mailer-daemon: {{luser}}
 postmaster:    {{luser}}
-{% if admin_user is defined %}
 abuse:         admin
 contact:       admin
 hostmaster:    admin
@@ -12,4 +11,3 @@ admin:         {{admin_user}}
 {% for alias in admin_aliases %}
 {{alias}}: {{admin_user}}
 {% endfor %}
-{% endif %}

@@ -3,7 +3,16 @@
   become: true
   roles:
     - base
-    - role: admin
-      when: "{{admin_user is defined}}"
+    - skel
+    - admin
 
-# The admin role must come before the following: devel, mail
+# Optional roles:
+# - backup
+# - dailyreport (requires mail and logsdb)
+# - devel
+# - loginmsg
+# - logsdb (requires postgres)
+# - mail (requires ssl)
+# - postgres
+# - ssl
+# - xmission
