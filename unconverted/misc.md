@@ -8,8 +8,8 @@
   2.7's `sys.path` will make sense.  (How did that line even get there in the
   first place???)
 - Version 2.2 or higher of bash-completion is needed for tab completion to play
-  nicely with failglob.  Until Ubuntu provides such a version, install from
-  source as follows:
+  nicely with failglob.  On pre-Bionic Beaver systems, install from source as
+  follows:
     - Install the latest release (2.7 at time of writing) from
       <https://github.com/scop/bash-completion>
     - Replace `/etc/profile.d/bash_completion.sh` with a symlink to

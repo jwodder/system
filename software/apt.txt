@@ -32,7 +32,6 @@ postgresql
 postgrey
 procmail
 pwgen
-pyflakes
 python-dev
 python3-dev
 rss2email
@@ -74,6 +73,7 @@ transmission-cli
 transmission-daemon
 python-psycopg2
 python3-psycopg2
+pyflakes
 
 # Installed by Let's Encrypt:
 dialog
