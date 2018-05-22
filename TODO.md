@@ -1,5 +1,6 @@
 - Put on GitHub (after purging passwords from the repository, of course)
 - Update/redo `/etc/skel`
+    - Edit the default `~/.profile` to add `$PYTHONUSERBASE/bin` to `PATH`
 - Align the two `certbot_cert_name` variables
 - Set admin user's password
 - Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs` (or just
@@ -16,7 +17,7 @@
 
 Completeness
 ============
-- Do everything in misc.txt
+- Do everything in `misc.md`
 - Ensure everything in `/opt/jwodder` is world-readable and (when relevant)
   -executable
 - Set up Apache
@@ -65,13 +66,7 @@ Changes & New Features
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
   cert(s) in `/etc/letsencrypt`, rerun the Certbot command
 - Use Ansible 2.2's `include_role` module
-- Install pip via <https://bootstrap.pypa.io/get-pip.py> instead of APT
-    - Install with `--user` for `admin_user`
-        - Add the necessary PATH modifications to `/etc/skel` before creating
-          `admin_user`
 - Convert all Python scripts to Python 3
-- devel: Install Python packages via pip (with `--user` for `admin_user`)
-  instead of via apt
 - Convey the Google Authenticator details back to the user running Ansible
 - Support adding SSH keys to the admin user's `authorized_keys` other than
   those in root's `authorized_keys`

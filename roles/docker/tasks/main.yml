@@ -1,26 +1,4 @@
 ---
-- name: Install development-related packages
-  apt: name={{item}} state=present update_cache=no
-  with_items:
-    - build-essential
-    #- libncurses5-dev
-    #- libncursesw5-dev
-    #- ncurses-doc
-    - patch
-    #- perl-doc
-    - pyflakes
-    - python-dev
-    - python-pip
-    - python-requests
-    - python-six
-    - python-virtualenv
-    - python3-dev
-    - python3-pip
-    - python3-requests
-    - python3-six
-    - python3-virtualenv
-    - tox
-
 - name: Install Docker
   ### TODO: Convert the get.docker.io script to Ansible tasks?
   shell: 'wget -qO- https://get.docker.io | bash -'

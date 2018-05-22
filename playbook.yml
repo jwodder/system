@@ -2,14 +2,14 @@
 - hosts: all
   become: true
   roles:
-    - base
+    - base  # `base` must be run before `admin` in order to configure /etc/skel
     - skel
     - admin
 
 # Optional roles:
 # - backup
 # - dailyreport (requires mail and logsdb)
-# - devel
+# - docker
 # - loginmsg
 # - logsdb (requires postgres)
 # - mail (requires ssl)

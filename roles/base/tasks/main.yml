@@ -3,6 +3,7 @@
   apt: name={{item}} state=present update_cache=yes
   with_items:
     - apt-transport-https
+    - build-essential
     - curl
     - fail2ban
     - git
@@ -10,6 +11,9 @@
     - jq
     - libpam-google-authenticator
     - moreutils  # chronic
+    - patch
+    - python-dev
+    - python3-dev
     - software-properties-common  # apt-add-repository
     - tree
     - unattended-upgrades
