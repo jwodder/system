@@ -5,6 +5,14 @@
 - Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs` (or just
   `{{jwodder_root}}/logs`?)
 - Remove the `meta/main.yml` dependencies on `skel`?
+- Allow all other roles to freely assume that `base`, `skel`, and `admin` have
+  already been run?
+- Problem: Since `base` disables root login, and the existence of the `admin`
+  role implies that there is initially no non-root account available for login
+  (and thus that we're logging in as root the first time the playbook is run),
+  the host's SSH details will have to be modified after the first play first
+  runs.  In particular, having multiple plays in the playbook will not work out
+  well on the first run.
 
 Completeness
 ============
