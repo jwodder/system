@@ -43,10 +43,3 @@
     dest: /usr/local/bin/docker-compose
     mode: 0755
     force: "{{update_docker_compose}}"
-
-- name: Check whether jq is installed
-  command: which jq
-  register: jq
-
-- include: jq.yml
-  when: jq|failed

@@ -7,6 +7,7 @@
     - fail2ban
     - git
     - htop
+    - jq
     - libpam-google-authenticator
     - moreutils  # chronic
     - software-properties-common  # apt-add-repository
