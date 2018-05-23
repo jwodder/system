@@ -44,6 +44,7 @@ Structure & Configuration
         - the source & destination address for `xmission-done`
 - Place the Apache config in a file named `{{domain}}.conf` instead of using
   the default config files
+- Move the logsdb password to the `etc/secret` directory?
 
 Changes & New Features
 ======================
