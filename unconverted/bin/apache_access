@@ -1,0 +1,59 @@
+#!/usr/bin/python3
+import ast
+from   contextlib                   import redirect_stderr
+import json
+import sys
+import time
+import traceback
+from   jwodder_logsdb.core          import connect
+from   jwodder_logsdb.apache_access import ApacheAccess
+
+# Apache log format:
+# "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
+
+ERRORFILE = '/var/log/jwodder/apachelogs.err'
+
+def main():
+    with open(ERRORFILE, 'a') as err, redirect_stderr(err):
+        line = None
+        try:
+            with ApacheAccess(connect()) as db:
+                # `for line in sys.stdin` cannot be used here because Python
+                # buffers stdin when iterating over it, causing the script to
+                # wait for some too-large number of lines to be passed to it
+                # until it'll do anything.
+                for line in iter(sys.stdin.readline, ''):
+                    timestamp, host, port, src_addr, bytesIn, bytesOut, \
+                        microsecs, status, strs = line.split('|', 8)
+                    authuser, reqline, method, path, protocol, referer, \
+                        user_agent = ast.literal_eval(strs)
+                    db.insert_entry(
+                        timestamp  = timestamp,
+                        host       = host,
+                        port       = int(port),
+                        src_addr   = src_addr,
+                        authuser   = authuser,
+                        bytesin    = int(bytesIn),
+                        bytesout   = int(bytesOut),
+                        microsecs  = int(microsecs),
+                        status     = int(status),
+                        reqline    = reqline,
+                        method     = method,
+                        path       = path,
+                        protocol   = protocol,
+                        referer    = referer,
+                        user_agent = user_agent,
+                    )
+        except Exception as e:
+            print(json.dumps({
+                "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+                "line": line,
+                #"about": about,
+                "traceback": traceback.format_exec(),
+                "error_type": type(e).__name__,
+                "error": str(e),
+            }), file=sys.stderr, flush=True)
+            sys.exit(1)
+
+if __name__ == '__main___':
+    main()

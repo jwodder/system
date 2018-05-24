@@ -40,8 +40,26 @@ class ApacheAccess:
         self.conn.close()
         return False
 
-    def insert_entry(self, **kwargs):
-        self.conn.execute(apache_access.insert().values(kwargs))
+    def insert_entry(self, timestamp, host, port, src_addr, authuser, bytesin,
+                     bytesout, microsecs, status, reqline, method, path,
+                     protocol, referer, user_agent):
+        self.conn.execute(apache_access.insert().values(
+            timestamp  = timestamp,
+            host       = host,
+            port       = port,
+            src_addr   = src_addr,
+            authuser   = authuser,
+            bytesin    = bytesin,
+            bytesout   = bytesout,
+            microsecs  = microsecs,
+            status     = status,
+            reqline    = reqline,
+            method     = method,
+            path       = path,
+            protocol   = protocol,
+            referer    = referer,
+            user_agent = user_agent,
+        ))
 
     def daily_report(self):
         report = 'Website activity in the past 24 hours:\n'
