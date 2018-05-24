@@ -1,13 +1,6 @@
 import sqlalchemy as S
-from   sqlalchemy.dialects.postgresql import INET
 
 schema = S.MetaData()
-
-authfail = S.Table('authfail', schema,
-    S.Column('timestamp', S.DateTime(timezone=True), nullable=False),
-    S.Column('username',  S.Unicode(255), nullable=False),
-    S.Column('src_addr',  INET, nullable=False),
-)
 
 inbox_contacts = S.Table('inbox_contacts', schema,
     S.Column('id',            S.Integer, primary_key=True, nullable=False),

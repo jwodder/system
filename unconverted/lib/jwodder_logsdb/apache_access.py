@@ -1,9 +1,7 @@
-from   datetime                       import timedelta
-from   email.utils                    import localtime
 from   prettytable                    import PrettyTable
 import sqlalchemy as S
 from   sqlalchemy.dialects.postgresql import INET
-from   .core                          import longint
+from   .core                          import SchemaConn, longint, one_day_ago
 
 ### TODO: Is there any reason not to define these at module level?
 schema = S.MetaData()
@@ -26,19 +24,8 @@ apache_access = S.Table('apache_access', schema,
     S.Column('user_agent', S.Unicode(2048),           nullable=False),
 )
 
-class ApacheAccess:
-    def __init__(self, engine):
-        schema.create_all(engine)
-        self.engine = engine
-        self.conn = None
-
-    def __enter__(self):
-        self.conn = self.engine.connect()
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.conn.close()
-        return False
+class ApacheAccess(SchemaConn):
+    SCHEMA = schema
 
     def insert_entry(self, timestamp, host, port, src_addr, authuser, bytesin,
                      bytesout, microsecs, status, reqline, method, path,
@@ -74,7 +61,7 @@ class ApacheAccess:
                 S.func.COUNT('*').label('qty'),
                 S.func.SUM(apache_access.c.bytesin),
                 S.func.SUM(apache_access.c.bytesout),
-            ]).where(apache_access.c.timestamp >= localtime()-timedelta(days=1))
+            ]).where(apache_access.c.timestamp >= one_day_ago())
               .group_by(apache_access.c.reqline)
               .order_by(S.desc('qty'), S.asc(apache_access.c.reqline))
         ):
