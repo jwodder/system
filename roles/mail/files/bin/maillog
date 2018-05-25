@@ -1,80 +1,37 @@
 #!/usr/bin/python3
-# Only Python 3's decode_header decodes RFC2047-encoded e-mail addresses.
-from   datetime     import datetime
-import email
-from   email.header import decode_header, make_header
-from   email.utils  import getaddresses, mktime_tz, parseaddr, parsedate_tz
-import logging
-import os.path
+from   contextlib             import redirect_stderr
+from   email                  import message_from_bytes, policy
 import sys
-from   psycopg2     import connect
+import time
+from   jwodder_logsdb.core    import connect
+from   jwodder_logsdb.maillog import MailLog
 
-jwodder_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+ERRORFILE = '/var/log/jwodder/maillog.err'
 
-errorfile = '/var/log/jwodder/maillog.err'
-credsfile = os.path.join(jwodder_root, 'etc', 'localhost', 'logger')
+def main():
+    with open(ERRORFILE, 'a') as err, redirect_stderr(err):
+        try:
+            rawmsg = sys.stdin.buffer.read()
+            size = len(rawmsg)
+            msg = message_from_bytes(rawmsg, policy=policy.default)
+            recipients = ()
+            for field in ('To', 'CC'):
+                if field in msg:
+                    recipients += msg[field].addresses
+            with MailLog(connect()) as db:
+                db.insert_entry(
+                    subject    = msg['Subject'],
+                    sender     = msg['From'].addresses[0],
+                    date       = msg['Date'].datetime,
+                    recipients = recipients,
+                    size       = size,
+                )
+        except Exception:
+            ### TODO: Include a description of the e-mail?
+            ### (Message-ID, first few characters, ???)
+            print(time.strftime('\n%Y-%m-%dT%H:%M:%SZ: Error processing e-mail',
+                                time.gmtime()), file=sys.stderr)
+            raise
 
-sys.stderr = open(errorfile, 'a')
-
-### TODO: Make error logs include a description of the e-mail? (Message-ID,
-### first few characters, ???)
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
-                    level=logging.INFO, datefmt='%Y-%m-%dT%H:%M:%SZ')
-
-try:
-    with open(credsfile) as fp:
-        dbpass = fp.read().strip()
-    db = connect(
-        host='localhost',
-        database='logs',
-        user='logger',
-        password=dbpass,
-    )
-    cursor = db.cursor()
-except Exception as e:
-    logging.exception('Error connecting to database')
-    #raise
-    sys.exit(1)
-
-def get_header(msg, hdr):
-    # Why doesn't Python do this automatically?!?
-    return [str(make_header(decode_header(h))) for h in msg.get_all(hdr, [])]
-
-def contactID(contact):
-    # `contact` is a `(realname, email_address)` pair.
-    cursor.execute('SELECT id FROM inbox_contacts WHERE realname = %s AND'
-                   ' email_address = %s', contact)
-    cid = cursor.fetchone()
-    if cid is None:
-        cursor.execute('INSERT INTO inbox_contacts (realname, email_address)'
-                       ' VALUES (%s, %s) RETURNING id', contact)
-        cid = cursor.fetchone()
-    return cid[0]
-
-try:
-    rawmsg = sys.stdin.buffer.read()
-    size = len(rawmsg)
-    msg = email.message_from_bytes(rawmsg)
-    subject = '\n'.join(get_header(msg, 'Subject'))[:2048]
-    #if '[DIE]' in subject:
-    #	raise RuntimeError('Dying as requested')
-    sender = contactID(parseaddr(get_header(msg, 'From')[0]))
-    date = datetime.utcfromtimestamp(mktime_tz(parsedate_tz(get_header(msg, 'Date')[0])))\
-                   .strftime('%Y-%m-%dT%H:%M:%SZ')
-    recips = set(map(contactID, getaddresses(get_header(msg, 'To')
-                                           + get_header(msg, 'CC'))))
-    cursor.execute('INSERT INTO inbox (timestamp, subject, sender, size, date)'
-                   ' VALUES (statement_timestamp(), %s, %s, %s, %s)'
-                   ' RETURNING id', (subject, sender, size, date))
-    mid = cursor.fetchone()[0]
-    cursor.executemany('INSERT INTO inbox_tocc (msg_id, contact_id)'
-                       ' VALUES (%s, %s)', [(mid, r) for r in recips])
-except Exception:
-    db.rollback()
-    logging.exception('Error processing e-mail')
-    #raise
-    sys.exit(1)
-else:
-    db.commit()
-finally:
-    db.close()
+if __name__ == '__main__':
+    main()

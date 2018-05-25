@@ -58,7 +58,8 @@ class ApacheAccess(SchemaConn):
         for reqline, qty, byin, byout in self.conn.execute(
             S.select([
                 apache_access.c.reqline,
-                S.func.COUNT('*').label('qty'),
+                # func.count() [lowercase!] == COUNT(*)
+                S.func.count().label('qty'),
                 S.func.SUM(apache_access.c.bytesin),
                 S.func.SUM(apache_access.c.bytesout),
             ]).where(apache_access.c.timestamp >= one_day_ago())

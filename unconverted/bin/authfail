@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+from   contextlib              import redirect_stderr
 import json
 import re
 import sys
 import time
+import traceback
 from   jwodder_logsdb.core     import connect
 from   jwodder_logsdb.authfail import Authfail
 
@@ -41,5 +43,5 @@ def main():
             }), file=sys.stderr, flush=True)
             sys.exit(1)
 
-if __name__ == '__main___':
+if __name__ == '__main__':
     main()
