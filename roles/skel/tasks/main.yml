@@ -12,6 +12,7 @@
     - "{{jwodder_root}}/etc"
     - "{{jwodder_root}}/lib"
     - "{{jwodder_root}}/share"
+    - "{{jwodder_root}}/venvs"
 
 - name: Create secrets directory
   file:

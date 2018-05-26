@@ -4,15 +4,36 @@
     length: 32
   register: logpass
 
-- postgresql_user:
+- name: Create PostgreSQL logger user
+  postgresql_user:
     name: logger
     password: "{{logpass.password}}"
     encrypted: true
     role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
   become_user: postgres
 
-- postgresql_db:
+- name: Create logs database
+  postgresql_db:
     name: logs
     owner: logger
     encoding: utf8
   become_user: postgres
+
+### TODO: Run on `logs` (cf. <http://stackoverflow.com/a/6454469>):
+# GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{admin_user}};
+# ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {{admin_user}};
+
+### TODO: Ensure all tables in `logs` are owned by `logger`? (ALTER TABLE
+### public.$table OWNER TO logger)
+
+- name: Install jwodder_logsdb skeleton
+  synchronize:
+    src: jwodder_logsdb
+    dest: "{{jwodder_root}}/lib"
+
+- name: Create jwodder_logsdb virtualenv
+  pip:
+    requirements: "{{jwodder_root}}/lib/jwodder_logsdb/requirements.txt"
+    virtualenv: "{{jwodder_root}}/venvs/logsdb"
+    virtualenv_command: "~{{admin_user}}/.local/bin/virtualenv"
+    virtualenv_python: python3

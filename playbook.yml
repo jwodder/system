@@ -11,8 +11,8 @@
 # - dailyreport (requires mail and logsdb)
 # - docker
 # - loginmsg
-# - logsdb (requires postgres)
-# - mail (requires ssl)
+# - logsdb (pre-depends on postgres)
+# - mail (pre-depends on ssl; has logsdb-dependent part)
 # - postgres
 # - ssl
 # - xmission

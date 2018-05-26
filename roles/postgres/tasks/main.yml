@@ -2,9 +2,10 @@
 - name: Install PostgreSQL
   apt: name={{item}} state=present update_cache=no
   with_items:
+    - libpq-dev
     - postgresql
-    - python-psycopg2
-    - python3-psycopg2
+    #- python-psycopg2
+    #- python3-psycopg2
 
 # This makes the pager always use -S when doing `sudo -u postgres psql`:
 - lineinfile:

@@ -14,6 +14,8 @@
   the host's SSH details will have to be modified after the first play first
   runs.  In particular, having multiple plays in the playbook will not work out
   well on the first run.
+- Require hosts to define a `features: list[str]` variable listing which of the
+  optional roles to run
 
 Completeness
 ============
@@ -45,6 +47,7 @@ Structure & Configuration
 - Place the Apache config in a file named `{{domain}}.conf` instead of using
   the default config files
 - Move the logsdb password to the `etc/secret` directory?
+- Add variables for configuring the logsdb username & database name
 
 Changes & New Features
 ======================
