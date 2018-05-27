@@ -1,7 +1,13 @@
+#!/usr/bin/python3
+import json
+import re
+import sys
+import time
+import traceback
 from   prettytable                    import PrettyTable
 import sqlalchemy as S
 from   sqlalchemy.dialects.postgresql import INET
-from   .core                          import SchemaConn, one_day_ago
+from   .core                          import SchemaConn, connect, one_day_ago
 
 ### TODO: Is there any reason not to define these at module level?
 schema = S.MetaData()
@@ -35,3 +41,39 @@ class Authfail(SchemaConn):
             tbl.add_row([qty, src_addr])
         return 'Failed SSH login attempts in the past 24 hours:\n' + \
             tbl.get_string() + '\n'
+
+
+def main():
+    line = None
+    try:
+        with Authfail(connect()) as db:
+            # `for line in sys.stdin` cannot be used here because Python
+            # buffers stdin when iterating over it, causing the script to wait
+            # for some too-large number of lines to be passed to it until it'll
+            # do anything.
+            for line in iter(sys.stdin.readline, ''):
+                m = re.fullmatch(
+                    r'(?P<timestamp>\S+) \S+ sshd\[\d+\]:'
+                    r'(?: message repeated \d+ times: \[)?'
+                    r' Failed (?:password|keyboard-interactive/pam|none)'
+                    r' for (?:invalid user )?(?P<username>.+?)'
+                    r' from (?P<src_addr>\S+) port \d+ ssh2\]?',
+                    line
+                )
+                if m:
+                    db.insert_entry(**m.groupdict())
+                else:
+                    raise ValueError('Could not parse logfile entry')
+    except Exception as e:
+        print(json.dumps({
+            "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            "line": line,
+            #"about": about,
+            "traceback": traceback.format_exec(),
+            "error_type": type(e).__name__,
+            "error": str(e),
+        }), file=sys.stderr, flush=True)
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()

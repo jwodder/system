@@ -1,47 +1,5 @@
-#!/usr/bin/python3
-from   contextlib              import redirect_stderr
-import json
-import re
-import sys
-import time
-import traceback
-from   jwodder_logsdb.core     import connect
-from   jwodder_logsdb.authfail import Authfail
-
-ERRORFILE = '/var/log/jwodder/authfail.err'
-
-def main():
-    with open(ERRORFILE, 'a') as err, redirect_stderr(err):
-        line = None
-        try:
-            with Authfail(connect()) as db:
-                # `for line in sys.stdin` cannot be used here because Python
-                # buffers stdin when iterating over it, causing the script to
-                # wait for some too-large number of lines to be passed to it
-                # until it'll do anything.
-                for line in iter(sys.stdin.readline, ''):
-                    m = re.fullmatch(
-                        r'(?P<timestamp>\S+) \S+ sshd\[\d+\]:'
-                        r'(?: message repeated \d+ times: \[)?'
-                        r' Failed (?:password|keyboard-interactive/pam|none)'
-                        r' for (?:invalid user )?(?P<username>.+?)'
-                        r' from (?P<src_addr>\S+) port \d+ ssh2\]?',
-                        line
-                    )
-                    if m:
-                        db.insert_entry(**m.groupdict())
-                    else:
-                        raise ValueError('Could not parse logfile entry')
-        except Exception as e:
-            print(json.dumps({
-                "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-                "line": line,
-                #"about": about,
-                "traceback": traceback.format_exec(),
-                "error_type": type(e).__name__,
-                "error": str(e),
-            }), file=sys.stderr, flush=True)
-            sys.exit(1)
-
-if __name__ == '__main__':
-    main()
+#!/bin/bash
+JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
+PYTHONPATH="$JWODDER_ROOT/lib" \
+    "$JWODDER_ROOT/venvs/logsdb/python" -m jwodder_logsdb.authfail \
+    2>>/var/log/jwodder/authfail.err

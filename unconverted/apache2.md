@@ -12,10 +12,11 @@
 - Edited `/etc/apache2/conf-*/other-vhosts-access-log.conf`:
     - Changed the basename of the logfile from `other_vhosts_access.log` to
       `access.log`
-    - Added the below line after writing a script `/opt/jwodder/bin/apachelogs`
-      for storing log entries in PostgreSQL (also, `mkdir /var/log/jwodder`):
+    - Added the below line after writing a script
+      `/opt/jwodder/bin/apache_access` for storing log entries in PostgreSQL
+      (also, `mkdir /var/log/jwodder`):
 
-            CustomLog "||/opt/jwodder/bin/apachelogs" "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
+            CustomLog "||/opt/jwodder/bin/apache_access" "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
 
 - Added the following settings to `/etc/apache2/mods-available/ssl.conf`:
 

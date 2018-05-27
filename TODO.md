@@ -25,9 +25,9 @@ Completeness
   -executable
 - Set up Apache
     - Set up Apache access monitoring
-        - If `bin/apachelogs` is changed by the `copy` task, restart Apache
+        - If `apache_access.py` is changed by the `copy` task, restart Apache
 - Configure rsyslog
-    - If `bin/authfail` is changed by the `copy` task, restart rsyslog
+    - If `authfail.py` is changed by the `copy` task, restart rsyslog
 - PGP-encrypt backups
 
 Structure & Configuration
@@ -59,8 +59,6 @@ Changes & New Features
   default for all other `update_*` variables and (if true) causes `apt-get
   upgrade` to be run at the beginning of the playbook
 - Make dailyreport automatically adjust if Apache isn't installed
-- Have `apachelogs`, `authfail`, and `maillog` set up & access their DB tables
-  using SQLAlchemy
 - Set up DNS?
 - Split the setup of Google 2FA into a separate role?
 - Cron output should still be logged somehow/somewhere even when Postfix isn't

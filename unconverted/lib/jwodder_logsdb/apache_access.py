@@ -1,7 +1,14 @@
+#!/usr/bin/python3
+import ast
+import json
+import sys
+import time
+import traceback
 from   prettytable                    import PrettyTable
 import sqlalchemy as S
 from   sqlalchemy.dialects.postgresql import INET
-from   .core                          import SchemaConn, longint, one_day_ago
+from   .core                          import SchemaConn, connect, longint, \
+                                                one_day_ago
 
 ### TODO: Is there any reason not to define these at module level?
 schema = S.MetaData()
@@ -77,3 +84,50 @@ class ApacheAccess(SchemaConn):
                   'Total bytes received: %*s\n' \
                   % (width, bytesOut, width, bytesIn)
         return report
+
+
+def main():
+    # Apache log format:
+    # "%{%Y-%m-%d %H:%M:%S %z}t|%v|%p|%a|%I|%O|%D|%>s|[\"%u\", \"%r\", \"%m\", \"%U%q\", \"%H\", \"%{Referer}i\", \"%{User-Agent}i\"]"
+    line = None
+    try:
+        with ApacheAccess(connect()) as db:
+            # `for line in sys.stdin` cannot be used here because Python
+            # buffers stdin when iterating over it, causing the script to wait
+            # for some too-large number of lines to be passed to it until it'll
+            # do anything.
+            for line in iter(sys.stdin.readline, ''):
+                timestamp, host, port, src_addr, bytesIn, bytesOut, microsecs, \
+                    status, strs = line.split('|', 8)
+                authuser, reqline, method, path, protocol, referer, user_agent \
+                    = ast.literal_eval(strs)
+                db.insert_entry(
+                    timestamp  = timestamp,
+                    host       = host,
+                    port       = int(port),
+                    src_addr   = src_addr,
+                    authuser   = authuser,
+                    bytesin    = int(bytesIn),
+                    bytesout   = int(bytesOut),
+                    microsecs  = int(microsecs),
+                    status     = int(status),
+                    reqline    = reqline,
+                    method     = method,
+                    path       = path,
+                    protocol   = protocol,
+                    referer    = referer,
+                    user_agent = user_agent,
+                )
+    except Exception as e:
+        print(json.dumps({
+            "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            "line": line,
+            #"about": about,
+            "traceback": traceback.format_exec(),
+            "error_type": type(e).__name__,
+            "error": str(e),
+        }), file=sys.stderr, flush=True)
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
