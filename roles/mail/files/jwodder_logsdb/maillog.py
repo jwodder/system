@@ -1,9 +1,13 @@
+#!/usr/bin/python3
 from   datetime             import timezone
+import sys
+import time
+from   email                import message_from_bytes, policy
 from   email.headerregistry import Address
 from   email.utils          import localtime
 import subprocess
 import sqlalchemy as S
-from   .core                import SchemaConn, one_day_ago
+from   .core                import SchemaConn, connect, one_day_ago
 
 ### TODO: Is there any reason not to define these at module level?
 schema = S.MetaData()
@@ -136,3 +140,30 @@ def formataddr(addr):
     # characters
     realname, address = addr
     return str(Address(realname, addr_spec=address))
+
+def main():
+    try:
+        rawmsg = sys.stdin.buffer.read()
+        size = len(rawmsg)
+        msg = message_from_bytes(rawmsg, policy=policy.default)
+        recipients = ()
+        for field in ('To', 'CC'):
+            if field in msg:
+                recipients += msg[field].addresses
+        with MailLog(connect()) as db:
+            db.insert_entry(
+                subject    = msg['Subject'],
+                sender     = msg['From'].addresses[0],
+                date       = msg['Date'].datetime,
+                recipients = recipients,
+                size       = size,
+            )
+    except Exception:
+        ### TODO: Include a description of the e-mail?
+        ### (Message-ID, first few characters, ???)
+        print(time.strftime('\n%Y-%m-%dT%H:%M:%SZ: Error processing e-mail',
+                            time.gmtime()), file=sys.stderr)
+        raise
+
+if __name__ == '__main__':
+    main()

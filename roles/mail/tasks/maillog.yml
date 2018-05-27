@@ -1,0 +1,24 @@
+---
+- name: Install bin/maillog
+  copy:
+    src: bin/maillog
+    dest: "{{jwodder_root}}/bin/maillog"
+    mode: 0755
+
+- name: Install maillog module
+  copy:
+    src: jwodder_logsdb/maillog.py
+    dest: "{{jwodder_root}}/lib/jwodder_logsdb/maillog.py"
+
+- name: Install /etc/procmailrc
+  template:
+    src: etc.procmailrc
+    dest: /etc/procmailrc
+    backup: true
+
+- name: Ensure maillog logfiles exist
+  file: dest=/var/log/jwodder/{{item}} mode=0666 state=touch
+  with_items:
+    - fatal.email
+    - maillog.err
+    - procmail.err

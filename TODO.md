@@ -16,6 +16,7 @@
   well on the first run.
 - Require hosts to define a `features: list[str]` variable listing which of the
   optional roles to run
+- Give every task a name
 
 Completeness
 ============

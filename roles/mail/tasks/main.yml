@@ -41,16 +41,11 @@
     move_home: true
     comment: 'Mail Failure'
 
-- file: dest=/var/log/jwodder/{{item}} mode=0666 state=touch
-  with_items:
-    - maillog.err
-    - procmail.err
-    - fatal.email
-
 - name: Remove the contents of /etc/postgrey/whitelist_recipients
   copy:
     dest: /etc/postgrey/whitelist_recipients
     content: ''
+    backup: true
 
 - name: Whitelist e-mails sent via Mandrill
   copy:
@@ -61,6 +56,7 @@
   template:
     src: main.cf
     dest: /etc/postfix/main.cf
+    backup: true
   notify:
     - Restart Postfix
 
@@ -68,25 +64,18 @@
   template:
     src: aliases
     dest: /etc/aliases
+    backup: true
   notify:
     - Run newaliases
 
-### TODO: Make this conditional on whether PostgreSQL is installed?
-### (Some sort of integration with PostgreSQL is needed here.)
+- include: maillog.yml
+  when: "'logsdb' in features"
 
-- name: Install bin/maillog
-  copy:
-    src: bin/maillog
-    dest: "{{jwodder_root}}/bin/maillog"
-    mode: 0755
-
-- name: Install bin/mailuser
+- name: Install bin/mailuser  # used by luser's procmailrc
   copy:
     src: bin/mailuser
     dest: "{{jwodder_root}}/bin/mailuser"
     mode: 0755
-
-- template: src=etc.procmailrc dest=/etc/procmailrc
 
 - template:
     src: luser.procmailrc

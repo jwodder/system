@@ -1,37 +1,5 @@
-#!/usr/bin/python3
-from   contextlib             import redirect_stderr
-from   email                  import message_from_bytes, policy
-import sys
-import time
-from   jwodder_logsdb.core    import connect
-from   jwodder_logsdb.maillog import MailLog
-
-ERRORFILE = '/var/log/jwodder/maillog.err'
-
-def main():
-    with open(ERRORFILE, 'a') as err, redirect_stderr(err):
-        try:
-            rawmsg = sys.stdin.buffer.read()
-            size = len(rawmsg)
-            msg = message_from_bytes(rawmsg, policy=policy.default)
-            recipients = ()
-            for field in ('To', 'CC'):
-                if field in msg:
-                    recipients += msg[field].addresses
-            with MailLog(connect()) as db:
-                db.insert_entry(
-                    subject    = msg['Subject'],
-                    sender     = msg['From'].addresses[0],
-                    date       = msg['Date'].datetime,
-                    recipients = recipients,
-                    size       = size,
-                )
-        except Exception:
-            ### TODO: Include a description of the e-mail?
-            ### (Message-ID, first few characters, ???)
-            print(time.strftime('\n%Y-%m-%dT%H:%M:%SZ: Error processing e-mail',
-                                time.gmtime()), file=sys.stderr)
-            raise
-
-if __name__ == '__main__':
-    main()
+#!/bin/bash
+JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
+PYTHONPATH="$JWODDER_ROOT/lib" \
+    "$JWODDER_ROOT/venvs/logsdb/python" -m jwodder_logsdb.maillog \
+    2>>/var/log/jwodder/maillog.err
