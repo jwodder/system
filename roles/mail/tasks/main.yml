@@ -1,8 +1,8 @@
 ---
 
-### TODO: Add a DNS A record (`mail.varonathe.org`) pointing to the mail server's IP
+### TODO: Add a DNS A record for {{mail_hostname}} pointing to the mail server's IP
 
-### TODO: Add a DNS MX record pointing to `mail.varonathe.org`
+### TODO: Add a DNS MX record pointing to {{mail_hostname}}
 
 - name: Allow incoming SMTP connections
   ufw: rule=allow to_ip=any to_port=25 proto=any direction=in

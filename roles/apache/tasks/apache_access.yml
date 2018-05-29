@@ -1,0 +1,18 @@
+---
+- name: Install bin/apache_access
+  copy:
+    src: bin/apache_access
+    dest: "{{jwodder_root}}/bin/apache_access"
+    mode: 0755
+  notify:
+    - Restart Apache
+
+- name: Install apache_access module
+  copy:
+    src: jwodder_logsdb/apache_access.py
+    dest: "{{jwodder_root}}/lib/jwodder_logsdb/apache_access.py"
+  notify:
+    - Restart Apache
+
+- name: Ensure apache_access errfile exists
+  file: dest=/var/log/jwodder/apache_access.err state=touch

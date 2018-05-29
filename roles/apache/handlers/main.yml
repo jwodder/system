@@ -1,0 +1,6 @@
+---
+- name: Restart Apache
+  service: name=apache2 state=restarted
+
+- name: Restart fail2ban
+  service: name=fail2ban state=restarted

@@ -1,0 +1,4 @@
+---
+default_web_domain: www.varonathe.org
+webmaster_email: webmaster@varonathe.org
+certbot_cert_name: jwodder

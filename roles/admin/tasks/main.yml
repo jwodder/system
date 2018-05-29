@@ -20,6 +20,7 @@
     mode: 0440
     owner: root
     group: root
+    create: true
     backup: true
 
 - name: Create admin user

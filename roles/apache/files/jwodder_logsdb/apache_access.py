@@ -100,7 +100,7 @@ def main():
                 timestamp, host, port, src_addr, bytesIn, bytesOut, microsecs, \
                     status, strs = line.split('|', 8)
                 authuser, reqline, method, path, protocol, referer, user_agent \
-                    = ast.literal_eval(strs)
+                    = map(reencode, ast.literal_eval(strs))
                 db.insert_entry(
                     timestamp  = timestamp,
                     host       = host,
@@ -128,6 +128,9 @@ def main():
             "error": str(e),
         }), file=sys.stderr, flush=True)
         sys.exit(1)
+
+def reencode(s):
+    return s.encode('iso-8859-1').decode('utf-8')
 
 if __name__ == '__main__':
     main()

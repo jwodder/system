@@ -1,7 +1,7 @@
 - Put on GitHub (after purging passwords from the repository, of course)
 - Update/redo `/etc/skel`
     - Edit the default `~/.profile` to add `$PYTHONUSERBASE/bin` to `PATH`
-- Align the two `certbot_cert_name` variables
+- Align the three `certbot_cert_name` variables
 - Set admin user's password
 - Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs` (or just
   `{{jwodder_root}}/logs`?)
@@ -23,9 +23,6 @@ Completeness
 - Do everything in `misc.md`
 - Ensure everything in `/opt/jwodder` is world-readable and (when relevant)
   -executable
-- Set up Apache
-    - Set up Apache access monitoring
-        - If `apache_access.py` is changed by the `copy` task, restart Apache
 - Configure rsyslog
     - If `authfail.py` is changed by the `copy` task, restart rsyslog
 - PGP-encrypt backups
@@ -45,8 +42,6 @@ Structure & Configuration
         - what `backdroplet` should back up
         - the Dropbox path to which `backdroplet` should upload the backup
         - the source & destination address for `xmission-done`
-- Place the Apache config in a file named `{{domain}}.conf` instead of using
-  the default config files
 - Move the logsdb password to the `etc/secret` directory?
 - Add variables for configuring the logsdb username & database name
 

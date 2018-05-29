@@ -1,0 +1,85 @@
+---
+- name: Install Apache
+  apt: name={{item}} state=present update_cache=no
+  with_items:
+    - apache2
+    #- apache2-utils  # htpasswd
+    #- libapache2-mod-wsgi-py3
+
+- name: Add admin user to `www-data` group
+  user: name={{admin_user}} groups=www-data append=true
+
+- name: Give www-data write access to Apache directories
+  file:
+    path: "{{item}}"
+    state: directory
+    follow: false
+    recurse: true
+    group: www-data
+    mode: g+wX
+  with_items:
+    - /etc/apache2
+    - /var/www
+
+# Doesn't adding admin_user to the adm group make this unnecessary?
+#- name: Allow others to read Apache logs
+#  file:
+#    path: /var/log/apache2
+#    state: directory
+#    recurse: true
+#    mode: o+rX
+
+- name: Enable Apache modules
+  apache2_module:
+    state: present
+    name: "{{item}}"
+  with_items:
+    - cgi
+    - rewrite
+    - ssl
+  notify:
+    - Restart Apache
+
+- name: Disable other-vhosts-access-log
+  command: a2disconf other-vhosts-access-log
+
+- name: Add custom Apache configuration
+  template:
+    src: jwodder.conf
+    dest: /etc/apache2/conf-available/jwodder.conf
+    backup: true
+  notify:
+    - Restart Apache
+
+- name: Enable custom Apache configuration
+  command: a2enconf jwodder
+
+- include: apache_access.yml
+  when: "'logsdb' in features"
+
+- name: Configure default website
+  template:
+    src: 000-default.conf
+    dest: /etc/apache2/sites-available/000-default.conf
+    backup: true
+  notify:
+    - Restart Apache
+
+- name: Cut down on old Apache logs
+  lineinfile:
+    dest: /etc/logrotate.d/apache2
+    line: "    {{item.key}} {{item.value}}"
+    regexp: "^\s*{{item.key}}"
+    insertbefore: '^\s*\}$'
+  with_dict:
+    minsize: 512k
+    rotate: 10
+
+- name: Configure fail2ban
+  synchronize:
+    src: fail2ban/
+    dest: /etc/fail2ban
+    archive: true
+    delete: false
+  notify:
+    - Restart fail2ban

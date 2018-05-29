@@ -30,6 +30,8 @@
   synchronize:
     src: jwodder_logsdb
     dest: "{{jwodder_root}}/lib"
+    archive: true
+    delete: false
 
 - name: Create jwodder_logsdb virtualenv
   pip:
