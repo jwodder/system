@@ -20,3 +20,4 @@
 # - apache (pre-depends on ssl; has logsdb-dependent part)
 #  - Assumes that cert is valid for {{default_web_domain}} both with & without
 #    leading "www."
+# - authfail (pre-depends on logsdb)

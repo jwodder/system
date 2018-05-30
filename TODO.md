@@ -23,8 +23,6 @@ Completeness
 - Do everything in `misc.md`
 - Ensure everything in `/opt/jwodder` is world-readable and (when relevant)
   -executable
-- Configure rsyslog
-    - If `authfail.py` is changed by the `copy` task, restart rsyslog
 - PGP-encrypt backups
 
 Structure & Configuration

@@ -1,0 +1,30 @@
+---
+- name: Install bin/authfail
+  copy:
+    src: bin/authfail
+    dest: "{{jwodder_root}}/bin/authfail"
+    mode: 0755
+  notify:
+    - Restart rsyslog
+
+- name: Install authfail module
+  copy:
+    src: jwodder_logsdb/authfail.py
+    dest: "{{jwodder_root}}/lib/jwodder_logsdb/authfail.py"
+  notify:
+    - Restart rsyslog
+
+- name: Ensure authfail errfile exists
+  file:
+    path: /var/log/jwodder/authfail.err
+    state: touch
+    owner: syslog
+    group: syslog
+
+- name: Configure logging of failed SSH logins
+  template:
+    src: 99-authfail.conf
+    dest: /etc/rsyslog.d/99-authfail.conf
+    backup: true
+  notify:
+    - Restart rsyslog
