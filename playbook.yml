@@ -16,7 +16,7 @@
 #  - Assumes that cert is valid for both {{mail_origin}} and {{mail_hostname}}
 # - postgres
 # - ssl
-# - xmission
+# - xmission (depends on mail)
 # - apache (pre-depends on ssl; has logsdb-dependent part)
 #  - Assumes that cert is valid for {{default_web_domain}} both with & without
 #    leading "www."

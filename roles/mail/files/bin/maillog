@@ -1,5 +1,5 @@
 #!/bin/bash
 JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
 PYTHONPATH="$JWODDER_ROOT/lib" \
-    "$JWODDER_ROOT/venvs/logsdb/python" -m jwodder_logsdb.maillog \
+    "$JWODDER_ROOT/venvs/logsdb/bin/python" -m jwodder_logsdb.maillog \
     2>>/var/log/jwodder/maillog.err

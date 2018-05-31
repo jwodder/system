@@ -2,13 +2,12 @@
 import ast
 import json
 import sys
-import time
 import traceback
 from   prettytable                    import PrettyTable
 import sqlalchemy as S
 from   sqlalchemy.dialects.postgresql import INET
-from   .core                          import SchemaConn, connect, longint, \
-                                                one_day_ago
+from   .core                          import SchemaConn, connect, iso8601_Z, \
+                                                longint, one_day_ago
 
 ### TODO: Is there any reason not to define these at module level?
 schema = S.MetaData()
@@ -120,7 +119,7 @@ def main():
                 )
     except Exception as e:
         print(json.dumps({
-            "time": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            "time": iso8601_Z(),
             "line": line,
             #"about": about,
             "traceback": traceback.format_exec(),

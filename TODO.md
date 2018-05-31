@@ -34,9 +34,8 @@ Structure & Configuration
         - `dailyreport`:
             - the e-mail address to which dailyreport sends its report
                 - Minimize the amount of e-mail mistakenly sent to me
-            - `mailbox`
-            - `netdevice`
-            - `mail_daemon`
+            - `MAILBOX`
+            - `NETDEVICE`
         - what `backdroplet` should back up
         - the Dropbox path to which `backdroplet` should upload the backup
         - the source & destination address for `xmission-done`

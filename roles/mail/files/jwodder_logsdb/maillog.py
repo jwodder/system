@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 from   datetime             import timezone
 import sys
-import time
 from   email                import message_from_bytes, policy
 from   email.headerregistry import Address
 from   email.utils          import localtime
 import subprocess
 import sqlalchemy as S
-from   .core                import SchemaConn, connect, one_day_ago
+from   .core                import SchemaConn, connect, iso8601_Z, one_day_ago
 
 ### TODO: Is there any reason not to define these at module level?
 schema = S.MetaData()
@@ -161,8 +160,8 @@ def main():
     except Exception:
         ### TODO: Include a description of the e-mail?
         ### (Message-ID, first few characters, ???)
-        print(time.strftime('\n%Y-%m-%dT%H:%M:%SZ: Error processing e-mail',
-                            time.gmtime()), file=sys.stderr)
+        print('\n{}: Error processing e-mail'.format(iso8601_Z()),
+              file=sys.stderr)
         raise
 
 if __name__ == '__main__':

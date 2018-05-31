@@ -1,6 +1,7 @@
 from   datetime    import timedelta
 from   email.utils import localtime
 from   pathlib     import Path
+import time
 import sqlalchemy as S
 
 JWODDER_ROOT = Path(__file__).parents[2]
@@ -40,3 +41,6 @@ def longint(n):
 
 def one_day_ago():
     return localtime() - timedelta(days=1)
+
+def iso8601_Z():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
