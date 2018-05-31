@@ -1,14 +1,12 @@
 set flp=\\v^\\s*[[(]?(\\d+\|\\a\|[IiVvXxLlCcDdMm]+)[]:.)]\\s+
 set com^=s1:#\|,mb:\|,ex:\|#,b:--,b:#:,n:# com+=b:!,b:\",b:;,b:\\
-set ai bs=2 nocp cpo+=M enc=utf-8 fcl=all fo+=n ic lcs+=tab:‣‧,trail:‧ ml mls=1
-set mps+=<:> ru ruf=%l:%c sc scs sw=1 ww=h,l,[,]
+set ai bs=2 nocp cpo+=M enc=utf-8 et fcl=all fo+=n ic lcs+=tab:‣‧,trail:‧ ml
+set mls=1 mps+=<:> ru ruf=%l:%c sc scs sts=4 sw=1 ww=h,l,[,]
 
-au BufNewFile,BufRead *.{json,md,pl,pm,py,sh,yml} setl et sts=4
-au BufNewFile,BufRead .{bashrc,profile} setl et sts=4
-
-" This is for files whose filetypes are determined via #! lines (only enabled
-" when syntax hilighting is on):
-au FileType python,perl,sh setl et sts=4
+au BufNewFile,BufRead *.{bh,tsv,txt} setl noet sts=0
+au BufNewFile,BufRead Makefile       setl noet sts=0
+au BufReadCmd         *.whl          call zip#Browse(expand("<amatch>"))
+au BufWinEnter * if getfsize(expand("%")) > 1024*1024 | syntax clear | endif
 
 dig uh 601 y- 563 Y- 562 zh 658 sh 643 dh 240 DH 208 !? 8253 :: 776
 dig ^1 185 ^2 178 ^3 179 ^4 8308 ^5 8309 ^6 8310 ^7 8311 ^8 8312 ^9 8313 ^0 8304
@@ -28,7 +26,7 @@ map \= :exe "normal " . (81-col("$")) . "A=\e"<CR>
 cmap <C-A> <C-B>
 
 let loaded_matchparen=1
-"syntax off
+syntax on
 
 hi String ctermfg=DarkBlue
 hi! link Character String
@@ -40,3 +38,4 @@ hi Function ctermfg=DarkRed
 hi Boolean ctermfg=DarkGreen
 hi Constant ctermfg=DarkGreen
 hi! link Structure Label
+hi markdownCode ctermfg=DarkGreen

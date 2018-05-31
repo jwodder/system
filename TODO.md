@@ -1,6 +1,4 @@
 - Put on GitHub (after purging passwords from the repository, of course)
-- Update/redo `/etc/skel`
-    - Edit the default `~/.profile` to add `$PYTHONUSERBASE/bin` to `PATH`
 - Align the three `certbot_cert_name` variables
 - Set admin user's password
 - Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs` (or just
@@ -50,7 +48,6 @@ Changes & New Features
 - Add an `update_all` variable that, when set (default: false), sets the
   default for all other `update_*` variables and (if true) causes `apt-get
   upgrade` to be run at the beginning of the playbook
-- Make dailyreport automatically adjust if Apache isn't installed
 - Set up DNS?
 - Split the setup of Google 2FA into a separate role?
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
@@ -58,10 +55,10 @@ Changes & New Features
     - cf. <http://unix.stackexchange.com/q/82093/11006>
     - Use nullmailer? dma? Mailgun? ssmtp?
 - Set up root's home directory
+    - Use the same files as `/etc/skel`?
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
   cert(s) in `/etc/letsencrypt`, rerun the Certbot command
 - Use Ansible 2.2's `include_role` module
-- Convert all Python scripts to Python 3
 - Convey the Google Authenticator details back to the user running Ansible
 - Support adding SSH keys to the admin user's `authorized_keys` other than
   those in root's `authorized_keys`

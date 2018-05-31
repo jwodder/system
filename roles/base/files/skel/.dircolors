@@ -70,12 +70,38 @@ CHR                      34;43  # character device driver
 ORPHAN                01;31;40  # symlink to nonexistent file
 SETUID                   30;41  # file that is setuid (u+s)
 SETGID                   30;46  # file that is setgid (g+s)
-CAPABILITY            01;30;41  # file with capability
+CAPABILITY            01;33;41  # file with capability
 OTHER_WRITABLE           30;43  # dir that is other-writable (o+w)
 STICKY_OTHER_WRITABLE    30;42  # dir that is sticky and other-writable (+t,o+w)
 STICKY                   37;44  # dir that is sticky (+t) and not other-writable
 
-# archives & compressed files (underlined yellow)
+# Ignored/ignorable/cruft files:
+# (Cruft directories apparently can't be re-highlighted)
+.class                01;35;40
+.hi                   01;35;40
+*history              01;35;40
+.lesshst              01;35;40
+.o                    01;35;40
+.pyc                  01;35;40
+.retry                01;35;40
+.swp                  01;35;40
+.wget-hsts            01;35;40
+
+# LaTeX cruft:
+.aux                  01;35;40
+.bbl                  01;35;40
+.blg                  01;35;40
+.idn                  01;35;40
+.idx                  01;35;40
+.ilg                  01;35;40
+.ind                  01;35;40
+.log                  01;35;40
+.nav                  01;35;40
+.out                  01;35;40
+.snm                  01;35;40
+.toc                  01;35;40
+
+# Archives and compressed files:
 .tar                  04;33
 .tgz                  04;33
 .arj                  04;33
@@ -108,3 +134,5 @@ STICKY                   37;44  # dir that is sticky (+t) and not other-writable
 .cpio                 04;33
 .7z                   04;33
 .rz                   04;33
+.egg                  04;33
+.whl                  04;33

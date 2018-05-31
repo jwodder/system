@@ -10,7 +10,7 @@
 # - backup
 # - dailyreport (requires mail and logsdb)
 # - docker
-# - loginmsg
+# - loginmsg (Merge into base?)
 # - logsdb (pre-depends on postgres)
 # - mail (pre-depends on ssl; has logsdb-dependent part)
 #  - Assumes that cert is valid for both {{mail_origin}} and {{mail_hostname}}

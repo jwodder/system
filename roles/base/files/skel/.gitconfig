@@ -7,9 +7,8 @@ cdiff    = diff --cached
 cat      = !git --no-pager show
 loggraph = log --graph --pretty=oneline --abbrev-commit
 numstat  = !git --no-pager diff --cached --numstat
-purge    = clean -dx
+purge    = clean -dX
 revno    = rev-list --count HEAD
-shove    = push --all
 svnstat  = !git --no-pager diff --name-status --cached
 toadd    = !git --no-pager diff --name-status
 vreji    = log --pretty=format:%H%x20%x20%ai%n%s%n
@@ -25,7 +24,10 @@ ignorecase = false
 logallrefupdates = false
 
 [diff]
-renames = 1
+renames = true
+
+[fetch]
+prune = true
 
 [gc]
 pruneExpire = 7.days.ago
@@ -35,8 +37,14 @@ reflogexpireunreachable = 7
 [merge]
 tool = vimdiff
 
+[pull]
+rebase = true
+
 [push]
 default = simple
+
+[rebase]
+autoStash = true
 
 #[user]
 #name = ???

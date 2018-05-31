@@ -12,17 +12,17 @@ idle off
 markkeys ^B=S:^F=s:\040=v
 msgwait 1
 nethack on
-#password ESGw7iOdpZs82
-shell bash
+#shell /bin/bash
 shelltitle Shell
 startup_message off
-term xterm-color
+term screen-256color
 vbell off
 
 bind ^[
 bind ^D
 bind d
 bind k
+bind ^X
 bind x
 bind ^C copy
 bind D detach
