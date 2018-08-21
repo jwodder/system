@@ -74,6 +74,7 @@ transmission-daemon
 python-psycopg2
 python3-psycopg2
 pyflakes
+python-libtorrent
 
 # Installed by Let's Encrypt:
 dialog

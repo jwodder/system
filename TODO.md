@@ -1,5 +1,4 @@
 - Put on GitHub (after purging passwords from the repository, of course)
-- Align the three `certbot_cert_name` variables
 - Set admin user's password
 - Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs` (or just
   `{{jwodder_root}}/logs`?)

@@ -8,4 +8,4 @@ mail_destinations:
     - "{{mail_origin}}"
     - "{{mail_hostname}}"
 
-certbot_cert_name: "{{mail_origin}}"
+certbot_cert_name: jwodder

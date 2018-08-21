@@ -31,6 +31,7 @@ admin_aliases:
     - readthedocs
     - steam
     - trello
+    - triplebyte
     - wodder
 
 certbot_cert_name: varonathe.org
