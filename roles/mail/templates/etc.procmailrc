@@ -1,4 +1,4 @@
-LOGFILE=/var/log/jwodder/procmail.err
+LOGFILE={{jwodder_root}}/logs/procmail.err
 LOGABSTRACT=no
 UMASK=0017
 
@@ -7,4 +7,4 @@ UMASK=0017
 
 # Records messages on which maillog fails:
 :0 ce
-/var/log/jwodder/fatal.email
+{{jwodder_root}}/logs/fatal.email

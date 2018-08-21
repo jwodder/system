@@ -16,7 +16,7 @@
 
 - name: Ensure authfail errfile exists
   file:
-    path: /var/log/jwodder/authfail.err
+    path: "{{jwodder_root}}/logs/authfail.err"
     state: touch
     owner: syslog
     group: syslog

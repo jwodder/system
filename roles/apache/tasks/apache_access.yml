@@ -15,4 +15,6 @@
     - Restart Apache
 
 - name: Ensure apache_access errfile exists
-  file: dest=/var/log/jwodder/apache_access.err state=touch
+  file:
+    dest: "{{jwodder_root}}/logs/apache_access.err"
+    state: touch

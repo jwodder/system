@@ -1,7 +1,5 @@
 - Put on GitHub (after purging passwords from the repository, of course)
 - Set admin user's password
-- Move `/var/log/jwodder` to `{{jwodder_root}}/var/logs` (or just
-  `{{jwodder_root}}/logs`?)
 - Remove the `meta/main.yml` dependencies on `skel`?
 - Allow all other roles to freely assume that `base`, `skel`, and `admin` have
   already been run?

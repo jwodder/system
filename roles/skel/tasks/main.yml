@@ -22,9 +22,9 @@
     owner: root
     group: root
 
-- name: Create /var/log/jwodder
+- name: Create logs directory
   file:
-    path: /var/log/jwodder
+    path: "{{jwodder_root}}/logs"
     state: directory
     group: syslog
     mode: 0775

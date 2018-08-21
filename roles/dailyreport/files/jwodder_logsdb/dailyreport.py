@@ -8,13 +8,13 @@ from   shutil        import disk_usage
 import socket
 import subprocess
 import sys
-from   .core         import connect, iso8601_Z, longint
+from   .core         import JWODDER_ROOT, connect, iso8601_Z, longint
 
 RECIPIENT      = 'jwodder@gmail.com'
 MAILBOX        = Path('/home/jwodder/Mail/INBOX')
 NETDEVICE      = 'eth0'
 DISK_THRESHOLD = 50  # measured in percentage points
-LOGS_DIR       = Path('/var/log/jwodder')
+LOGS_DIR       = JWODDER_ROOT / 'logs'
 
 TAGSEQ         = 'DISK LOGERR REBOOT MAIL'.split()
 
