@@ -1,5 +1,9 @@
 ---
-- name: Restart SSHd
-  service: name=ssh state=restarted
 - name: Restart fail2ban
   service: name=fail2ban state=restarted
+
+- name: Restart rsyslog
+  service: name=rsyslog state=restarted
+
+- name: Restart SSHd
+  service: name=ssh state=restarted

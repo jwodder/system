@@ -19,12 +19,3 @@
       `/usr/local/share/bash-completion/bash_completion` and set
       `BASH_COMPLETION_COMPAT_DIR=/etc/bash_completion.d` just before it
 - Uncomment `de_DE.UTF-8 UTF-8` in `/etc/locale.gen` and rerun `locale-gen`
-- Run:
-
-        # This keeps UFW messages from being logged to files other than ufw.log:
-        sudo sed -i 's/^#& \(~\|stop\)$/\& ~/' /etc/rsyslog.d/20-ufw.conf
-
-        sudo sed -i -e '/^#cron\.\*[ \t]\+\/var\/log\/cron.log$/s/^#//' \
-                    -e '/^#user\.\*[ \t]\+-\/var\/log\/user.log$/s/^#//' \
-                    /etc/rsyslog.d/50-default.conf
-                    ### Also uncomment the mail.warn and mail.info lines?
