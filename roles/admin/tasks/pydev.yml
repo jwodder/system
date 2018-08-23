@@ -27,7 +27,7 @@
     - rwt
   become_user: "{{admin_user}}"
 
-### click? attrs? python-dateutil? six? flake8? enum34?
+### click? attrs? six?
 
 - name: Install essential Python 3 packages
   pip:
@@ -35,6 +35,9 @@
     extra_args: --user
     executable: ~/.local/bin/pip3
   with_items:
+    - flake8
+    - flake8-bugbear
+    - flake8-builtins
     - requests
     - rwt
     - setuptools

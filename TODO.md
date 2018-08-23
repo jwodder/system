@@ -34,7 +34,6 @@ Structure & Configuration
         - what `backdroplet` should back up
         - the Dropbox path to which `backdroplet` should upload the backup
         - the source & destination address for `xmission-done`
-- Move the logsdb password to the `etc/secret` directory?
 - Add variables for configuring the logsdb username & database name
 
 Changes & New Features
