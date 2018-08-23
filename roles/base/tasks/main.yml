@@ -72,9 +72,13 @@
     - Restart SSHd
 
 - name: Set /etc/skel
-  ### TODO: Do I also need to delete /etc/skel/.bash_logout?
-  ### TODO: Use `synchronize` with `delete: true`?
-  copy: src=skel/ dest=/etc/skel owner=root group=root
+  synchronize:
+    src: skel/
+    dest: /etc/skel
+    archive: true
+    delete: true
+    owner: false
+    group: false
 
 - name: Configure APT
   copy:
