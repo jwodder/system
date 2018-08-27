@@ -74,4 +74,14 @@
     owner: opendkim
     group: opendkim
 
-### TODO: Use /etc/opendkim/keys/{{mail_origin}}/mail.txt to create a DNS TXT entry named "mail._domainkey"
+- slurp:
+    src: /etc/opendkim/keys/{{mail_origin}}/mail.txt
+  register: dkimkey
+
+- name: Create mail._domainkey DNS record
+  set_do_dns_record:
+    oauth_token: "{{digitalocean_token}}"
+    domain: "{{mail_origin}}"
+    type: TXT
+    name: mail._domainkey
+    data: "{{dkimkey.content|b64decode}}"
