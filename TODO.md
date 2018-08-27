@@ -54,7 +54,6 @@ Changes & New Features
     - Use the same files as `/etc/skel`?
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
   cert(s) in `/etc/letsencrypt`, rerun the Certbot command
-- Use Ansible 2.2's `include_role` module
 - Convey the Google Authenticator details back to the user running Ansible
 - Support adding SSH keys to the admin user's `authorized_keys` other than
   those in root's `authorized_keys`

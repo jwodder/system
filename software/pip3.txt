@@ -16,9 +16,11 @@ ptyprocess
 pyrfc3339
 python-dateutil
 pytz
+qypi  # editable install
 readme_renderer
 reportlab
 rwt
+statjson  # editable install
 tox
 twine
 wheel

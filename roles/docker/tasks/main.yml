@@ -1,6 +1,5 @@
 ---
 - name: Install Docker
-  ### TODO: Convert the get.docker.io script to Ansible tasks?
   shell: 'wget -qO- https://get.docker.io | bash -'
   args:
     creates: /usr/bin/docker
