@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from   contextlib    import closing
 from   email.message import EmailMessage
 from   inspect       import signature
 import os
@@ -47,21 +46,24 @@ def check_authfail(engine):
         from jwodder_logsdb.authfail import Authfail
     except ImportError:
         return None
-    return Authfail(engine).daily_report()
+    with Authfail(engine) as db:
+        return db.daily_report()
 
 def check_apache_access(engine):
     try:
         from jwodder_logsdb.apache_access import ApacheAccess
     except ImportError:
         return None
-    return ApacheAccess(engine).daily_report()
+    with ApacheAccess(engine) as db:
+        return db.daily_report()
 
 def check_inbox(engine):
     try:
         from jwodder_logsdb.maillog import MailLog
     except ImportError:
         return None
-    return MailLog(engine).daily_report()
+    with MailLog(engine) as db:
+        return db.daily_report()
 
 def check_mailbox(tags):
     if MAILBOX.exists() and MAILBOX.stat().st_size > 0:
@@ -83,7 +85,10 @@ def check_reboot(tags):
         return report
 
 def check_vnstat():
-    vnstat = subprocess.check_output(['vnstat', '--dumpdb', '-i', NETDEVICE])
+    vnstat = subprocess.check_output(
+        ['vnstat', '--dumpdb', '-i', NETDEVICE],
+        universal_newlines=True,
+    )
     yesterday = [s for s in vnstat.splitlines() if s.startswith('d;1;')]
     assert len(yesterday) == 1
     _, _, mrx, mtx, krx, ktx, _ = map(int, yesterday[0].split(';')[1:])
@@ -97,28 +102,28 @@ def check_vnstat():
 def main():
     body = ''
     tags = set()
-    with closing(connect()) as engine:
-        for check in [
-            check_mailbox,
-            check_errlogs,
-            check_reboot,
-            check_load,
-            check_disk,
-            check_vnstat,
-            check_inbox,
-            check_authfail,
-            check_apache_access,
-        ]:
-            kwargs = {}
-            if 'engine' in signature(check).parameters:
-                kwargs["engine"] = engine
-            if 'tags' in signature(check).parameters:
-                kwargs['tags'] = tags
-            report = check(**kwargs)
-            if report is not None and report != '':
-                if body:
-                    body += '\n'
-                body += report
+    engine = connect()
+    for check in [
+        check_mailbox,
+        check_errlogs,
+        check_reboot,
+        check_load,
+        check_disk,
+        check_vnstat,
+        check_inbox,
+        check_authfail,
+        check_apache_access,
+    ]:
+        kwargs = {}
+        if 'engine' in signature(check).parameters:
+            kwargs["engine"] = engine
+        if 'tags' in signature(check).parameters:
+            kwargs['tags'] = tags
+        report = check(**kwargs)
+        if report is not None and report != '':
+            if body:
+                body += '\n'
+            body += report
     if not body:
         body = 'Nothing to report\n'
     subject = ''
@@ -133,14 +138,13 @@ def main():
     msg['Subject'] = subject
     msg['To'] = RECIPIENT
     msg.set_content(body)
-    msg = str(msg)
     if sys.stdout.isatty():
         subprocess.Popen(
             [os.environ.get('PAGER', 'less')],
             stdin=subprocess.PIPE,
-        ).communicate(msg)
+        ).communicate(bytes(msg))
     else:
-        print(msg)
+        print(str(msg))
 
 if __name__ == '__main__':
     main()
