@@ -69,7 +69,7 @@ def main():
             "time": iso8601_Z(),
             "line": line,
             #"about": about,
-            "traceback": traceback.format_exec(),
+            "traceback": traceback.format_exc(),
             "error_type": type(e).__name__,
             "error": str(e),
         }), file=sys.stderr, flush=True)
