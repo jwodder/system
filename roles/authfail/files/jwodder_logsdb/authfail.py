@@ -57,7 +57,7 @@ def main():
                     r'(?: message repeated \d+ times: \[)?'
                     r' Failed (?:password|keyboard-interactive/pam|none)'
                     r' for (?:invalid user )?(?P<username>.+?)'
-                    r' from (?P<src_addr>\S+) port \d+ ssh2\]?',
+                    r' from (?P<src_addr>\S+) port \d+ ssh2\]?\s*',
                     line
                 )
                 if m:
