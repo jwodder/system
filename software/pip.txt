@@ -1,6 +1,5 @@
 # All installed with --user:
 click
 doapi  # editable install
-habitica
 pip
 wheel

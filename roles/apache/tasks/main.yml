@@ -21,14 +21,6 @@
     - /etc/apache2
     - /var/www
 
-# Doesn't adding admin_user to the adm group make this unnecessary?
-#- name: Allow others to read Apache logs
-#  file:
-#    path: /var/log/apache2
-#    state: directory
-#    recurse: true
-#    mode: o+rX
-
 - name: Enable Apache modules
   apache2_module:
     state: present

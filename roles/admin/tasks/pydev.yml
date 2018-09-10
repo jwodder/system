@@ -27,8 +27,6 @@
     - rwt
   become_user: "{{admin_user}}"
 
-### click? attrs? six?
-
 - name: Install essential Python 3 packages
   pip:
     name: "{{item}}"
