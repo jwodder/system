@@ -23,7 +23,7 @@ def check_errlogs(tags):
         tags.add('LOGERR')
         return 'The following files in {} are nonempty:\n{}'.format(
             LOGS_DIR,
-            ''.join(map('    {}\n'.format, errlogs)),
+            ''.join(map('    {0.name}\n'.format, errlogs)),
         )
 
 def check_load():
