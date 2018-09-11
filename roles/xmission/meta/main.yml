@@ -1,4 +1,3 @@
 ---
 dependencies:
     - role: mail
-    - role: skel

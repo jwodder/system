@@ -2,6 +2,8 @@
 - hosts: all
   become: true
   roles:
+    # All other roles are allowed to assume that these three roles have already
+    # been run:
     - base  # `base` must be run before `admin` in order to configure /etc/skel
     - skel
     - admin

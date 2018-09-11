@@ -2,4 +2,3 @@
 dependencies:
     - role: logsdb
     - role: mail
-    - role: skel
