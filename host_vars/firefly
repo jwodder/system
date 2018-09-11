@@ -1,6 +1,19 @@
 ---
 ansible_host: 104.236.121.96
 
+features:
+    - apache
+    - authfail
+    - backup
+    - dailyreport
+    - docker
+    - loginmsg
+    - logsdb
+    - mail
+    - postgres
+    - ssl
+    - xmission
+
 #update_certbot: false
 certbot_email: jwodder+letsencrypt@gmail.com
 

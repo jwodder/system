@@ -37,6 +37,7 @@ Structure & Configuration
 - Add variables for configuring the logsdb username & database name
 - Rethink whether having `mail_origin` and `mail_hostname` be different values
   makes sense
+- Merge `loginmsg` into `base`?
 
 Changes & New Features
 ======================

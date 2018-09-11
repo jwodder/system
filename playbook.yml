@@ -6,18 +6,22 @@
     - skel
     - admin
 
-# Optional roles:
-# - backup
-# - dailyreport (requires mail and logsdb)
-# - docker
-# - loginmsg (Merge into base?)
-# - logsdb (pre-depends on postgres)
-# - mail (pre-depends on ssl; has logsdb-dependent part)
-#  - Assumes that cert is valid for both {{mail_origin}} and {{mail_hostname}}
-# - postgres
-# - ssl
-# - xmission (depends on mail)
-# - apache (pre-depends on ssl; has logsdb-dependent part)
-#  - Assumes that cert is valid for {{default_web_domain}} both with & without
-#    leading "www."
-# - authfail (pre-depends on logsdb)
+    ### TODO: Fill in `features` based on role dependencies:
+    ### - dailyreport: implies mail and logsdb
+    ### - logsdb: implies postgres
+    ### - mail: implies ssl
+    ### - xmission: implies mail
+    ### - apache: implies ssl
+    ### - authfail: implies logsdb
+
+    - {role: backup,      when: "'backup' in features"}
+    - {role: postgres,    when: "'postgres' in features"}
+    - {role: logsdb,      when: "'logsdb' in features"}
+    - {role: ssl,         when: "'ssl' in features"}
+    - {role: mail,        when: "'mail' in features"}
+    - {role: dailyreport, when: "'dailyreport' in features"}
+    - {role: docker,      when: "'docker' in features"}
+    - {role: loginmsg,    when: "'loginmsg' in features"}
+    - {role: xmission,    when: "'xmission' in features"}
+    - {role: apache,      when: "'apache' in features"}
+    - {role: authfail,    when: "'authfail' in features"}
