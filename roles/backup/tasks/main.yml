@@ -20,11 +20,7 @@
   copy:
     dest: "{{jwodder_root}}/etc/secret/dropbox_uploader"
     content: |
-        APPKEY={{dropbox_appkey|quote}}
-        APPSECRET={{dropbox_appsecret|quote}}
-        ACCESS_LEVEL={{dropbox_access_level|quote}}
         OAUTH_ACCESS_TOKEN={{dropbox_oauth_access_token|quote}}
-        OAUTH_ACCESS_TOKEN_SECRET={{dropbox_oauth_access_token_secret|quote}}
     mode: 0600
     owner: root
     group: root
