@@ -1,6 +1,4 @@
 ---
-ansible_host: 104.236.121.96
-
 features:
     - apache
     - authfail

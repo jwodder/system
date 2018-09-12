@@ -33,7 +33,7 @@
     - command: mkswap /swapfile
     - lineinfile: dest=/etc/fstab line="/swapfile none swap sw 0 0"
     - command: swapon /swapfile
-  when: createdSwap|changed
+  when: createdSwap is changed
 
 #- name: Reset any changes made to ufw
 #  ufw: state=reset
@@ -119,7 +119,7 @@
 
 - name: Enable new popularity-contest settings
   command: dpkg-reconfigure -f noninteractive popularity-contest
-  when: popcon_changed|changed
+  when: popcon_changed is changed
 
 - name: Set timezone to UTC
   timezone: name=Etc/UTC
@@ -134,7 +134,7 @@
 
 - name: Enable new unattended-upgrades settings
   command: dpkg-reconfigure -f noninteractive unattended-upgrades
-  when: unattup|changed
+  when: unattup is changed
 
 - name: Configure fail2ban
   copy:

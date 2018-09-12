@@ -19,7 +19,7 @@ for dir in /root /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
 do if [ -e "$dir" ]
    then rsync -avRF --delete --delete-excluded \
               --exclude="$JWODDER_ROOT/etc/secret" \
-              --exclude-from="$JWODDER_ROOT/etc/backup.exclude" \
+              --exclude-from="$JWODDER_ROOT/share/backup.exclude" \
               --exclude-from=<(find "$dir" -type d -exec test -e {}/.norsync ';' -print) \
               "$dir" "$ROOT"
    else rm -rf "$ROOT$dir"

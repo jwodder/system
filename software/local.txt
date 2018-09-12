@@ -1,4 +1,3 @@
-jq  # v.1.5, installed in /usr/local from source
 Docker  # via https://get.docker.io (and added myself to the `docker` group)
 docker-compose
 Certbot

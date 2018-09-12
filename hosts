@@ -1,1 +1,2 @@
-firefly
+#firefly ansible_host=104.236.121.96
+firefly ansible_connection=local ansible_become_user=root

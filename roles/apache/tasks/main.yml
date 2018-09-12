@@ -61,7 +61,7 @@
   lineinfile:
     dest: /etc/logrotate.d/apache2
     line: "    {{item.key}} {{item.value}}"
-    regexp: "^\s*{{item.key}}"
+    regexp: '^\s*{{item.key}}'
     insertbefore: '^\s*\}$'
   with_dict:
     minsize: 512k
