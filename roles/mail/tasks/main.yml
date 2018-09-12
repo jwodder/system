@@ -106,7 +106,8 @@
     group: mail
     mode: 0775
 
-- copy:
+- name: Configure logrotate to move old e-mails to /var/mail.old
+  copy:
     src: mailboxes.logrotate
     dest: /etc/logrotate.d/mailboxes
     # The logrotate manpage doesn't mention that you need to chown root, but

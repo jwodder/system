@@ -39,7 +39,6 @@ Structure & Configuration
 Changes & New Features
 ======================
 - Make `backdroplet` exclude files listed in `cruft`
-- Don't back up `/root` with `backdroplet`?
 - Add a role or playbook that updates all available packages
 - Add an `update_all` variable that, when set (default: false), sets the
   default for all other `update_*` variables and (if true) causes `apt-get
