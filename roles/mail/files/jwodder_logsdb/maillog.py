@@ -1,53 +1,80 @@
 #!/usr/bin/python3
-from   datetime             import timezone
+from   datetime                   import timezone
 import sys
-from   email                import message_from_bytes, policy
-from   email.headerregistry import Address
-from   email.utils          import localtime
+from   email                      import message_from_bytes, policy
+from   email.headerregistry       import Address
+from   email.utils                import localtime
 import subprocess
 import sqlalchemy as S
-from   .core                import SchemaConn, connect, iso8601_Z, one_day_ago
+from   sqlalchemy.ext.declarative import declarative_base
+from   sqlalchemy.orm             import relationship, sessionmaker
+from   .core                      import connect, iso8601_Z, one_day_ago
 
-### TODO: Is there any reason not to define these at module level?
-schema = S.MetaData()
+Base = declarative_base()
 
-inbox_contacts = S.Table('inbox_contacts', schema,
-    S.Column('id',            S.Integer, primary_key=True, nullable=False),
-    S.Column('realname',      S.Unicode(2048), nullable=False),
-    S.Column('email_address', S.Unicode(2048), nullable=False),
-    S.UniqueConstraint('realname', 'email_address'),
-)
-
-inbox = S.Table('inbox', schema,
-    S.Column('id',        S.Integer, primary_key=True, nullable=False),
-    S.Column('timestamp', S.DateTime(timezone=True), nullable=False),
-    S.Column('subject',   S.Unicode(2048), nullable=False),
-    S.Column('sender',    S.Integer, S.ForeignKey(inbox_contacts.c.id), nullable=False),
-    S.Column('size',      S.Integer, nullable=False),
-    S.Column('date',      S.DateTime(timezone=True), nullable=False),
-)
-
-inbox_tocc = S.Table('inbox_tocc', schema,
-    S.Column('msg_id',     S.Integer, S.ForeignKey(inbox.c.id), nullable=False),
-    S.Column('contact_id', S.Integer, S.ForeignKey(inbox_contacts.c.id), nullable=False),
+inbox_tocc = S.Table('inbox_tocc', Base.metadata,
+    S.Column('msg_id',     S.Integer, S.ForeignKey('inbox.id'), nullable=False),
+    S.Column('contact_id', S.Integer, S.ForeignKey('inbox_contacts.id'), nullable=False),
     S.UniqueConstraint('msg_id', 'contact_id'),
 )
 
-class MailLog(SchemaConn):
-    SCHEMA = schema
+class Contact(Base):
+    __tablename__ = 'inbox_contacts'
+    __table_args = (S.UniqueConstraint('realname', 'email_address'),)
 
-    def get_contact_id(self, contact):
-        cid = self.conn.execute(
-            S.select([inbox_contacts.c.id])
-             .where(inbox_contacts.c.realname      == contact.display_name)
-             .where(inbox_contacts.c.email_address == contact.addr_spec)
-        ).scalar()
-        if cid is None:
-            cid = self.conn.execute(inbox_contacts.insert().values(
+    id            = S.Column(S.Integer, primary_key=True, nullable=False)
+    realname      = S.Column(S.Unicode(2048), nullable=False)
+    email_address = S.Column(S.Unicode(2048), nullable=False)
+
+    def __str__(self):
+        # email.utils.formataddr performs an undesirable encoding of non-ASCII
+        # characters
+        return str(Address(self.realname, addr_spec=self.email_address))
+
+
+class EMail(Base):
+    __tablename__ = 'inbox'
+
+    id        = S.Column(S.Integer, primary_key=True, nullable=False)
+    timestamp = S.Column(S.DateTime(timezone=True), nullable=False)
+    subject   = S.Column(S.Unicode(2048), nullable=False)
+    sender_id = S.Column('sender', S.Integer, S.ForeignKey('inbox_contacts.id'), nullable=False)
+    sender    = relationship('Contact')
+    size      = S.Column(S.Integer, nullable=False)
+    date      = S.Column(S.DateTime(timezone=True), nullable=False)
+    tocc      = relationship('Contact', secondary=inbox_tocc)
+
+
+class MailLog:
+    def __init__(self, engine):
+        Base.metadata.create_all(engine)
+        self.engine = engine
+        self.session = None
+
+    def __enter__(self):
+        self.session = sessionmaker(bind=self.engine)()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.session.close()
+        return False
+
+    def get_contact(self, contact):
+        """
+        :type contact: email.headerregistry.Address
+        :return: Contact
+        """
+        cnobj = self.session.query(Contact)\
+                .filter(Contact.realname      == contact.display_name)\
+                .filter(Contact.email_address == contact.addr_spec)\
+                .first()
+        if cnobj is None:
+            cnobj = Contact(
                 realname      = contact.display_name,
                 email_address = contact.addr_spec,
-            )).inserted_primary_key[0]
-        return cid
+            )
+            self.session.add(cnobj)
+        return cnobj
 
     def insert_entry(self, subject, sender, date, recipients, size):
         """
@@ -57,66 +84,35 @@ class MailLog(SchemaConn):
         :type recipients: Iterable[email.headerregistry.Address]
         :type size: int
         """
-        with self.conn.begin():
-            sid = self.get_contact_id(sender)
-            recips = set(map(self.get_contact_id, recipients))
-            mid = self.conn.execute(inbox.insert().values(
-                timestamp = localtime(),
-                subject   = subject[:2048],
-                sender    = sid,
-                size      = size,
-                date      = date,
-            )).inserted_primary_key[0]
-            self.conn.execute(
-                inbox_tocc.insert(),
-                [{"msg_id": mid, "contact_id": r} for r in recips],
-            )
+        self.session.add(EMail(
+            timestamp = localtime(),
+            subject   = subject[:2048],
+            sender    = self.get_contact(sender),
+            size      = size,
+            date      = date,
+            tocc      = list(set(map(self.get_contact, recipients))),
+        ))
+        self.session.commit()
 
     def daily_report(self):
         title = 'E-mails received in the past 24 hours:'
-        newmail = self.conn.execute(
-            S.select([
-                inbox.c.id,
-                inbox.c.subject,
-                inbox_contacts.c.realname,
-                inbox_contacts.c.email_address,
-                inbox.c.size,
-                inbox.c.date,
-            ]).select_from(inbox.join(inbox_contacts))
-              .where(inbox.c.timestamp >= one_day_ago())
-              .order_by(S.asc(inbox.c.timestamp), S.asc(inbox.c.id))
-        ).fetchall()
+        newmail = self.session.query(EMail)\
+                    .filter(EMail.timestamp >= one_day_ago())\
+                    .order_by(S.asc(EMail.timestamp), S.asc(EMail.id))\
+                    .all()
         if not newmail:
             return title + ' none\n'
         report = title + '\n---\n'
-        dests = subprocess.check_output(
+        dests = set(subprocess.check_output(
             ['postconf', '-hx', 'mydestination'],
             universal_newlines=True,
-        ).strip().lower().split(', ')
-        for mid, sub, sender_name, sender_addr, size, date in newmail:
-            recips = ', '.join(map(formataddr, self.conn.execute(
-                S.select([
-                    inbox_contacts.c.realname,
-                    inbox_contacts.c.email_address,
-                ])
-                .select_from(inbox_tocc.join(inbox_contacts))
-                .where(inbox_tocc.c.msg_id == mid)
-                .where(
-                    # `split_part` is a PostgreSQL-specific function.  Ignoring
-                    # the case of addresses without a '@', the standard SQL
-                    # equivalent is something like:
-                    #
-                    #   lower(substring(
-                    #       email_address FROM position('@' IN email_address)+1
-                    #   )) IN ($dests)
-                    S.func.split_part(inbox_contacts.c.email_address, '@', 2)
-                     .in_(dests)
-                )
-                .order_by(
-                    S.asc(inbox_contacts.c.realname),
-                    S.asc(inbox_contacts.c.email_address),
-                )
-            )))
+        ).strip().lower().split(', '))
+        for msg in newmail:
+            recips = [
+                c for c in msg.tocc
+                  if c.email_address.partition('@')[2] in dests
+            ]
+            recips.sort(key=lambda c: (c.realname, c.email_address))
             report += (
                 'From:    {}\n'
                 'To:      {}\n'
@@ -125,20 +121,14 @@ class MailLog(SchemaConn):
                 'Size:    {}\n'
                 '---\n'
             ).format(
-                formataddr((sender_name, sender_addr)),
-                recips,
-                sub,
-                date.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-                size,
+                msg.sender,
+                ', '.join(map(str, recips)),
+                msg.subject,
+                msg.date.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                msg.size,
             )
         return report
 
-
-def formataddr(addr):
-    # email.utils.formataddr performs an undesirable encoding of non-ASCII
-    # characters
-    realname, address = addr
-    return str(Address(realname, addr_spec=address))
 
 def main():
     try:

@@ -44,7 +44,6 @@ Changes & New Features
   default for all other `update_*` variables and (if true) causes `apt-get
   upgrade` to be run at the beginning of the playbook
 - Set up DNS?
-- Split the setup of Google 2FA into a separate role?
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
@@ -56,4 +55,8 @@ Changes & New Features
 - Convey the Google Authenticator details back to the user running Ansible
 - Support adding SSH keys to the admin user's `authorized_keys` other than
   those in root's `authorized_keys`
-- Rewrite `maillog.py` to use SQLAlchemy's ORM?
+- Automatically regenerate the backup PGP key if it's expired or near
+  expiration
+- `admin/pydev`: Add options for updating pip and the other Python packages the
+  role installs
+- `logsdb`: Add an option for recreating the virtualenv

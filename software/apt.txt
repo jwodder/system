@@ -68,6 +68,7 @@ python3-daemon
 python3-prettytable
 python3-psycopg2
 python3-yaml
+rng-tools
 rs
 transmission-cli
 transmission-daemon
