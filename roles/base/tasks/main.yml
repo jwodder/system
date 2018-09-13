@@ -12,7 +12,9 @@
     - libpam-google-authenticator
     - moreutils  # chronic
     - patch
+    - python
     - python-dev
+    - python3
     - python3-dev
     - software-properties-common  # apt-add-repository
     - tree
