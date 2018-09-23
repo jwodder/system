@@ -12,7 +12,7 @@ ROOT=/var/backups/jwodder
 set -ex
 mkdir -p "$ROOT"
 
-JWODDER_ROOT="$(dirname "$(readlink -f "$0")")"
+JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
 
 for dir in /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
            "$JWODDER_ROOT"
