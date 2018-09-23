@@ -28,3 +28,8 @@
     state: directory
     group: syslog
     mode: 0775
+
+- name: Keep venvs directory from being backed up
+  file:
+    path: "{{jwodder_root}}/venvs/.norsync"
+    state: touch

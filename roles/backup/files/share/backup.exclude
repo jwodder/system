@@ -5,9 +5,11 @@
 .*.swp
 .cache/
 .distlib/
+.doctrees/
 .eggs/
 .imageio/
 .local/
+.nox/
 .pylint.d/
 .pytest_cache/
 .tox/
