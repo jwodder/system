@@ -60,10 +60,12 @@
     content: ''
     backup: true
 
-- name: Whitelist e-mails sent via Mandrill
+- name: Whitelist e-mails sent via Mailgun and Mandrill
   copy:
     dest: /etc/postgrey/whitelist_clients.local
-    content: 'mandrillapp.com\n'
+    content: |
+        mailgun.net
+        mandrillapp.com
 
 - name: Configure Postfix
   template:
