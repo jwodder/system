@@ -1,9 +1,11 @@
 ---
 - name: Install Transmission
-  apt: name={{item}} state=present update_cache=no
-  with_items:
-    - transmission-cli
-    - transmission-daemon
+  apt:
+    name:
+        - transmission-cli
+        - transmission-daemon
+    state: present
+    update_cache: false
 
 - json_dict:
     dest: /etc/transmission-daemon/settings.json

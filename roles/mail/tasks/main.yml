@@ -32,14 +32,16 @@
     vtype: string
     value: "{{mail_origin}}"
 
-- apt: name={{item}} state=present update_cache=no
-  with_items:
-    - mailutils
-    - opendkim
-    - opendkim-tools
-    - postfix
-    - postgrey
-    - procmail
+- apt:
+    name:
+        - mailutils
+        - opendkim
+        - opendkim-tools
+        - postfix
+        - postgrey
+        - procmail
+    state: present
+    update_cache: false
 
 - include: dkim.yml
 - include: postwhite.yml

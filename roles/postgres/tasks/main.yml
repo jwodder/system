@@ -1,11 +1,13 @@
 ---
 - name: Install PostgreSQL
-  apt: name={{item}} state=present update_cache=no
-  with_items:
-    - libpq-dev
-    - postgresql
-    - python-psycopg2  # Needed by Ansible's postgresql_* modules
-    #- python3-psycopg2
+  apt:
+    name:
+        - libpq-dev
+        - postgresql
+        - python-psycopg2  # Needed by Ansible's postgresql_* modules
+        #- python3-psycopg2
+    state: present
+    update_cache: false
 
 # This makes the pager always use -S when doing `sudo -u postgres psql`:
 - lineinfile:
