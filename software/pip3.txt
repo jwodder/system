@@ -7,7 +7,8 @@ colored
 flake8
 flake8-bugbear   # provides 'B' checks
 flake8-builtins  # also provides 'B' checks
-nox-automation
+in_place
+nox
 packaging
 pip
 pipdeptree
@@ -19,9 +20,11 @@ python-dateutil
 pytz
 qypi  # editable install
 readme_renderer
+read_version
 reportlab
 rwt
 statjson  # editable install
 tox
 twine
+uritemplate
 wheel

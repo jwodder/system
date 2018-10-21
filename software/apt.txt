@@ -2,7 +2,6 @@ apache2
 apache2-utils  # htpasswd
 apt-file
 apt-transport-https
-aptitude
 bikeshed  # --no-install-recommends; for `dman`
 build-essential
 devscripts  # for `rmadison`
@@ -22,9 +21,7 @@ mailutils
 miscfiles
 moreutils
 mutt
-ncdu
 opendkim
-opendkim-tools
 perl-doc
 popularity-contest
 postfix
@@ -40,7 +37,6 @@ sqlite3
 tree
 unzip
 vnstat
-wikipedia2text
 xmlstarlet
 zip
 
@@ -51,11 +47,12 @@ ansible
 python3.4
 
 # No need to carry over to new/clean systems:
+aptitude
 debconf-utils
-graphviz
+ncdu
 ncurses-doc
+opendkim-tools
 openvpn
-pyflakes
 python-apt-doc
 python-bitarray
 python-dateutil
@@ -72,6 +69,7 @@ rng-tools
 rs
 transmission-cli
 transmission-daemon
+wikipedia2text
 
 # Installed by Let's Encrypt:
 dialog

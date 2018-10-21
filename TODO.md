@@ -9,6 +9,8 @@
 - Require hosts to define a `features: list[str]` variable listing which of the
   optional roles to run
 - Give every task a name
+- Newer PPA versions of certbot come with a systemd cronjob for performing the
+  autorenewal; use this instead?
 
 Completeness
 ============
@@ -35,6 +37,7 @@ Structure & Configuration
 - Rethink whether having `mail_origin` and `mail_hostname` be different values
   makes sense
 - Merge `loginmsg` into `base`?
+- Run cronjobs through systemd?
 
 Changes & New Features
 ======================
