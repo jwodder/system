@@ -1,4 +1,3 @@
-- Put on GitHub (after purging passwords from the repository, of course)
 - Set admin user's password
 - Problem: Since `base` disables root login, and the existence of the `admin`
   role implies that there is initially no non-root account available for login
