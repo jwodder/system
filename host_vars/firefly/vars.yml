@@ -12,15 +12,13 @@ features:
     - ssl
     - xmission
 
-#update_certbot: false
 certbot_email: jwodder+letsencrypt@gmail.com
 
 certbot_domains:
-    - varonathe.org
-    - www.varonathe.org
-    - mail.varonathe.org
-    - mg.varonathe.org
-    - local.varonathe.org
+    - 'varonathe.org'
+    - '*.varonathe.org'
+
+certbot_cert_name: varonathe.org
 
 admin_aliases:
     - borogove
@@ -44,8 +42,6 @@ admin_aliases:
     - trello
     - triplebyte
     - wodder
-
-certbot_cert_name: varonathe.org
 
 mail_destinations:
     - varonathe.org

@@ -6,7 +6,9 @@ function installed {
 }
 
 if installed apache2
-then service apache2 stop
-else ufw allow in 80
-     ufw allow in 443
+then service apache2 restart
+fi
+
+if installed postfix
+then service postfix restart
 fi

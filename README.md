@@ -28,3 +28,9 @@ Required Variables
 -----------
 
     digitalocean_token
+
+`ssl` role
+----------
+
+    certbot_domains
+    digitalocean_token

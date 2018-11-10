@@ -6,47 +6,40 @@
 
 - name: Install Certbot
   apt:
-    name: certbot
+    name:
+        - certbot
+        - python3-certbot-dns-digitalocean
     state: "{{update_certbot|ternary('latest', 'present')}}"
 
-- name: Install Certbot hooks
+- name: Store DigitalOcean token
+  template:
+    dest: "{{jwodder_root}}/etc/secret/certbot_digitalocean.ini"
+    src: certbot_digitalocean.ini
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Install Certbot deploy hook
   copy:
-    src: "{{item}}"
-    dest: "{{jwodder_root}}/{{item}}"
+    src: certbot-deploy-hook.sh
+    dest: /etc/letsencrypt/renewal-hooks/deploy/certbot-deploy-hook
     mode: 0755
-  with_items:
-    - bin/certbot-post-hook
-    - bin/certbot-pre-hook
 
 - name: Get SSL certificates
-  ### TODO: Is this idempotent?
+  ### Not idempotent
   ### TODO: Force a run if certbot_domains changed?  Always run?
   command: |
     certbot certonly
-        --standalone
+        --dns-digitalocean
+        --dns-digitalocean-credentials {{jwodder_root|quote}}/etc/secret/certbot_digitalocean.ini
         --rsa-key-size 4096
         --expand
         --cert-name {{certbot_cert_name|quote}}
         --email {{certbot_email|quote}}
         --domains {{certbot_domains|join(',')|quote}}
         --non-interactive
-        --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook
-        --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
         --agree-tos
   args:
     creates: /etc/letsencrypt/live/{{certbot_cert_name}}
 
 # Cert autorenewal is done by a cronjob installed by the certbot package
-
-#- name: Create certificate renewal cronjob
-#  copy:
-#    dest: /etc/cron.weekly/certbot
-#    content: |
-#        #!/bin/bash
-#        chronic certbot renew \
-#            --quiet \
-#            --non-interactive \
-#            --cert-name {{certbot_cert_name|quote}} \
-#            --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook \
-#            --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
-#    mode: 0755
