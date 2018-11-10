@@ -4,8 +4,5 @@ certbot_venv: "{{jwodder_root}}/venvs/certbot"
 certbot_email: jwodder+letsencrypt@gmail.com
 certbot_cert_name: jwodder
 
-# Must be 'auto' or 'ppa':
-certbot_source: auto
-
 # Required: certbot_domains (list of strings)
 # Note that, as of 2016-01-09, wildcard certs are still not supported.

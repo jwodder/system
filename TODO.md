@@ -10,6 +10,8 @@
 - Give every task a name
 - Newer PPA versions of certbot come with a systemd cronjob for performing the
   autorenewal; use this instead?
+- Replace `features` variable with Ansible tags?
+- Expand README (Describe what the playbook sets up etc.)
 
 Completeness
 ============
@@ -62,3 +64,4 @@ Changes & New Features
 - `admin/pydev`: Add options for updating pip and the other Python packages the
   role installs
 - `logsdb`: Add an option for recreating the virtualenv
+- Get a DNS wildcard cert with certbot

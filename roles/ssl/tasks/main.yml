@@ -1,10 +1,13 @@
 ---
 - assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
-- assert:
-    that: 'certbot_source == "auto" or certbot_source == "ppa"'
+- name: Add Certbot PPA
+  apt_repository: repo='ppa:certbot/certbot' update_cache=true
 
-- include: certbot_{{certbot_source}}.yml
+- name: Install Certbot
+  apt:
+    name: certbot
+    state: "{{update_certbot|ternary('latest', 'present')}}"
 
 - name: Install Certbot hooks
   copy:
@@ -31,17 +34,19 @@
         --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
         --agree-tos
   args:
-    creates: /etc/letsencrypt
+    creates: /etc/letsencrypt/live/{{certbot_cert_name}}
 
-- name: Create certificate renewal cronjob
-  copy:
-    dest: /etc/cron.weekly/certbot
-    content: |
-        #!/bin/bash
-        chronic certbot renew \
-            --quiet \
-            --non-interactive \
-            --cert-name {{certbot_cert_name|quote}} \
-            --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook \
-            --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
-    mode: 0755
+# Cert autorenewal is done by a cronjob installed by the certbot package
+
+#- name: Create certificate renewal cronjob
+#  copy:
+#    dest: /etc/cron.weekly/certbot
+#    content: |
+#        #!/bin/bash
+#        chronic certbot renew \
+#            --quiet \
+#            --non-interactive \
+#            --cert-name {{certbot_cert_name|quote}} \
+#            --pre-hook {{jwodder_root|quote}}/bin/certbot-pre-hook \
+#            --post-hook {{jwodder_root|quote}}/bin/certbot-post-hook
+#    mode: 0755
