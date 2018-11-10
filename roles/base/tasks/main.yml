@@ -14,6 +14,7 @@
         - patch
         - python
         - python-dev
+        - python-requests  # Required for `set_do_dns_record` module
         - python3
         - python3-dev
         - software-properties-common  # apt-add-repository
