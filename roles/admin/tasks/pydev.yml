@@ -19,28 +19,26 @@
 
 - name: Install essential Python 2 packages
   pip:
-    name: "{{item}}"
+    name:
+        - requests
+        - rwt
     extra_args: --user
     executable: ~/.local/bin/pip2
-  with_items:
-    - requests
-    - rwt
   become_user: "{{admin_user}}"
 
 - name: Install essential Python 3 packages
   pip:
-    name: "{{item}}"
+    name:
+        - flake8
+        - flake8-bugbear
+        - flake8-builtins
+        - requests
+        - rwt
+        - setuptools
+        - tox
+        - twine
+        - virtualenv
+        - wheel
     extra_args: --user
     executable: ~/.local/bin/pip3
-  with_items:
-    - flake8
-    - flake8-bugbear
-    - flake8-builtins
-    - requests
-    - rwt
-    - setuptools
-    - tox
-    - twine
-    - virtualenv
-    - wheel
   become_user: "{{admin_user}}"
