@@ -3,10 +3,7 @@ admin_aliases: []
 luser: muffins
 
 mail_origin: varonathe.org  # Must be a domain name rather than a subdomain
-    ### TODO: Set to first line of certbot_domains?
-
 mail_hostname: "mail.{{mail_origin}}"  # Must be a subdomain of mail_origin
-
 mail_destinations:
     - "{{mail_origin}}"
     - "{{mail_hostname}}"
