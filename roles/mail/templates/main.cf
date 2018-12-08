@@ -16,13 +16,13 @@ append_dot_mydomain = no
 # information on enabling SSL in the smtp client.
 smtpd_tls_cert_file = /etc/letsencrypt/live/{{certbot_cert_name}}/fullchain.pem
 smtpd_tls_key_file = /etc/letsencrypt/live/{{certbot_cert_name}}/privkey.pem
-smtpd_use_tls = yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtpd_tls_security_level = may
+smtpd_tls_protocols = !SSLv2, !SSLv3
+
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtp_tls_security_level = may
 smtp_tls_protocols = !SSLv2, !SSLv3
-smtpd_tls_security_level = may
-smtpd_tls_protocols = !SSLv2, !SSLv3
 
 smtpd_recipient_restrictions = permit_mynetworks,
                                permit_sasl_authenticated,
