@@ -10,16 +10,4 @@
   2.7's `sys.path` will make sense.  (How did that line even get there in the
   first place???)
 
-- Version 2.2 or higher of bash-completion is needed for tab completion to play
-  nicely with failglob.  On pre-Bionic Beaver systems, install from source as
-  follows:
-    - Install the latest release (2.7 at time of writing) from
-      <https://github.com/scop/bash-completion>
-    - Replace `/etc/profile.d/bash_completion.sh` with a symlink to
-      `/usr/local/etc/profile.d/bash_completion.sh` (or get rid of it
-      altogether?)
-    - [Per user] Change bash completion enablement code to source
-      `/usr/local/share/bash-completion/bash_completion` and set
-      `BASH_COMPLETION_COMPAT_DIR=/etc/bash_completion.d` just before it
-
 - Uncomment `de_DE.UTF-8 UTF-8` in `/etc/locale.gen` and rerun `locale-gen`
