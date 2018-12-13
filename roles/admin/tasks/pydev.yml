@@ -20,8 +20,8 @@
 - name: Install essential Python 2 packages
   pip:
     name:
+        - pip-run
         - requests
-        - rwt
     extra_args: --user
     executable: ~/.local/bin/pip2
   become_user: "{{admin_user}}"
@@ -32,8 +32,8 @@
         - flake8
         - flake8-bugbear
         - flake8-builtins
+        - pip-run
         - requests
-        - rwt
         - setuptools
         - tox
         - twine
