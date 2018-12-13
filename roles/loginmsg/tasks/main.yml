@@ -35,3 +35,9 @@
     regexp: 'landscape-sysinfo(?! --exclude-sysinfo-plugins)'
     replace: 'landscape-sysinfo --exclude-sysinfo-plugins=LandscapeLink'
     backup: true
+
+- name: Disable live news
+  lineinfile:
+    dest: /etc/default/motd-news
+    regexp: '^\s*#?\s*ENABLED='
+    line: 'ENABLED=0'
