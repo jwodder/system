@@ -70,10 +70,13 @@
     rotate: 10
 
 - name: Configure fail2ban
-  synchronize:
-    src: fail2ban/
-    dest: /etc/fail2ban
-    archive: true
-    delete: false
+  copy:
+    src: "fail2ban/{{item}}"
+    dest: "/etc/fail2ban/{{item}}"
+    backup: true
+  with_items:
+    - filter.d/apache-badbots.local
+    - filter.d/apache-notaproxy.local
+    - jail.d/apache.local
   notify:
     - Restart fail2ban

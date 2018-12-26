@@ -27,12 +27,20 @@
 ### TODO: Ensure all tables in `logs` are owned by `logger`? (ALTER TABLE
 ### public.$table OWNER TO logger)
 
+- name: Create jwodder_logsdb folder
+  file:
+    path: "{{jwodder_root}}/lib/jwodder_logsdb"
+    state: directory
+
 - name: Install jwodder_logsdb skeleton
-  synchronize:
-    src: jwodder_logsdb
-    dest: "{{jwodder_root}}/lib"
-    archive: true
-    delete: false
+  copy:
+    src: "jwodder_logsdb/{{item}}"
+    dest: "{{jwodder_root}}/lib/jwodder_logsdb/{{item}}"
+    backup: true
+  with_items:
+    - __init__.py
+    - core.py
+    - requirements.txt
 
 - name: Create jwodder_logsdb virtualenv
   pip:
