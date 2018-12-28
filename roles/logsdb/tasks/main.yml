@@ -17,7 +17,7 @@
     name: "{{logsdb_user}}"
     password: "{{logsdb_password}}"
     encrypted: true
-    role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
+    role_attr_flags: NOSUPERUSER,NOCREATEDB,NOCREATEROLE,LOGIN
   become_user: postgres
 
 - name: Create logs database
