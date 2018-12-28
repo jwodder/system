@@ -32,7 +32,6 @@ Structure & Configuration
         - what `backdroplet` should back up
         - the Dropbox path to which `backdroplet` should upload the backup
         - the source & destination address for `xmission-done`
-- Add variables for configuring the logsdb username & database name
 - Rethink whether having `mail_origin` and `mail_hostname` be different values
   makes sense
 - Merge `loginmsg` into `base`?
@@ -49,7 +48,7 @@ Changes & New Features
 - Cron output should still be logged somehow/somewhere even when Postfix isn't
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
-    - Use nullmailer? dma? Mailgun? ssmtp?
+    - Use nullmailer? dma? Mailgun? ssmtp? msmtp?
 - Set up root's home directory
     - Use the same files as `/etc/skel`?
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current

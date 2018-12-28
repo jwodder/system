@@ -1,5 +1,6 @@
 from   datetime    import timedelta
 from   email.utils import localtime
+import json
 from   pathlib     import Path
 import time
 import sqlalchemy as S
@@ -22,13 +23,13 @@ class SchemaConn:
 
 
 def connect() -> 'Engine':
-    dbpass = (JWODDER_ROOT/'etc'/'logger').read_text().strip()
+    creds = json.loads((JWODDER_ROOT/'etc'/'logsdb.json').read_text())
     return S.create_engine(S.engine.url.URL(
         drivername = 'postgresql',
         host       = 'localhost',
-        database   = 'logs',
-        username   = 'logger',
-        password   = dbpass,
+        database   = creds["database"],
+        username   = creds["username"],
+        password   = creds["password"],
     ))
 
 def longint(n):

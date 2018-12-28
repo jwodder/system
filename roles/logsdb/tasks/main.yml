@@ -1,31 +1,38 @@
 ---
-- password_file:
-    dest: "{{jwodder_root}}/etc/logger"
-    length: 32
+- name: Record logsdb credentials
+  copy:
+    dest: "{{jwodder_root}}/etc/logsdb.json"
     mode: 0644
-  register: logpass
+    content: |
+        {{
+            {
+                "database": logsdb_db,
+                "username": logsdb_user,
+                "password": logsdb_password,
+            }|to_json
+        }}
 
-- name: Create PostgreSQL logger user
+- name: Create PostgreSQL logsdb user
   postgresql_user:
-    name: logger
-    password: "{{logpass.password}}"
+    name: "{{logsdb_user}}"
+    password: "{{logsdb_password}}"
     encrypted: true
     role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
   become_user: postgres
 
 - name: Create logs database
   postgresql_db:
-    name: logs
-    owner: logger
+    name: "{{logsdb_db}}"
+    owner: "{{logsdb_user}}"
     encoding: utf8
   become_user: postgres
 
-### TODO: Run on `logs` (cf. <http://stackoverflow.com/a/6454469>):
+### TODO: Run on database (cf. <http://stackoverflow.com/a/6454469>):
 # GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{admin_user}};
 # ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {{admin_user}};
 
-### TODO: Ensure all tables in `logs` are owned by `logger`? (ALTER TABLE
-### public.$table OWNER TO logger)
+### TODO: Ensure all tables in database are owned by {{logsdb_user}}? (ALTER
+### TABLE public.$table OWNER TO {{logsdb_user}})
 
 - name: Create jwodder_logsdb folder
   file:
