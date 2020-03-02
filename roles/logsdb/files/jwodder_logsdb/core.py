@@ -1,7 +1,6 @@
-from   datetime    import timedelta
-from   email.utils import localtime
+from   datetime import datetime, timedelta, timezone
 import json
-from   pathlib     import Path
+from   pathlib  import Path
 import time
 import sqlalchemy as S
 
@@ -41,7 +40,7 @@ def longint(n):
     return ' '.join(triples)
 
 def one_day_ago():
-    return localtime() - timedelta(days=1)
+    return datetime.now(timezone.utc).astimezone() - timedelta(days=1)
 
 def iso8601_Z():
     return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())

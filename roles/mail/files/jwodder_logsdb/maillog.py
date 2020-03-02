@@ -1,9 +1,8 @@
 #!/usr/bin/python3
-from   datetime                   import timezone
+from   datetime                   import datetime, timezone
 import sys
 from   email                      import message_from_bytes, policy
 from   email.headerregistry       import Address
-from   email.utils                import localtime
 import subprocess
 import sqlalchemy as S
 from   sqlalchemy.ext.declarative import declarative_base
@@ -85,7 +84,7 @@ class MailLog:
         :type size: int
         """
         self.session.add(EMail(
-            timestamp = localtime(),
+            timestamp = datetime.now(timezone.utc).astimezone(),
             subject   = subject[:2048],
             sender    = self.get_contact(sender),
             size      = size,
