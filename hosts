@@ -1,2 +1,3 @@
-#firefly ansible_host=104.236.121.96
-firefly ansible_connection=local ansible_become_user=root
+firefly ansible_host=104.236.121.96 ansible_user=jwodder
+#firefly ansible_connection=local #ansible_become_user=root
+# <https://stackoverflow.com/questions/25751085/postgresql-failing-peer-authentication-with-ansible>

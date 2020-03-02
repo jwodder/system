@@ -11,3 +11,6 @@
   first place???)
 
 - Uncomment `de_DE.UTF-8 UTF-8` in `/etc/locale.gen` and rerun `locale-gen`
+
+- Comment out the `echo` commands under `"disabled")` in
+  `/etc/update-motd.d/80-livepatch`

@@ -10,6 +10,13 @@
 - Give every task a name
 - Replace `features` variable with Ansible tags?
 - Expand README (Describe what the playbook sets up etc.)
+- Set up SPF by adding the following DNS record:
+    - Type: `TXT`
+    - Name: `@`
+    - Data: `v=spf1 mx -all`
+    - (Provisions for Mailgun in this record seem to be unnecessary due to
+      Mailgun's `Sender:` rewriting making use of the mg.varonathe.org SPF
+      entry instead)
 
 Completeness
 ============

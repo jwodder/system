@@ -37,14 +37,18 @@ sqlite3
 tree
 unzip
 vnstat
-xmlstarlet
 zip
 
 # apt-add-repository -y ppa:ansible/ansible
 ansible
 
+# apt-add-repository -y ppa:certbot/certbot
+certbot
+python3-certbot-dns-digitalocean
+
 # apt-add-repository -y ppa:deadsnakes/ppa
 python3.4
+python3.4-dev
 
 # No need to carry over to new/clean systems:
 aptitude
@@ -55,11 +59,8 @@ opendkim-tools
 openvpn
 python-apt-doc
 python-bitarray
-python-dateutil
-python-jsonschema
 python-libtorrent
 python-prettytable
-python-psycopg2
 python-rfc3339
 python3-daemon
 python3-prettytable
@@ -69,7 +70,9 @@ rng-tools
 rs
 transmission-cli
 transmission-daemon
-wikipedia2text
+mkvtoolnix
+poppler-utils  # for `pdftoppm`
+xmlstarlet
 
 # Installed by Let's Encrypt:
 dialog

@@ -1,4 +1,3 @@
 Docker  # via https://get.docker.io (and added myself to the `docker` group)
 docker-compose
-Certbot
 dropbox_uploader  # <https://github.com/andreafabrizi/Dropbox-Uploader>
