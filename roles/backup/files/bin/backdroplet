@@ -33,9 +33,9 @@ fi
 
 [ -z "$rsync_only" ] || exit 0
 
-cd "$ROOT"
+cd "$ROOT/.."
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
-tar zcf "$TARBALL" .
+tar zcf "$TARBALL" "$(basename "$ROOT")"
 
 /usr/local/bin/dropbox_uploader \
     -f "$JWODDER_ROOT/etc/secret/dropbox_uploader" \
