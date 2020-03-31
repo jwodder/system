@@ -140,7 +140,7 @@ def main():
                 recipients += msg[field].addresses
         with MailLog(connect()) as db:
             db.insert_entry(
-                subject    = msg['Subject'],
+                subject    = msg['Subject'] or 'NO SUBJECT',
                 sender     = msg['From'].addresses[0],
                 date       = msg['Date'].datetime,
                 recipients = recipients,
