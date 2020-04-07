@@ -5,25 +5,10 @@
     dest: /tmp/get-pip.py
     force: true
 
-- name: Install pip for Python 2
-  command: python2 /tmp/get-pip.py --user
-  args:
-    creates: ~/.local/bin/pip2
-  become_user: "{{admin_user}}"
-
 - name: Install pip for Python 3
   command: python3 /tmp/get-pip.py --user
   args:
     creates: ~/.local/bin/pip3
-  become_user: "{{admin_user}}"
-
-- name: Install essential Python 2 packages
-  pip:
-    name:
-        - pip-run
-        - requests
-    extra_args: --user
-    executable: ~/.local/bin/pip2
   become_user: "{{admin_user}}"
 
 - name: Install essential Python 3 packages

@@ -1,6 +1,4 @@
-#!/usr/bin/python
-from   __future__ import print_function
-from   errno      import ENOENT
+#!/usr/bin/python3
 import random
 import string
 import traceback
@@ -20,14 +18,11 @@ def main():
     force     = module.params["force"]
     file_args = module.load_file_common_arguments(module.params)
     try:
-        with open(dest) as fp:
-            pwd = fp.read.strip()
-    except Exception as e:
-        if e.errno == ENOENT:
+        try:
+            with open(dest) as fp:
+                pwd = fp.read.strip()
+        except FileNotFoundError:
             pwd = None
-        else:
-            module.fail_json(msg=traceback.format_exc())
-    try:
         if pwd is None or pwd == '' or (force and len(pwd) != length):
             pwd = ''.join(random.choice(string.ascii_letters + string.digits)
                           for _ in range(length))

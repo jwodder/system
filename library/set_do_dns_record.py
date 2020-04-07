@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Set a DNS record in DigitalOcean to a given value, deleting any conflicting
 # records of the same domain, name, & type
 # cf. <https://github.com/ansible/ansible/pull/31765>
@@ -50,13 +50,13 @@ def main():
             except KeyError:
                 break
 
-        matching = set([
+        matching = {
             rec["id"] for rec in records
-                      if rec["data"] == recdata and
-                          rec["priority"] == recpriority and
-                          rec["port"] == recport and
-                          rec["weight"] == recweight
-        ])
+                      if rec["data"] == recdata
+                          and rec["priority"] == recpriority
+                          and rec["port"] == recport
+                          and rec["weight"] == recweight
+        }
         if not matching:
             if not module.check_mode:
                 s.post(recurl, json={

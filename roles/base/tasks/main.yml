@@ -12,11 +12,9 @@
         - libpam-google-authenticator
         - moreutils  # chronic
         - patch
-        - python
-        - python-dev
-        - python-requests  # Required for `set_do_dns_record` module
         - python3
         - python3-dev
+        - python3-requests  # Required for `set_do_dns_record` module
         - software-properties-common  # apt-add-repository
         - tree
         - unattended-upgrades

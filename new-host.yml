@@ -11,4 +11,4 @@
 - hosts: all
   gather_facts: false
   tasks:
-    - raw: apt-get update && apt-get install -y python
+    - raw: apt-get update && apt-get install -y python3
