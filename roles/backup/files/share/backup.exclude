@@ -9,6 +9,7 @@
 .eggs/
 .imageio/
 .local/
+.mypy_cache/
 .nox/
 .pylint.d/
 .pytest_cache/
