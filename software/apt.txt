@@ -47,8 +47,10 @@ certbot
 python3-certbot-dns-digitalocean
 
 # apt-add-repository -y ppa:deadsnakes/ppa
-python3.4
-python3.4-dev
+
+# add-apt-repository -y ppa:pypy/ppa
+#pypy3
+#pypy3-dev
 
 # No need to carry over to new/clean systems:
 aptitude

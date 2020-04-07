@@ -7,14 +7,18 @@ colored
 flake8
 flake8-bugbear   # provides 'B' checks
 flake8-builtins  # also provides 'B' checks
+flake8-import-order  # provides 'I' checks
+flake8-import-order-jwodder
 in_place
 intspan
+jwodder-pyrepo  # editable install
 nox
+numpy
 packaging
+pep517
 pip
 pip-run
 pipdeptree
-pipenv
 property-manager
 psutil
 psycopg2-binary
@@ -25,7 +29,6 @@ pytz
 PyYAML
 qypi  # editable install
 readme_renderer
-read_version
 reportlab
 SQLAlchemy
 statjson  # editable install
