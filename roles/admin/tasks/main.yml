@@ -48,7 +48,7 @@
     user: "{{admin_user}}"
     key: "{{item}}"
     manage_dir: true
-  with_items: "{{authkeys.content|b64decode|splitlines}}"
+  with_items: "{{(authkeys.content|b64decode).splitlines()}}"
 
 - name: Set up Google Authenticator for admin
   command: |
