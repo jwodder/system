@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from   email.message import EmailMessage
 from   inspect       import signature
+import json
 import os
 from   pathlib       import Path
 from   shutil        import disk_usage
@@ -85,20 +86,17 @@ def check_reboot(tags):
         return report
 
 def check_vnstat():
-    ### TODO: The --dumpdb option was removed in recent versions of vnstat.
-    ### Deal with this.
     vnstat = subprocess.check_output(
-        ['vnstat', '--dumpdb', '-i', NETDEVICE],
+        ['vnstat', '--json', 'd', '2', '-i', 'eth0'],
         universal_newlines=True,
     )
-    yesterday = [s for s in vnstat.splitlines() if s.startswith('d;1;')]
-    assert len(yesterday) == 1
-    _, _, mrx, mtx, krx, ktx, _ = map(int, yesterday[0].split(';')[1:])
-    sent = longint(mtx * 1024 + ktx)
-    received = longint(mrx * 1024 + krx)
+    data = json.loads(vnstat)
+    yesterday = data["interfaces"][0]["traffic"]["day"][0]
+    sent = longint(yesterday["tx"])
+    received = longint(yesterday["rx"])
     width = max(len(sent), len(received))
-    return 'Data sent yesterday:     %*s KiB\n' \
-           'Data received yesterday: %*s KiB\n' \
+    return 'Data sent yesterday:     %*s B\n' \
+           'Data received yesterday: %*s B\n' \
            % (width, sent, width, received)
 
 def main():
@@ -111,7 +109,7 @@ def main():
         check_reboot,
         check_load,
         check_disk,
-        #check_vnstat,
+        check_vnstat,
         check_inbox,
         check_authfail,
         check_apache_access,
