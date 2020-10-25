@@ -11,7 +11,7 @@ flake8-import-order  # provides 'I' checks
 flake8-import-order-jwodder
 in_place
 intspan
-jwodder-pyrepo  # editable install
+#jwodder-pyrepo  # editable install
 nox
 numpy
 packaging
@@ -28,7 +28,7 @@ pyrfc3339
 python-dateutil
 pytz
 PyYAML
-qypi  # editable install
+#qypi  # editable install
 readme_renderer
 reportlab
 SQLAlchemy

@@ -4,7 +4,7 @@ apt-file
 apt-transport-https
 bikeshed  # --no-install-recommends; for `dman`
 build-essential
-devscripts  # for `rmadison`
+certbot
 dos2unix
 fail2ban
 fortune-mod  # --no-install-recommends; needed for `catsig`
@@ -13,8 +13,7 @@ git
 htop
 jq
 libapache2-mod-wsgi-py3
-libncurses5-dev
-libncursesw5-dev
+libncurses-dev
 libpam-google-authenticator
 libpq-dev  # so psycopg2 can be installed via pip
 mailutils
@@ -22,64 +21,34 @@ miscfiles
 moreutils
 mutt
 opendkim
+opendkim-tools
 perl-doc
+poppler-utils  # for `pdftoppm`
 popularity-contest
 postfix
 postgresql
 postgrey
 procmail
 pwgen
-python-dev
+python3-certbot-dns-digitalocean
 python3-dev
+rs
 rss2email
 software-properties-common  # apt-add-repository
 sqlite3
+transmission-cli
+transmission-daemon
 tree
 unzip
 vnstat
 zip
 
 # apt-add-repository -y ppa:ansible/ansible
-ansible
-
-# apt-add-repository -y ppa:certbot/certbot
-certbot
-python3-certbot-dns-digitalocean
-
-# apt-add-repository -y ppa:deadsnakes/ppa
-
-# add-apt-repository -y ppa:pypy/ppa
-#pypy3
-#pypy3-dev
+#ansible
 
 # No need to carry over to new/clean systems:
-aptitude
-debconf-utils
-ncdu
-ncurses-doc
-opendkim-tools
-openvpn
-python-apt-doc
-python-bitarray
-python-libtorrent
-python-prettytable
-python-rfc3339
-python3-daemon
-python3-prettytable
-python3-psycopg2
-python3-yaml
-rng-tools
-rs
-transmission-cli
-transmission-daemon
-mkvtoolnix
-poppler-utils  # for `pdftoppm`
-xmlstarlet
-libldap2-dev
-libsasl2-dev
-
-# Installed by Let's Encrypt:
-dialog
-libaugeas0
-libffi-dev
-libssl-dev
+#mkvtoolnix
+#openvpn
+#python3-daemon
+python3-libtorrent
+#python3-psycopg2
