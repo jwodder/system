@@ -5,6 +5,8 @@
   the host's SSH details will have to be modified after the first play first
   runs.  In particular, having multiple plays in the playbook will not work out
   well on the first run.
+    - In addition, the "synchronize" task in the `base` role doesn't work when
+      the `ansible_user` isn't root.
 - Require hosts to define a `features: list[str]` variable listing which of the
   optional roles to run
 - Give every task a name
@@ -17,6 +19,7 @@
     - (Provisions for Mailgun in this record seem to be unnecessary due to
       Mailgun's `Sender:` rewriting making use of the mg.varonathe.org SPF
       entry instead)
+- Set admin user's password on creation
 
 Completeness
 ============

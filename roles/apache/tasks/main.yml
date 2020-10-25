@@ -8,6 +8,12 @@
     state: present
     update_cache: false
 
+- name: Allow incoming HTTP(S) connections
+  ufw: rule=allow to_ip=any to_port={{item}} proto=any direction=in
+  with_items:
+    - 80
+    - 443
+
 - name: Add admin user to `www-data` group
   user: name={{admin_user}} groups=www-data append=true
 
@@ -28,7 +34,8 @@
     state: present
     name: "{{item}}"
   with_items:
-    - cgi
+    #- cgi
+    - cgid
     - rewrite
     - ssl
   notify:

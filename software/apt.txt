@@ -75,6 +75,8 @@ transmission-daemon
 mkvtoolnix
 poppler-utils  # for `pdftoppm`
 xmlstarlet
+libldap2-dev
+libsasl2-dev
 
 # Installed by Let's Encrypt:
 dialog

@@ -39,7 +39,6 @@
     mode: 0755
 
 - name: Allow incoming connections to Transmission
-  ### TODO: Does this need to allow both TCP and UDP?
   ufw: rule=allow to_ip=any to_port={{xmission_port}} proto=any direction=in
 
 - name: Don't start Transmission automatically on system startup

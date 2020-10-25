@@ -85,6 +85,8 @@ def check_reboot(tags):
         return report
 
 def check_vnstat():
+    ### TODO: The --dumpdb option was removed in recent versions of vnstat.
+    ### Deal with this.
     vnstat = subprocess.check_output(
         ['vnstat', '--dumpdb', '-i', NETDEVICE],
         universal_newlines=True,
@@ -109,7 +111,7 @@ def main():
         check_reboot,
         check_load,
         check_disk,
-        check_vnstat,
+        #check_vnstat,
         check_inbox,
         check_authfail,
         check_apache_access,

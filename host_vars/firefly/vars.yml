@@ -21,27 +21,10 @@ certbot_domains:
 certbot_cert_name: varonathe.org
 
 admin_aliases:
-    - borogove
-    - daemail
-    - doapi
     - git
-    - guildorn
-    - ifttt
-    - john.wodder
-    - john
-    - jtw
-    - launchpad
-    - mailgun
-    - mborogove
-    - mimsy
-    - minimiscience
-    - nethack
     - pypi
     - readthedocs
     - steam
-    - trello
-    - triplebyte
-    - wodder
 
 mail_destinations:
     - varonathe.org

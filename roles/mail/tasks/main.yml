@@ -1,21 +1,21 @@
 ---
-- name: Add DNS record for mail subdomain
-  ### TODO: Create a CNAME record instead when the mail_origin and
-  ### mail_hostname are the same server
-  set_do_dns_record:
-    oauth_token: "{{digitalocean_token}}"
-    domain: "{{mail_origin}}"
-    type: A
-    name: "{{mail_hostname[:-(mail_origin|length)-1]}}"
-    data: "{{ansible_default_ipv4.address}}"
+#- name: Add DNS record for mail subdomain
+#  ### TODO: Create a CNAME record instead when the mail_origin and
+#  ### mail_hostname are the same server
+#  set_do_dns_record:
+#    oauth_token: "{{digitalocean_token}}"
+#    domain: "{{mail_origin}}"
+#    type: A
+#    name: "{{mail_hostname[:-(mail_origin|length)-1]}}"
+#    data: "{{ansible_default_ipv4.address}}"
 
-- name: Create DNS MX record
-  set_do_dns_record:
-    oauth_token: "{{digitalocean_token}}"
-    domain: "{{mail_origin}}"
-    type: MX
-    name: '@'
-    data: "{{mail_hostname}}"
+#- name: Create DNS MX record
+#  set_do_dns_record:
+#    oauth_token: "{{digitalocean_token}}"
+#    domain: "{{mail_origin}}"
+#    type: MX
+#    name: '@'
+#    data: "{{mail_hostname}}"
 
 - name: Allow incoming SMTP connections
   ufw: rule=allow to_ip=any to_port=25 proto=any direction=in

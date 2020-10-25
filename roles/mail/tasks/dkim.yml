@@ -78,10 +78,11 @@
     src: /etc/opendkim/keys/{{mail_origin}}/mail.txt
   register: dkimkey
 
-- name: Create mail._domainkey DNS record
-  set_do_dns_record:
-    oauth_token: "{{digitalocean_token}}"
-    domain: "{{mail_origin}}"
-    type: TXT
-    name: mail._domainkey
-    data: "{{dkimkey.content|b64decode}}"
+### TODO: The format of mail.txt contains extraneous stuff.  Handle this.
+#- name: Create mail._domainkey DNS record
+#  set_do_dns_record:
+#    oauth_token: "{{digitalocean_token}}"
+#    domain: "{{mail_origin}}"
+#    type: TXT
+#    name: mail._domainkey
+#    data: "{{dkimkey.content.strip()|b64decode}}"

@@ -14,6 +14,7 @@
     regexp: '^\\setenv LESS\b'
     line: '\setenv LESS -iS'
     backup: true
+    create: true
 
 # This lets me do `psql DATABASE` without needing `sudo` or an explicit login:
 - postgresql_user:

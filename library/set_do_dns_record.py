@@ -22,7 +22,7 @@ def main():
         supports_check_mode=True,
     )
     s = requests.Session()
-    s.headers["Authorization"] = "Bearer " + module.params["oauth_token"]
+    s.headers["Authorization"] = "Bearer " + module.params["oauth_token"].strip()
 
     recurl = 'https://api.digitalocean.com/v2/domains/' \
             + module.params["domain"] + '/records'
@@ -74,6 +74,21 @@ def main():
                 if not module.check_mode:
                     s.delete(recurl + '/' + str(rec["id"])).raise_for_status()
                 changed = True
+    except requests.HTTPError as e:
+        if 400 <= e.response.status_code < 500:
+            msg = '{0.status_code} Client Error: {0.reason} for URL: {0.url}\n'
+        elif 500 <= e.response.status_code < 600:
+            msg = '{0.status_code} Server Error: {0.reason} for URL: {0.url}\n'
+        else:
+            msg = '{0.status_code} Unknown Error: {0.reason} for URL: {0.url}\n'
+        msg = msg.format(e.response)
+        try:
+            resp = e.response.json()
+        except ValueError:
+            msg += e.response.text
+        else:
+            msg += json.dumps(resp, sort_keys=True, indent=4)
+        module.fail_json(msg=traceback.format_exc() + '\n\n' + msg)
     except Exception:
         module.fail_json(msg=traceback.format_exc())
     module.exit_json(changed=changed)

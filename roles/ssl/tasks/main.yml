@@ -1,9 +1,6 @@
 ---
 - assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
-- name: Add Certbot PPA
-  apt_repository: repo='ppa:certbot/certbot' update_cache=true
-
 - name: Install Certbot
   apt:
     name:
@@ -16,6 +13,13 @@
     dest: "{{jwodder_root}}/etc/secret/certbot_digitalocean.ini"
     src: certbot_digitalocean.ini
     mode: 0600
+    owner: root
+    group: root
+
+- name: Create deploy hook folder
+  file:
+    path: /etc/letsencrypt/renewal-hooks/deploy
+    state: directory
     owner: root
     group: root
 

@@ -7,6 +7,7 @@ def main():
             "dest": {"required": True, "type": "path", "aliases": ["path"]},
             "update": {"type": "dict", "default": {}},
             "delete": {"type": "list", "default": []},
+            "backup": {"type": "bool", "default": False},
         },
         add_file_common_args=True,
         supports_check_mode=True,
@@ -20,6 +21,7 @@ def main():
         module.fail_json(msg=traceback.format_exc())
     if not isinstance(data, dict):
         module.fail_json(msg='File must contain a JSON object/dictionary')
+    changed = False
     for k,v in module.params["update"].items():
         if k not in data or data[k] != v:
             data[k] = v

@@ -49,9 +49,20 @@
     - core.py
     - requirements.txt
 
+- name: Install virtualenv
+  # We need virtualenv installed globally if we're running as root, as we won't
+  # be able to run Python code installed in the admin user's userspace
+  apt:
+    name: virtualenv
+    state: present
+    update_cache: false
+
+### TODO: Only install virtualenv if we need to create a virtualenv, and then
+### uninstall it afterwards.
+
 - name: Create jwodder_logsdb virtualenv
   pip:
     requirements: "{{jwodder_root}}/lib/jwodder_logsdb/requirements.txt"
     virtualenv: "{{jwodder_root}}/venvs/logsdb"
-    virtualenv_command: "~{{admin_user}}/.local/bin/virtualenv"
+    #virtualenv_command: "~{{admin_user}}/.local/bin/virtualenv"
     virtualenv_python: python3
