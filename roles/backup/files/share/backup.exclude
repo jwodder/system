@@ -1,9 +1,11 @@
+*.egg
 *.egg-info/
 *.hi
 *.o
 *.pyc
 .*.swp
 .cache/
+.coverage
 .distlib/
 .doctrees/
 .eggs/
