@@ -15,13 +15,26 @@
   notify:
     - Run postwhite
 
+- name: Install postwhite config file
+  command: cp /usr/local/postwhite/postwhite.conf /etc/postwhite.conf
+  args:
+    creates: /etc/postwhite.conf
+
 - name: Configure postwhite
   lineinfile:
-    dest: /usr/local/postwhite/postwhite
-    regexp: '^spfttoolspath='
-    line: 'spfttoolspath=/usr/local/spf-tools'
+    dest: /etc/postwhite.conf
+    regexp: '^{{item.key}}='
+    line: '{{item.key}}={{item.value}}'
+  with_dict:
+    spfttoolspath: /usr/local/spf-tools
+    yahoo_static_hosts: /usr/local/postwhite/yahoo_static_hosts.txt
   notify:
     - Run postwhite
+
+- name: Ensure yahoo_static_hosts.txt exists
+  command: /usr/local/postwhite/scrape_yahoo
+  args:
+    creates: /usr/local/postwhite/yahoo_static_hosts.txt
 
 - name: Create postwhite cronjob
   copy:
@@ -29,4 +42,12 @@
     content: |
         #!/bin/bash
         chronic /usr/local/postwhite/postwhite
+    mode: 0755
+
+- name: Create postwhite Yahoo update cronjob
+  copy:
+    dest: /etc/cron.weekly/postwhite-yahoo
+    content: |
+        #!/bin/bash
+        chronic /usr/local/postwhite/scrape_yahoo
     mode: 0755
