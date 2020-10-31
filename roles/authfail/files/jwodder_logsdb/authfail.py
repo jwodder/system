@@ -43,6 +43,22 @@ class Authfail(SchemaConn):
             tbl.get_string() + '\n'
 
 
+MSG_REGEXEN = [
+    re.compile(
+        r'(?P<timestamp>\S+) \S+ sshd\[\d+\]:'
+        r'(?: message repeated \d+ times: \[)?'
+        r' Failed (?:password|keyboard-interactive/pam|none)'
+        r' for (?:invalid user )?(?P<username>.+?)'
+        r' from (?P<src_addr>\S+) port \d+ ssh2\]?\s*'
+    ),
+    re.compile(
+        r'(?P<timestamp>\S+) \S+ sshd\[\d+\]:'
+        r'(?: message repeated \d+ times: \[)?'
+        r' Invalid user (?P<username>.+?)'
+        r' from (?P<src_addr>\S+) port \d+\s*',
+    ),
+]
+
 def main():
     line = None
     try:
@@ -52,16 +68,11 @@ def main():
             # for some too-large number of lines to be passed to it until it'll
             # do anything.
             for line in iter(sys.stdin.readline, ''):
-                m = re.fullmatch(
-                    r'(?P<timestamp>\S+) \S+ sshd\[\d+\]:'
-                    r'(?: message repeated \d+ times: \[)?'
-                    r' Failed (?:password|keyboard-interactive/pam|none)'
-                    r' for (?:invalid user )?(?P<username>.+?)'
-                    r' from (?P<src_addr>\S+) port \d+ ssh2\]?\s*',
-                    line
-                )
-                if m:
-                    db.insert_entry(**m.groupdict())
+                for rgx in MSG_REGEXEN:
+                    m = rgx.fullmatch(line)
+                    if m:
+                        db.insert_entry(**m.groupdict())
+                        break
                 else:
                     raise ValueError('Could not parse logfile entry')
     except Exception as e:
