@@ -98,15 +98,6 @@
   notify:
     - Restart SSHd
 
-- name: Set /etc/skel
-  synchronize:
-    src: skel/
-    dest: /etc/skel
-    archive: true
-    delete: true
-    owner: false
-    group: false
-
 - name: Configure APT
   copy:
     src: apt.conf

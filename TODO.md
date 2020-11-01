@@ -5,8 +5,6 @@
   the host's SSH details will have to be modified after the first play first
   runs.  In particular, having multiple plays in the playbook will not work out
   well on the first run.
-    - In addition, the "synchronize" task in the `base` role doesn't work when
-      the `ansible_user` isn't root.
 - Require hosts to define a `features: list[str]` variable listing which of the
   optional roles to run
 - Give every task a name
@@ -26,6 +24,7 @@ Completeness
 - Do everything in `misc.md`
 - Ensure everything in `/opt/jwodder` is world-readable and (when relevant)
   -executable
+    - Make it be owned by the admin user? (except for `etc/secret`)
 - PGP-encrypt backups
 
 Structure & Configuration
@@ -59,8 +58,6 @@ Changes & New Features
   installed
     - cf. <http://unix.stackexchange.com/q/82093/11006>
     - Use nullmailer? dma? Mailgun? ssmtp? msmtp?
-- Set up root's home directory
-    - Use the same files as `/etc/skel`?
 - ssl: If the domains in `{{certbot_domains}}` don't match those in the current
   cert(s) in `/etc/letsencrypt`, rerun the Certbot command
 - Convey the Google Authenticator details back to the user running Ansible
