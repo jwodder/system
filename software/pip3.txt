@@ -2,8 +2,7 @@
 beautifulsoup4
 cachecontrol[filecache]
 click
-colorama
-colored
+daemail
 flake8
 flake8-bugbear   # provides 'B' checks
 flake8-builtins  # also provides 'B' checks
@@ -13,7 +12,6 @@ in_place
 intspan
 #jwodder-pyrepo  # editable install
 nox
-numpy
 packaging
 pep517
 pip
@@ -22,7 +20,6 @@ pipdeptree
 property-manager
 psutil
 psycopg2-binary
-ptyprocess
 pylint
 pyrfc3339
 python-dateutil
