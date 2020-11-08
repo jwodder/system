@@ -27,14 +27,9 @@
     line: '{{item.key}}={{item.value}}'
   with_dict:
     spfttoolspath: /usr/local/spf-tools
-    yahoo_static_hosts: /usr/local/postwhite/yahoo_static_hosts.txt
+    include_yahoo: 'no'
   notify:
     - Run postwhite
-
-- name: Ensure yahoo_static_hosts.txt exists
-  command: /usr/local/postwhite/scrape_yahoo
-  args:
-    creates: /usr/local/postwhite/yahoo_static_hosts.txt
 
 - name: Create postwhite cronjob
   copy:
@@ -42,12 +37,4 @@
     content: |
         #!/bin/bash
         chronic /usr/local/postwhite/postwhite
-    mode: 0755
-
-- name: Create postwhite Yahoo update cronjob
-  copy:
-    dest: /etc/cron.weekly/postwhite-yahoo
-    content: |
-        #!/bin/bash
-        chronic /usr/local/postwhite/scrape_yahoo
     mode: 0755
