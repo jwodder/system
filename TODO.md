@@ -17,7 +17,6 @@
     - (Provisions for Mailgun in this record seem to be unnecessary due to
       Mailgun's `Sender:` rewriting making use of the mg.varonathe.org SPF
       entry instead)
-- Set admin user's password on creation
 
 Completeness
 ============
@@ -26,6 +25,8 @@ Completeness
   -executable
     - Make it be owned by the admin user? (except for `etc/secret`)
 - PGP-encrypt backups
+    - Automatically regenerate the backup PGP key if it's expired or near
+      expiration
 
 Structure & Configuration
 =========================
@@ -44,7 +45,6 @@ Structure & Configuration
 - Rethink whether having `mail_origin` and `mail_hostname` be different values
   makes sense
 - Merge `loginmsg` into `base`?
-- Run cronjobs through systemd?
 
 Changes & New Features
 ======================
@@ -63,8 +63,6 @@ Changes & New Features
 - Convey the Google Authenticator details back to the user running Ansible
 - Support adding SSH keys to the admin user's `authorized_keys` other than
   those in root's `authorized_keys`
-- Automatically regenerate the backup PGP key if it's expired or near
-  expiration
 - `admin/pydev`: Add options for updating pip and the other Python packages the
   role installs
 - `logsdb`: Add an option for recreating the virtualenv

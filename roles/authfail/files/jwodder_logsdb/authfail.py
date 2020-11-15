@@ -54,7 +54,7 @@ MSG_REGEXEN = [
     re.compile(
         r'(?P<timestamp>\S+) \S+ sshd\[\d+\]:'
         r'(?: message repeated \d+ times: \[)?'
-        r' Invalid user (?P<username>.+?)'
+        r' Invalid user (?P<username>.*?)'
         r' from (?P<src_addr>\S+) port \d+\s*',
     ),
 ]
