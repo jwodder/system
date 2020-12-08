@@ -113,18 +113,12 @@ class MailLog:
             ]
             recips.sort(key=lambda c: (c.realname, c.email_address))
             report += (
-                'From:    {}\n'
-                'To:      {}\n'
-                'Subject: {}\n'
-                'Date:    {}\n'
-                'Size:    {}\n'
+                f'From:    {msg.sender}\n'
+                f'To:      {", ".join(map(str, recips))}\n'
+                f'Subject: {msg.subject}\n'
+                f'Date:    {msg.date.astimezone(timezone.utc):%Y-%m-%dT%H:%M:%SZ}\n'
+                f'Size:    {msg.size}\n'
                 '---\n'
-            ).format(
-                msg.sender,
-                ', '.join(map(str, recips)),
-                msg.subject,
-                msg.date.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-                msg.size,
             )
         return report
 
@@ -149,8 +143,7 @@ def main():
     except Exception:
         ### TODO: Include a description of the e-mail?
         ### (Message-ID, first few characters, ???)
-        print('\n{}: Error processing e-mail'.format(iso8601_Z()),
-              file=sys.stderr)
+        print(f'\n{iso8601_Z()}: Error processing e-mail', file=sys.stderr)
         raise
 
 if __name__ == '__main__':

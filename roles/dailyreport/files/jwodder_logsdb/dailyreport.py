@@ -133,7 +133,7 @@ def main():
             tags.remove(t)
     for t in sorted(tags):
         subject += '[' + t + '] '
-    subject += 'Status Report: {}, {}'.format(socket.gethostname(), iso8601_Z())
+    subject += f'Status Report: {socket.gethostname()}, {iso8601_Z()}'
     msg = EmailMessage()
     msg['Subject'] = subject
     msg['To'] = RECIPIENT

@@ -6,7 +6,7 @@ Target system requirements:
 
 - Ubuntu
 - minimum Ubuntu version: 20.04
-- minimum Python 3 version: 3.6
+- minimum Python 3 version: 3.8
 
 Other assumptions made:
 
