@@ -5,7 +5,7 @@
 *.pyc
 .*.swp
 .cache/
-.coverage
+.coverage*
 .distlib/
 .doctrees/
 .eggs/
