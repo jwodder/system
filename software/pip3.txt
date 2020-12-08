@@ -1,36 +1,29 @@
 # All installed with --user:
+appdirs
 beautifulsoup4
+build
 cachecontrol[filecache]
 click
-daemail
 flake8
 flake8-bugbear   # provides 'B' checks
 flake8-builtins  # also provides 'B' checks
 flake8-import-order  # provides 'I' checks
 flake8-import-order-jwodder
-in_place
-intspan
-#jwodder-pyrepo  # editable install
 nox
 packaging
-pep517
 pip
 pip-run
 pipdeptree
-property-manager
+pipx
 psutil
 psycopg2-binary
 pylint
-pyrfc3339
 python-dateutil
-pytz
 PyYAML
-#qypi  # editable install
 readme_renderer
 reportlab
 SQLAlchemy
 tox
 twine
 txtble
-uritemplate
 wheel

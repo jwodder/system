@@ -1,0 +1,4 @@
+#aptrepo  # from local clone
+daemail
+#jwodder-pyrepo  # from local clone
+qypi

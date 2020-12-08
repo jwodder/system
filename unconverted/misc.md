@@ -12,3 +12,6 @@
 - Comment out the `echo` commands under `"disabled")` in
   `/etc/update-motd.d/80-livepatch`
     - Not a thing anymore on 20.04?
+
+- Run `chmod g-w /usr/local/lib/python3.8` to keep me from running `pip
+  install` without `--user`
