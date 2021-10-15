@@ -1,4 +1,9 @@
 ---
+- name: Enable Transmission PPA
+  apt_repository:
+    repo: ppa:transmissionbt/ppa
+    update_cache: true
+
 - name: Install Transmission
   apt:
     name:
