@@ -19,7 +19,7 @@ inbox_tocc = S.Table('inbox_tocc', Base.metadata,
 
 class Contact(Base):
     __tablename__ = 'inbox_contacts'
-    __table_args = (S.UniqueConstraint('realname', 'email_address'),)
+    __table_args__ = (S.UniqueConstraint('realname', 'email_address'),)
 
     id            = S.Column(S.Integer, primary_key=True, nullable=False)
     realname      = S.Column(S.Unicode(2048), nullable=False)
