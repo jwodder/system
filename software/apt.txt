@@ -39,18 +39,18 @@ rs
 rss2email
 software-properties-common  # apt-add-repository
 sqlite3
-transmission-cli
-transmission-daemon
 tree
 unzip
 vnstat
 zip
 
-# apt-add-repository -y ppa:ansible/ansible
+# apt-add-repository ppa:transmissionbt/ppa
+transmission-cli
+transmission-daemon
 
 # No need to carry over to new/clean systems:
 aptitude
-#mkvtoolnix
+mkvtoolnix
 openvpn
 python3-cairo-dev  # to satisfy `pip check`
 python3-libtorrent
