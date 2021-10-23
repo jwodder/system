@@ -12,8 +12,8 @@ from   .core                      import connect, iso8601_Z, one_day_ago
 Base = declarative_base()
 
 inbox_tocc = S.Table('inbox_tocc', Base.metadata,
-    S.Column('msg_id',     S.Integer, S.ForeignKey('inbox.id'), nullable=False),
-    S.Column('contact_id', S.Integer, S.ForeignKey('inbox_contacts.id'), nullable=False),
+    S.Column('msg_id',     S.Integer, S.ForeignKey('inbox.id', ondelete='CASCADE'), nullable=False),
+    S.Column('contact_id', S.Integer, S.ForeignKey('inbox_contacts.id', ondelete='CASCADE'), nullable=False),
     S.UniqueConstraint('msg_id', 'contact_id'),
 )
 
@@ -37,7 +37,7 @@ class EMail(Base):
     id        = S.Column(S.Integer, primary_key=True, nullable=False)
     timestamp = S.Column(S.DateTime(timezone=True), nullable=False)
     subject   = S.Column(S.Unicode(2048), nullable=False)
-    sender_id = S.Column('sender', S.Integer, S.ForeignKey('inbox_contacts.id'), nullable=False)
+    sender_id = S.Column('sender', S.Integer, S.ForeignKey('inbox_contacts.id', ondelete='CASCADE'), nullable=False)
     sender    = relationship('Contact')
     size      = S.Column(S.Integer, nullable=False)
     date      = S.Column(S.DateTime(timezone=True), nullable=False)
