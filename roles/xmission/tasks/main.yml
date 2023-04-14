@@ -27,9 +27,9 @@
         script-torrent-done-enabled: true
         script-torrent-done-filename: "{{jwodder_root}}/bin/xmission-done"
         seed-queue-enabled: true
-        speed-limit-down: 200
+        speed-limit-down: 500
         speed-limit-down-enabled: true
-        speed-limit-up: 200
+        speed-limit-up: 500
         speed-limit-up-enabled: true
         trash-original-torrent-files: true
         watch-dir: "/var/lib/transmission-daemon/watch"
