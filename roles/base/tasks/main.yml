@@ -103,6 +103,12 @@
     src: apt.conf
     dest: /etc/apt/apt.conf.d/99jwodder
 
+- name: Automatically restart services on package upgrades without prompting
+  lineinfile:
+    dest: /etc/needrestart/needrestart.conf
+    regexp: '^#?\$nrconf\{restart\}'
+    line: "$nrconf{restart} = 'a';"
+
 - name: Configure popularity-contest
   debconf:
     name: popularity-contest
