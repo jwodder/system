@@ -17,6 +17,8 @@
     - (Provisions for Mailgun in this record seem to be unnecessary due to
       Mailgun's `Sender:` rewriting making use of the mg.varonathe.org SPF
       entry instead)
+- Update the secrets stored in `$JWODDER_ROOT/etc/secret/dropbox_uploader` for
+  Dropbox's new credentials version
 
 Completeness
 ============
