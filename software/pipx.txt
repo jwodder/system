@@ -1,10 +1,13 @@
+asciinema
 ansible  # --include-deps
 # pipx inject --include-apps ansible "ansible-lint[community,yamllint]"
-#aptrepo  # from local clone
+aptrepo  # from local clone
 daemail
+dead
 dotdrop
-#ghutil  # from local clone
-#habits  # from local clone
-#jwodder-pyrepo  # from local clone
+ghutil  # from local clone
+habits  # from local clone
+jwodder-pyrepo  # from local clone
 outgoing
 qypi
+reponews

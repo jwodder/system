@@ -1,14 +1,15 @@
 # All installed with --user:
-appdirs
 beautifulsoup4
 black
 build
 cachecontrol[filecache]
 click
+coverage
 flake8
 flake8-bugbear   # provides 'B' checks
 flake8-builtins  # also provides 'B' checks
 flake8-unused-arguments  # provides 'U' checks
+isort
 nox
 packaging
 pip
