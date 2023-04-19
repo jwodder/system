@@ -109,6 +109,12 @@
     regexp: '^#?\$nrconf\{restart\}'
     line: "$nrconf{restart} = 'a';"
 
+- name: Don't block upgrades with notifications about pending kernel updates
+  lineinfile:
+    dest: /etc/needrestart/needrestart.conf
+    regexp: '^#?\$nrconf\{kernelhints\}'
+    line: "$nrconf{kernelhints} = -1;"
+
 - name: Configure popularity-contest
   debconf:
     name: popularity-contest
