@@ -31,6 +31,8 @@ if [ "$(dpkg-query -Wf '${db:Status-Abbrev}' postgresql 2>/dev/null)" = "ii " ]
 then sudo -u postgres pg_dumpall | gzip > "$ROOT/postgres.sql.gz"
 fi
 
+crontab -l -u {{admin_user|quote}} > "$ROOT"/{{admin_user|quote}}.crontab
+
 [ -z "$rsync_only" ] || exit 0
 
 cd "$ROOT/.."

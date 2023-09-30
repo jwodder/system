@@ -6,8 +6,8 @@
     force: "{{update_dropbox_uploader}}"
 
 - name: Install bin/backdroplet
-  copy:
-    src: bin/backdroplet
+  template:
+    src: backdroplet
     dest: "{{jwodder_root}}/bin/backdroplet"
     mode: 0755
 
