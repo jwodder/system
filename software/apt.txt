@@ -26,7 +26,6 @@ opendkim
 opendkim-tools
 perl-doc
 poppler-utils  # for `pdftoppm`
-popularity-contest
 postfix
 postgresql
 postgrey
@@ -54,7 +53,6 @@ graphviz  # Needed for wheel-inspect docs
 mkvtoolnix
 openvpn
 python3-cairo-dev  # to satisfy `pip check`
-python3-libtorrent
 python3-prettytable
 python3-testresources  # to satisfy `pip check`
 transmission-cli

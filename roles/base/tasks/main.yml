@@ -115,18 +115,6 @@
     regexp: '^#?\$nrconf\{kernelhints\}'
     line: "$nrconf{kernelhints} = -1;"
 
-- name: Configure popularity-contest
-  debconf:
-    name: popularity-contest
-    question: popularity-contest/participate
-    vtype: boolean
-    value: "{{popcon}}"
-  register: popcon_changed
-
-- name: Enable new popularity-contest settings
-  command: dpkg-reconfigure -f noninteractive popularity-contest
-  when: popcon_changed is changed
-
 - name: Set timezone to UTC
   timezone: name=Etc/UTC
 
