@@ -1,13 +1,20 @@
-asciinema
 ansible  # --include-deps
-# pipx inject --include-apps ansible "ansible-lint[community,yamllint]"
-aptrepo  # from local clone
+# pipx inject --include-apps ansible ansible-lint
+git+https://github.com/jwodder/aptrepo
+black
 daemail
 dead
 dotdrop
-ghutil  # from local clone
-habits  # from local clone
+flake8
+# pipx inject flake8 flake8-bugbear flake8-builtins flake8-unused-arguments
+git+https://github.com/jwodder/ghutil
+git+https://github.com/jwodder/habits
 jwodder-pyrepo  # from local clone
+nox
 outgoing
+pip-run
+pollster  # from local clone
+pre-commit
 qypi
 reponews
+tox
