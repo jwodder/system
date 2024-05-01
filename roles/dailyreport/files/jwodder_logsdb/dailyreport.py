@@ -134,16 +134,22 @@ def main():
     for t in sorted(tags):
         subject += '[' + t + '] '
     subject += f'Status Report: {socket.gethostname()}, {iso8601_Z()}'
-    msg = EmailMessage()
-    msg['Subject'] = subject
-    msg['To'] = RECIPIENT
-    msg.set_content(body)
     if sys.stdout.isatty():
-        subprocess.Popen(
+        # Something about typical dailyreport contents (the size? long lines?)
+        # invariably causes serialized EmailMessage's to use quoted-printable
+        # transfer encoding no matter what I do.  Thus, in order to actually be
+        # able to view non-ASCII characters in subjects of recently-received
+        # e-mails in `less`, we need to basically output a pseudo-e-email.
+        subprocess.run(
             [os.environ.get('PAGER', 'less')],
-            stdin=subprocess.PIPE,
-        ).communicate(bytes(msg))
+            input=f"Subject: {subject}\n\n{body}",
+            encoding="utf-8",
+        )
     else:
+        msg = EmailMessage()
+        msg['Subject'] = subject
+        msg['To'] = RECIPIENT
+        msg.set_content(body)
         print(str(msg))
 
 if __name__ == '__main__':
