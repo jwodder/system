@@ -1,3 +1,12 @@
+- Update for newer Ansible versions
+- Update `jwodder_logsdb` for SQLAlchemy 2.0
+    - Change `S` alias to `sa`
+    - Give all tables `id` primary keys
+    - Use the ORM for all tables
+- Update prettytable version for `jwodder_logsdb`
+
+- Install certbot via snaps instead of apt
+
 - Set admin user's password
 - Problem: Since `base` disables root login, and the existence of the `admin`
   role implies that there is initially no non-root account available for login
