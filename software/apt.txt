@@ -50,10 +50,14 @@ zip
 aptitude
 cloc
 graphviz  # Needed for wheel-inspect docs
+hyperfine
 mkvtoolnix
+neofetch
 openvpn
 python3-cairo-dev  # to satisfy `pip check`
 python3-prettytable
 python3-testresources  # to satisfy `pip check`
+shellcheck
 transmission-cli
 transmission-daemon
+xmlstarlet

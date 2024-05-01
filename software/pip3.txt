@@ -7,10 +7,8 @@ pip
 pip-run
 pipdeptree
 pipx
-psycopg2-binary
 python-dateutil
 readme_renderer
-SQLAlchemy
 txtble
 urwid
 virtualenvwrapper
