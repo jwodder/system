@@ -8,7 +8,6 @@ pip-run
 pipdeptree
 pipx
 python-dateutil
-readme_renderer
 txtble
 urwid
 virtualenvwrapper
