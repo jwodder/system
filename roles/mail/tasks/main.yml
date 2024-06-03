@@ -85,6 +85,19 @@
   notify:
     - Run newaliases
 
+- name: Populate /etc/postfix/access
+  file:
+    src: access
+    dest: /etc/postfix/access
+    backup: true
+  register: access
+  notify:
+    - Restart Postfix
+
+- name: Rehash access file
+  command: postmap hash:/etc/postfix/access
+  when: access is changed
+
 - include: maillog.yml
   when: "'logsdb' in features"
 
