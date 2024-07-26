@@ -18,6 +18,7 @@
 .pytest_cache/
 .rustup/
 .tox/
+.vim/plugged/
 .viminfo
 .virtualenvs
 __pycache__/
