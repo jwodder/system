@@ -1,5 +1,5 @@
 ansible  # --include-deps
-# pipx inject --include-apps ansible ansible-lint
+ansible-lint
 git+https://github.com/jwodder/aptrepo
 black
 daemail
@@ -9,6 +9,7 @@ flake8
 # pipx inject flake8 flake8-bugbear flake8-builtins flake8-unused-arguments
 git+https://github.com/jwodder/ghutil
 git+https://github.com/jwodder/habits
+jwodder-ps1
 jwodder-pyrepo  # from local clone
 nox
 outgoing
