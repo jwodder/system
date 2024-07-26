@@ -1,7 +1,5 @@
-cargo-binstall  # via installer script
 DigitalOcean metrics agent  # <https://repos.insights.digitalocean.com/install.sh>
 Docker  # via https://get.docker.io (and added myself to the `docker` group)
 docker-compose
 dropbox_uploader  # <https://github.com/andreafabrizi/Dropbox-Uploader>
 gh # <https://github.com/cli/cli/blob/trunk/docs/install_linux.md>
-rust # via https://sh.rustup.rs
