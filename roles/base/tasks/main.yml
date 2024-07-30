@@ -69,8 +69,18 @@
   with_dict:
     "cron.*": /var/log/cron.log
     "user.*": -/var/log/user.log
-    mail.info: -/var/log/mail.info
-    mail.warn: -/var/log/mail.warn
+  notify:
+    - Restart rsyslog
+
+- name: Deprive some syslog facilities of their own logfiles
+  lineinfile:
+    dest: /etc/rsyslog.d/50-default.conf
+    regexp: '^({{item}}\s+.+)'
+    line: '#\1'
+    backup: true
+    backrefs: true
+  with_items:
+    - mail.err
   notify:
     - Restart rsyslog
 
