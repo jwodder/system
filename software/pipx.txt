@@ -2,13 +2,14 @@ ansible  # --include-deps
 ansible-lint
 git+https://github.com/jwodder/aptrepo
 black
+build
 daemail
-dead
 dotdrop
 flake8
 # pipx inject flake8 flake8-bugbear flake8-builtins flake8-unused-arguments
 git+https://github.com/jwodder/ghutil
 git+https://github.com/jwodder/habits
+hatch
 jwodder-ps1
 jwodder-pyrepo  # from local clone
 nox

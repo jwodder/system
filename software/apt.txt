@@ -25,6 +25,7 @@ net-tools  # netstat
 opendkim
 opendkim-tools
 perl-doc
+pipx  # --no-install-recommends
 poppler-utils  # for `pdftoppm`
 postfix
 postgresql
@@ -32,7 +33,9 @@ postgrey
 procmail
 pwgen
 python3-certbot-dns-digitalocean
+python3-coverage
 python3-dev
+python3-pip
 python3-venv
 rs
 rss2email
@@ -40,6 +43,7 @@ software-properties-common  # apt-add-repository
 sqlite3
 tree
 unzip
+virtualenvwrapper
 vnstat
 w3m
 zip

@@ -95,5 +95,3 @@
     minute: 0
     hour: 9
     job: 'cd ~; xargs -a {{jwodder_root|quote}}/share/cruft -r rm -rf'
-
-- include: pydev.yml
