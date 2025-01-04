@@ -7,13 +7,6 @@
   notify:
     - Restart Apache
 
-- name: Install apache_access module
-  copy:
-    src: jwodder_logsdb/apache_access.py
-    dest: "{{jwodder_root}}/lib/jwodder_logsdb/apache_access.py"
-  notify:
-    - Restart Apache
-
 - name: Ensure apache_access errfile exists
   file:
     dest: "{{jwodder_root}}/logs/apache_access.err"

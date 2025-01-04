@@ -1,16 +1,9 @@
 ---
-- name: Record logsdb credentials
-  copy:
-    dest: "{{jwodder_root}}/etc/logsdb.json"
+- name: Create logsdb config file
+  template:
+    src: logsdb.ini
+    dest: "{{jwodder_root}}/etc/logsdb.ini"
     mode: 0644
-    content: |
-        {{
-            {
-                "database": logsdb_db,
-                "username": logsdb_user,
-                "password": logsdb_password,
-            }|to_json
-        }}
 
 - name: Create PostgreSQL logsdb user
   postgresql_user:
@@ -34,21 +27,6 @@
 ### TODO: Ensure all tables in database are owned by {{logsdb_user}}? (ALTER
 ### TABLE public.$table OWNER TO {{logsdb_user}})
 
-- name: Create jwodder_logsdb folder
-  file:
-    path: "{{jwodder_root}}/lib/jwodder_logsdb"
-    state: directory
-
-- name: Install jwodder_logsdb skeleton
-  copy:
-    src: "jwodder_logsdb/{{item}}"
-    dest: "{{jwodder_root}}/lib/jwodder_logsdb/{{item}}"
-    backup: true
-  with_items:
-    - __init__.py
-    - core.py
-    - requirements.txt
-
 - name: Install virtualenv
   # We need virtualenv installed globally if we're running as root, as we won't
   # be able to run Python code installed in the admin user's userspace
@@ -57,8 +35,9 @@
     state: present
     update_cache: false
 
-- name: Create jwodder_logsdb virtualenv
+- name: Install jwodder-logsdb in virtualenv
   pip:
-    requirements: "{{jwodder_root}}/lib/jwodder_logsdb/requirements.txt"
+    name: git+https://github.com/jwodder/logsdb
+    state: forcereinstall
     virtualenv: "{{jwodder_root}}/venvs/logsdb"
     virtualenv_python: python3

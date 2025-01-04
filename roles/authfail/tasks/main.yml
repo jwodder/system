@@ -7,13 +7,6 @@
   notify:
     - Restart rsyslog
 
-- name: Install authfail module
-  copy:
-    src: jwodder_logsdb/authfail.py
-    dest: "{{jwodder_root}}/lib/jwodder_logsdb/authfail.py"
-  notify:
-    - Restart rsyslog
-
 - name: Ensure authfail errfile exists
   file:
     path: "{{jwodder_root}}/logs/authfail.err"

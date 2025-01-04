@@ -5,11 +5,6 @@
     dest: "{{jwodder_root}}/bin/maillog"
     mode: 0755
 
-- name: Install maillog module
-  copy:
-    src: jwodder_logsdb/maillog.py
-    dest: "{{jwodder_root}}/lib/jwodder_logsdb/maillog.py"
-
 - name: Install /etc/procmailrc
   template:
     src: etc.procmailrc

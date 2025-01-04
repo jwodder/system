@@ -10,11 +10,6 @@
     dest: "{{jwodder_root}}/bin/dailyreport"
     mode: 0755
 
-- name: Install dailyreport module
-  copy:
-    src: jwodder_logsdb/dailyreport.py
-    dest: "{{jwodder_root}}/lib/jwodder_logsdb/dailyreport.py"
-
 - name: Create dailyreport cronjob
   cron:
     user: "{{dailyreporter}}"
