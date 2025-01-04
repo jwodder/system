@@ -1,4 +1,5 @@
-DigitalOcean metrics agent  # <https://repos.insights.digitalocean.com/install.sh>
+DigitalOcean droplet agent  # <https://docs.digitalocean.com/products/droplets/how-to/manage-agent/>
+DigitalOcean metrics agent  # <https://docs.digitalocean.com/products/monitoring/how-to/install-agent/>
 Docker  # via https://get.docker.io (and added myself to the `docker` group)
 dropbox_uploader  # <https://github.com/andreafabrizi/Dropbox-Uploader>
 gh # <https://github.com/cli/cli/blob/trunk/docs/install_linux.md>
