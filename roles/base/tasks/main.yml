@@ -141,17 +141,10 @@
     src: apt.conf
     dest: /etc/apt/apt.conf.d/99jwodder
 
-- name: Automatically restart services on package upgrades without prompting
-  lineinfile:
-    dest: /etc/needrestart/needrestart.conf
-    regexp: '^#?\$nrconf\{restart\}'
-    line: "$nrconf{restart} = 'a';"
-
-- name: Don't block upgrades with notifications about pending kernel updates
-  lineinfile:
-    dest: /etc/needrestart/needrestart.conf
-    regexp: '^#?\$nrconf\{kernelhints\}'
-    line: "$nrconf{kernelhints} = -1;"
+- name: Configure needrestart
+  copy:
+    src: needrestart.conf
+    dest: /etc/needrestart/conf.d/99jwodder.conf
 
 - name: Set timezone to UTC
   timezone: name=Etc/UTC
