@@ -5,8 +5,8 @@ Control system requirements:
 Target system requirements:
 
 - Ubuntu
-- minimum Ubuntu version: 20.04
-- minimum Python 3 version: 3.8
+- minimum Ubuntu version: 24.04
+- minimum Python 3 version: 3.12
 
 Other assumptions made:
 
