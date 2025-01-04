@@ -86,6 +86,13 @@
   notify:
     - Restart rsyslog
 
+- name: Configure SSH
+  copy:
+    src: sshd.conf
+    dest: /etc/ssh/sshd_config.d/99jwodder.conf
+  notify:
+    - Restart SSHd
+
 - name: Enable Google Authenticator in PAM
   lineinfile:
     dest: /etc/pam.d/sshd
@@ -94,21 +101,40 @@
   notify:
     - Restart SSHd
 
-- name: Enable Google Authenticator in sshd_config
+- name: Configure PAM to show the "Last login" and "Failed logins" messages
   lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^#?ChallengeResponseAuthentication\s+'
-    line: 'ChallengeResponseAuthentication yes'
-  notify:
-    - Restart SSHd
+    dest: /etc/pam.d/sshd
+    # Insert between the pam_env lines and the pam_selinux line
+    insertafter: 'pam_env'
+    line: "{{item}}"
+    backup: true
+  with_items:
+    # Note that the lines will & must appear in the opposite order in the
+    # configured file.
+    - 'session optional    pam_lastlog.so silent noupdate showfailed'
+    - 'session [default=1] pam_lastlog.so nowtmp showfailed'
 
-- name: Forbid root login
+- name: Disable cruft in login message
+  file:
+    ### TODO: This will fail when the file doesn't exist; fix this!
+    path: "/etc/update-motd.d/{{item}}"
+    mode: 0644
+  with_items:
+    - '00-header'
+    - '10-help-text'
+
+- name: Omit Landscape link from sysinfo in login message
+  replace:
+    dest: /etc/update-motd.d/50-landscape-sysinfo
+    regexp: 'landscape-sysinfo(?! --exclude-sysinfo-plugins)'
+    replace: 'landscape-sysinfo --exclude-sysinfo-plugins=LandscapeLink'
+    backup: true
+
+- name: Disable live news
   lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^#?PermitRootLogin\s+'
-    line: 'PermitRootLogin no'
-  notify:
-    - Restart SSHd
+    dest: /etc/default/motd-news
+    regexp: '^\s*#?\s*ENABLED='
+    line: 'ENABLED=0'
 
 - name: Configure APT
   copy:
