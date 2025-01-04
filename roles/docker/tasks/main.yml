@@ -6,16 +6,3 @@
 
 - name: Add admin user to `docker` group
   user: name={{admin_user}} groups=docker append=true
-
-- name: Determine latest release of Docker Compose
-  uri:
-    url: https://api.github.com/repos/docker/compose/releases/latest
-    return_content: true
-  register: compose_latest
-
-- name: Install Docker Compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/{{compose_latest.json.tag_name}}/docker-compose-{{ansible_system}}-{{ansible_machine}}
-    dest: /usr/local/bin/docker-compose
-    mode: 0755
-    force: "{{update_docker_compose}}"
