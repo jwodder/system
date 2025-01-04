@@ -18,7 +18,6 @@ libpam-google-authenticator
 libpq-dev  # so psycopg2 can be installed via pip
 mailutils
 miscfiles
-mlocate
 moreutils
 mutt
 net-tools  # netstat
@@ -26,6 +25,7 @@ opendkim
 opendkim-tools
 perl-doc
 pipx  # --no-install-recommends
+plocate
 poppler-utils  # for `pdftoppm`
 postfix
 postgresql
