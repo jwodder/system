@@ -75,7 +75,7 @@
 - name: Cut down on old Apache logs
   lineinfile:
     dest: /etc/logrotate.d/apache2
-    line: "    {{item.key}} {{item.value}}"
+    line: "\t{{item.key}} {{item.value}}"
     regexp: '^\s*{{item.key}}'
     insertbefore: '^\s*\}$'
   with_dict:
