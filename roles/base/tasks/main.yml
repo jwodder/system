@@ -56,7 +56,7 @@
   lineinfile:
     dest: /etc/rsyslog.d/20-ufw.conf
     regexp: '^\s*#?\s*&\s+(~|stop)\s*$'
-    line: '& ~'
+    line: '& stop'
     insertafter: EOF
     backup: true
   notify:
