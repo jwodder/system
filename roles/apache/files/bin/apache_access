@@ -2,5 +2,5 @@
 JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
 exec "$JWODDER_ROOT"/venvs/logsdb/bin/logsdb \
     -c "$JWODDER_ROOT"/etc/logsdb.ini \
-    apache-access \
-    2>>"$JWODDER_ROOT"/logs/apache_access.err
+    -l "$JWODDER_ROOT"/logs/apache_access.err \
+    apache-access
