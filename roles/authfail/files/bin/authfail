@@ -1,6 +1,6 @@
 #!/bin/bash
 JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
-"$JWODDER_ROOT"/venvs/logsdb/bin/logsdb \
+exec "$JWODDER_ROOT"/venvs/logsdb/bin/logsdb \
     -c "$JWODDER_ROOT"/etc/logsdb.ini \
     authfail \
     2>>"$JWODDER_ROOT"/logs/authfail.err
