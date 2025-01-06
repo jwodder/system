@@ -21,3 +21,23 @@
     backup: true
   notify:
     - Restart rsyslog
+
+# TODO: Look for a better way to configure apparmor
+# <https://askubuntu.com/q/1537301/25560>
+
+- name: Make rsyslog apparmor profile unconfined
+  lineinfile:
+    dest: /etc/apparmor.d/usr.sbin.rsyslogd
+    regexp: '^profile rsyslogd /usr/sbin/rsyslogd '
+    line: 'profile rsyslogd /usr/sbin/rsyslogd flags=(unconfined) {'
+    backup: true
+  notify:
+    - Restart apparmor
+
+- name: Configure apparmor to allow rsyslog to execute authfail
+  template:
+    src: authfail.apparmor
+    dest: /etc/apparmor.d/rsyslog.d/authfail.apparmor
+    backup: true
+  notify:
+    - Restart apparmor
