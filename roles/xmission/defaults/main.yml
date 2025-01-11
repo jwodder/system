@@ -1,2 +1,5 @@
 ---
 xmission_port: 60069
+mail_origin: varonathe.org  # Must be a domain name rather than a subdomain
+
+# Requred: xmission_recipient

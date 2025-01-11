@@ -1,6 +1,6 @@
 #!/bin/bash
-FROM_ADDR='xmission@varonathe.org'
-TO_ADDR='jwodder@gmail.com'
+FROM_ADDR='xmission@{{ mail_origin }}'
+TO_ADDR='{{ xmission_recipient }}'
 
 sendmail -t <<EOT
 Subject: Download complete: $TR_TORRENT_NAME

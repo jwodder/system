@@ -24,6 +24,11 @@ Required Variables
 
     dropbox_oauth_access_token
 
+`logsdb` role
+-------------
+
+    dailyreport_recipient  # if dailyreport enabled
+
 `mail` role
 -----------
 
@@ -33,4 +38,10 @@ Required Variables
 ----------
 
     certbot_domains
+    certbot_email
     digitalocean_token
+
+`xmission` role
+---------------
+
+    xmission_recipient

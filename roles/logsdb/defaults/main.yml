@@ -2,3 +2,5 @@
 logsdb_db: logs
 logsdb_user: logger
 logsdb_password: "{{lookup('password', inventory_dir + '/passwords/' + ansible_hostname + '/logsdb length=32 chars=ascii_letters,digits') }}"
+
+# Required (if dailyreport enabled): dailyreport_recipient

@@ -1,6 +1,6 @@
 ---
 update_certbot: false
-certbot_email: jwodder+letsencrypt@gmail.com
 certbot_cert_name: jwodder
 
 # Required: certbot_domains (list of strings)
+# Required: certbot_email
