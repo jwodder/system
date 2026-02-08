@@ -10,8 +10,10 @@ flake8
 git+https://github.com/jwodder/ghutil
 git+https://github.com/jwodder/habits
 hatch
+isort
 jwodder-ps1
 jwodder-pyrepo  # from local clone
+mypy
 nox
 outgoing
 pip-run
