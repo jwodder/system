@@ -28,8 +28,8 @@
 - name: Make rsyslog apparmor profile unconfined
   lineinfile:
     dest: /etc/apparmor.d/usr.sbin.rsyslogd
-    regexp: '^profile rsyslogd /usr/sbin/rsyslogd '
-    line: 'profile rsyslogd /usr/sbin/rsyslogd flags=(unconfined) {'
+    regexp: '^profile rsyslogd /usr/sbin/rsyslogd flags=\(attach_disconnected( unconfined)?\) '
+    line: 'profile rsyslogd /usr/sbin/rsyslogd flags=(attach_disconnected unconfined) {'
     backup: true
   notify:
     - Restart apparmor
