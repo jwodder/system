@@ -36,7 +36,6 @@ rss2email
 software-properties-common  # apt-add-repository
 tree
 unzip
-virtualenvwrapper
 vnstat
 w3m
 zip
@@ -44,15 +43,11 @@ zip
 # No need to carry over to new/clean systems:
 aptitude
 cloc
-graphviz  # Needed for wheel-inspect docs
 hyperfine
 jekyll
-libncurses-dev
 mkvtoolnix
 openvpn
-python3-cairo-dev  # to satisfy `pip check`
 python3-prettytable
-python3-testresources  # to satisfy `pip check`
 shellcheck
 transmission-cli
 transmission-daemon
