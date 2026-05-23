@@ -10,7 +10,6 @@
   with_items:
     - "{{jwodder_root}}/bin"
     - "{{jwodder_root}}/etc"
-    - "{{jwodder_root}}/lib"
     - "{{jwodder_root}}/share"
     - "{{jwodder_root}}/venvs"
 

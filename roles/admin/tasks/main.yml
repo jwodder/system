@@ -4,7 +4,7 @@
 
 - ansible.builtin.set_fact:
     # This makes the variable accessible to subsequent roles, right?
-    admin_user: "{{admin_user}}"
+    admin_user: "{{ admin_user }}"
 
 # Creating a new group with sudo powers is a workaround that allows the admin
 # user to use `sudo` without their home directory being defiled by the
@@ -38,7 +38,7 @@
     comment: "{{admin_gecos}}"
     generate_ssh_key: true
     ssh_key_type: rsa
-    ssh_key_comment: "{{admin_user}}@{{ansible_hostname}}"
+    ssh_key_comment: "{{ admin_user }}@{{ ansible_facts['hostname'] }}"
 
 - name: Fetch root's authorized_keys
   ansible.builtin.slurp:

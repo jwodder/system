@@ -28,7 +28,7 @@
     update_cache: true
 
 - name: Create swap space
-  ansible.builtin.command: fallocate -l {{ansible_memtotal_mb * 2}}M /swapfile
+  ansible.builtin.command: fallocate -l {{ ansible_facts["memtotal_mb"] * 2 }}M /swapfile
   args:
     creates: /swapfile
   register: base_created_swap
