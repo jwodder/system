@@ -34,11 +34,13 @@
   notify:
     - Restart OpenDKIM
 
-- ansible.builtin.file:
+- name: Create OpenDKIM keys directory for mail server
+  ansible.builtin.file:
     path: /etc/opendkim/keys/{{mail_origin}}
     state: directory
 
-- ansible.builtin.copy:
+- name: Configure OpenDKIM trusted hosts
+  ansible.builtin.copy:
     dest: /etc/opendkim/TrustedHosts
     content: |
         127.0.0.1
@@ -48,33 +50,38 @@
   notify:
     - Restart OpenDKIM
 
-- ansible.builtin.copy:
+- name: Configure OpenDKIM key table
+  ansible.builtin.copy:
     dest: /etc/opendkim/KeyTable
     content: |
         mail._domainkey.{{mail_origin}} {{mail_origin}}:mail:/etc/opendkim/keys/{{mail_origin}}/mail.private
   notify:
     - Restart OpenDKIM
 
-- ansible.builtin.copy:
+- name: Configure OpenDKIM signing table
+  ansible.builtin.copy:
     dest: /etc/opendkim/SigningTable
     content: |
         *@{{mail_origin}} mail._domainkey.{{mail_origin}}
   notify:
     - Restart OpenDKIM
 
-- ansible.builtin.command: opendkim-genkey -s mail -d {{mail_origin}}
+- name: Generate OpenDKIM keys
+  ansible.builtin.command: opendkim-genkey -s mail -d {{mail_origin}}
   args:
     chdir: /etc/opendkim/keys/{{mail_origin}}
     creates: /etc/opendkim/keys/{{mail_origin}}/mail.private
   notify:
     - Restart OpenDKIM
 
-- ansible.builtin.file:
+- name: Set owner of private OpenDKIM key
+  ansible.builtin.file:
     dest: /etc/opendkim/keys/{{mail_origin}}/mail.private
     owner: opendkim
     group: opendkim
 
-- ansible.builtin.slurp:
+- name: Fetch contents of OpenDKIM mail.txt file
+  ansible.builtin.slurp:
     src: /etc/opendkim/keys/{{mail_origin}}/mail.txt
   register: dkimkey
 

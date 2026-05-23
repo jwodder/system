@@ -25,19 +25,22 @@
     proto: any
     direction: in
 
-- ansible.builtin.debconf:
+- name: Configure postfix main_mailer_type
+  ansible.builtin.debconf:
     name: postfix
     question: postfix/main_mailer_type
     vtype: select
     value: Internet Site
 
-- ansible.builtin.debconf:
+- name: Configure postfix mailname
+  ansible.builtin.debconf:
     name: postfix
     question: postfix/mailname
     vtype: string
     value: "{{mail_origin}}"
 
-- ansible.builtin.apt:
+- name: Install postfix
+  ansible.builtin.apt:
     name:
         - mailutils
         - opendkim
@@ -112,7 +115,8 @@
     dest: "{{jwodder_root}}/bin/mailuser"
     mode: 0755
 
-- ansible.builtin.template:
+- name: Create procmailrc for luser
+  ansible.builtin.template:
     src: luser.procmailrc
     dest: /home/{{luser}}/.procmailrc
     owner: "{{luser}}"

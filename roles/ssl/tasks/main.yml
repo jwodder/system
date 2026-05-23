@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
+- name: Assert that certbot_domains is defined and nonempty
+  ansible.builtin.assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
 - name: Install Certbot
   ansible.builtin.apt:

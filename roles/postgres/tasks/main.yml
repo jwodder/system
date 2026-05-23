@@ -9,7 +9,8 @@
     update_cache: false
 
 # This makes the pager always use -S when doing `sudo -u postgres psql`:
-- ansible.builtin.lineinfile:
+- name: Configure psql pager for postgres user
+  ansible.builtin.lineinfile:
     dest: ~postgres/.psqlrc
     regexp: '^\\setenv LESS\b'
     line: '\setenv LESS -iS'
@@ -17,7 +18,8 @@
     create: true
 
 # This lets me do `psql DATABASE` without needing `sudo` or an explicit login:
-- community.postgresql.postgresql_user:
+- name: Grant extra PostgreSQL powers to admin user
+  community.postgresql.postgresql_user:
     name: "{{admin_user}}"
     role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
   become_user: postgres

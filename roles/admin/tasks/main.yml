@@ -1,8 +1,10 @@
 ---
-- ansible.builtin.assert:
+- name: Assert that admin user is not root
+  ansible.builtin.assert:
     that: 'admin_user != "root"'
 
-- ansible.builtin.set_fact:
+- name: Store admin_user var for later roles
+  ansible.builtin.set_fact:
     # This makes the variable accessible to subsequent roles, right?
     admin_user: "{{ admin_user }}"
 

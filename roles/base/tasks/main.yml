@@ -36,15 +36,19 @@
 - name: Create swapfile  # noqa: no-handler
   when: base_created_swap is changed
   block:
-    - ansible.builtin.file:
+    - name: Set swapfile mode
+      ansible.builtin.file:
         path: /swapfile
         mode: "0600"
-    - ansible.builtin.command: mkswap /swapfile
+    - name: Make swapfile swappy
+      ansible.builtin.command: mkswap /swapfile
       changed_when: true
-    - ansible.builtin.lineinfile:
+    - name: Add swapfile to fstab
+      ansible.builtin.lineinfile:
         dest: /etc/fstab
         line: "/swapfile none swap sw 0 0"
-    - ansible.builtin.command: swapon /swapfile
+    - name: Enable swapfile
+      ansible.builtin.command: swapon /swapfile
       changed_when: true
 
 #- name: Reset any changes made to ufw
@@ -140,7 +144,7 @@
     - '00-header'
     - '10-help-text'
 
-- name: Disable live news
+- name: Disable live news in MOTD
   ansible.builtin.lineinfile:
     dest: /etc/default/motd-news
     regexp: '^\s*#?\s*ENABLED='
