@@ -203,3 +203,15 @@
     backup: true
   notify:
     - Restart journald
+
+- name: Enable German locale
+  ansible.builtin.lineinfile:
+    dest: /etc/locale.gen
+    regexp: '^(#\s*)?de_DE\.UTF-8\s+UTF-8$'
+    line: 'de_DE.UTF-8 UTF-8'
+    backup: true
+  register: base_locale_edited
+
+- name: Regenerate locales
+  ansible.builtin.command: locale-gen
+  when: base_locale_edited is changed
