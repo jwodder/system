@@ -37,7 +37,7 @@
     move_home: true
     comment: "{{admin_gecos}}"
     generate_ssh_key: true
-    ssh_key_type: rsa
+    ssh_key_type: ed25519
     ssh_key_comment: "{{ admin_user }}@{{ ansible_facts['hostname'] }}"
 
 - name: Fetch root's authorized_keys
