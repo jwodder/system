@@ -27,17 +27,10 @@
 ### TODO: Ensure all tables in database are owned by {{logsdb_user}}? (ALTER
 ### TABLE public.$table OWNER TO {{logsdb_user}})
 
-- name: Install virtualenv
-  # We need virtualenv installed globally if we're running as root, as we won't
-  # be able to run Python code installed in the admin user's userspace
-  ansible.builtin.apt:
-    name: virtualenv
-    state: present
-    update_cache: false
-
-- name: Install jwodder-logsdb in virtualenv
+- name: Install jwodder-logsdb in venv
   ansible.builtin.pip:
     name: git+https://github.com/jwodder/logsdb
     state: forcereinstall
     virtualenv: "{{jwodder_root}}/venvs/logsdb"
+    virtualenv_command: "{{ ansible_facts['python']['executable'] }} -m venv"
     virtualenv_python: python3

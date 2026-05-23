@@ -94,7 +94,7 @@
     - Run newaliases
 
 - name: Populate /etc/postfix/access
-  ansible.builtin.file:
+  ansible.builtin.copy:
     src: access
     dest: /etc/postfix/access
     backup: true

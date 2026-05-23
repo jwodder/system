@@ -41,8 +41,8 @@
     - Reload Transmission
 
 - name: Install xmission-done
-  ansible.builtin.copy:
-    src: bin/xmission-done
+  ansible.builtin.template:
+    src: xmission-done
     dest: "{{jwodder_root}}/bin/xmission-done"
     mode: 0755
 
