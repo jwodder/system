@@ -26,7 +26,7 @@
     regexp: '^{{item.key}}='
     line: '{{item.key}}={{item.value}}'
   with_dict:
-    spfttoolspath: /usr/local/spf-tools
+    spftoolspath: /usr/local/spf-tools
     include_yahoo: 'no'
   notify:
     - Run postwhite
