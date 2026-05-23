@@ -1,6 +1,6 @@
 ---
 - name: Install PostgreSQL
-  apt:
+  ansible.builtin.apt:
     name:
         - libpq-dev
         - postgresql
@@ -9,7 +9,7 @@
     update_cache: false
 
 # This makes the pager always use -S when doing `sudo -u postgres psql`:
-- lineinfile:
+- ansible.builtin.lineinfile:
     dest: ~postgres/.psqlrc
     regexp: '^\\setenv LESS\b'
     line: '\setenv LESS -iS'
@@ -17,7 +17,7 @@
     create: true
 
 # This lets me do `psql DATABASE` without needing `sudo` or an explicit login:
-- postgresql_user:
+- community.postgresql.postgresql_user:
     name: "{{admin_user}}"
     role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
   become_user: postgres

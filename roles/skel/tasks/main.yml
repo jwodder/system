@@ -1,10 +1,10 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     # This makes the variable accessible to subsequent roles, right?
     jwodder_root: "{{jwodder_root}}"
 
 - name: Create jwodder package skeleton
-  file:
+  ansible.builtin.file:
     path: "{{item}}"
     state: directory
   with_items:
@@ -15,7 +15,7 @@
     - "{{jwodder_root}}/venvs"
 
 - name: Create secrets directory
-  file:
+  ansible.builtin.file:
     path: "{{jwodder_root}}/etc/secret"
     state: directory
     mode: 0700
@@ -23,13 +23,13 @@
     group: root
 
 - name: Create logs directory
-  file:
+  ansible.builtin.file:
     path: "{{jwodder_root}}/logs"
     state: directory
     group: syslog
     mode: 0775
 
 - name: Keep venvs directory from being backed up
-  file:
+  ansible.builtin.file:
     path: "{{jwodder_root}}/venvs/.norsync"
     state: touch

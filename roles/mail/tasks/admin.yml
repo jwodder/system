@@ -1,16 +1,19 @@
 ---
 - name: Add admin user to `mail` group
-  user: name={{admin_user}} groups=mail append=true
+  ansible.builtin.user:
+    name: "{{ admin_user }}"
+    groups: mail
+    append: true
 
 - name: Create admin user's Mail directory
-  file:
+  ansible.builtin.file:
     path: /home/{{admin_user}}/Mail
     state: directory
     owner: "{{admin_user}}"
     group: "{{admin_user}}"
 
 - name: Send admin user's incoming e-mail to Mail/INBOX
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /home/{{admin_user}}/.procmailrc
     regexp: '^DEFAULT='
     line: 'DEFAULT=$HOME/Mail/INBOX'
@@ -21,14 +24,14 @@
     group: "{{admin_user}}"
 
 - name: Set admin user's MAIL envvar
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /home/{{admin_user}}/.profile
     regexp: '^export MAIL='
     line: 'export MAIL=$HOME/Mail/INBOX'
     backup: true
 
 - name: Move admin user's mailbox
-  command: mv -n /var/mail/{{admin_user}} /home/{{admin_user}}/Mail/INBOX
+  ansible.builtin.command: mv -n /var/mail/{{admin_user}} /home/{{admin_user}}/Mail/INBOX
   args:
     creates: /home/{{admin_user}}/Mail/INBOX
     removes: /var/mail/{{admin_user}}

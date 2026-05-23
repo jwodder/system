@@ -1,12 +1,12 @@
 ---
 - name: Create logsdb config file
-  template:
+  ansible.builtin.template:
     src: logsdb.ini
     dest: "{{jwodder_root}}/etc/logsdb.ini"
     mode: 0644
 
 - name: Create PostgreSQL logsdb user
-  postgresql_user:
+  community.postgresql.postgresql_user:
     name: "{{logsdb_user}}"
     password: "{{logsdb_password}}"
     encrypted: true
@@ -14,7 +14,7 @@
   become_user: postgres
 
 - name: Create logs database
-  postgresql_db:
+  community.postgresql.postgresql_db:
     name: "{{logsdb_db}}"
     owner: "{{logsdb_user}}"
     encoding: utf8
@@ -30,13 +30,13 @@
 - name: Install virtualenv
   # We need virtualenv installed globally if we're running as root, as we won't
   # be able to run Python code installed in the admin user's userspace
-  apt:
+  ansible.builtin.apt:
     name: virtualenv
     state: present
     update_cache: false
 
 - name: Install jwodder-logsdb in virtualenv
-  pip:
+  ansible.builtin.pip:
     name: git+https://github.com/jwodder/logsdb
     state: forcereinstall
     virtualenv: "{{jwodder_root}}/venvs/logsdb"

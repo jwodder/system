@@ -1,17 +1,17 @@
 ---
 - name: Install vnstat
-  apt: name=vnstat state=present update_cache=no
+  ansible.builtin.apt: name=vnstat state=present update_cache=no
 
 ### TODO: Make vnstat only monitor eth0?
 
 - name: Install bin/dailyreport
-  copy:
+  ansible.builtin.copy:
     src: bin/dailyreport
     dest: "{{jwodder_root}}/bin/dailyreport"
     mode: 0755
 
 - name: Create dailyreport cronjob
-  cron:
+  ansible.builtin.cron:
     user: "{{dailyreporter}}"
     name: dailyreport
     minute: 0

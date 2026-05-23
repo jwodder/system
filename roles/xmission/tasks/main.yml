@@ -1,18 +1,19 @@
 ---
 - name: Enable Transmission PPA
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: ppa:transmissionbt/ppa
     update_cache: true
 
 - name: Install Transmission
-  apt:
+  ansible.builtin.apt:
     name:
         - transmission-cli
         - transmission-daemon
     state: present
     update_cache: false
 
-- json_dict:
+- name: Configure Transmission
+  json_dict:
     dest: /etc/transmission-daemon/settings.json
     owner: debian-transmission
     group: debian-transmission
@@ -40,19 +41,26 @@
     - Reload Transmission
 
 - name: Install xmission-done
-  copy:
+  ansible.builtin.copy:
     src: bin/xmission-done
     dest: "{{jwodder_root}}/bin/xmission-done"
     mode: 0755
 
 - name: Allow incoming connections to Transmission
-  ufw: rule=allow to_ip=any to_port={{xmission_port}} proto=any direction=in
+  community.general.ufw:
+    rule: allow
+    to_ip: any
+    to_port: "{{ xmission_port }}"
+    proto: any
+    direction: in
 
 - name: Don't start Transmission automatically on system startup
-  service: name=transmission-daemon enabled=false
+  ansible.builtin.service:
+    name: transmission-daemon
+    enabled: false
 
 - name: Create watch dir
-  file:
+  ansible.builtin.file:
     path: /var/lib/transmission-daemon/watch
     state: directory
     owner: debian-transmission
@@ -60,4 +68,7 @@
     mode: 0775
 
 - name: Add admin user to `debian-transmission` group
-  user: name={{admin_user}} groups=debian-transmission append=true
+  ansible.builtin.user:
+    name: "{{ admin_user }}"
+    groups: debian-transmission
+    append: true

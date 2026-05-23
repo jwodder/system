@@ -1,8 +1,8 @@
 ---
-- assert:
+- ansible.builtin.assert:
     that: 'admin_user != "root"'
 
-- set_fact:
+- ansible.builtin.set_fact:
     # This makes the variable accessible to subsequent roles, right?
     admin_user: "{{admin_user}}"
 
@@ -10,10 +10,12 @@
 # user to use `sudo` without their home directory being defiled by the
 # `.sudo_as_admin_successful` file.
 - name: Create sudmin group
-  group: name=sudmin state=present
+  ansible.builtin.group:
+    name: sudmin
+    state: present
 
 - name: Grant sudmin group sudo powers
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sudoers.d/jwodder
     line: '%sudmin ALL=(ALL:ALL) ALL'
     validate: 'visudo -cf %s'
@@ -24,7 +26,7 @@
     backup: true
 
 - name: Create admin user
-  user:
+  ansible.builtin.user:
     name: "{{admin_user}}"
     groups: adm,staff,sudmin,users
     # `adm` membership lets me read files in `/var/log` without the need for
@@ -39,19 +41,19 @@
     ssh_key_comment: "{{admin_user}}@{{ansible_hostname}}"
 
 - name: Fetch root's authorized_keys
-  slurp:
+  ansible.builtin.slurp:
     src: /root/.ssh/authorized_keys
   register: authkeys
 
 - name: Add root's authorized_keys to admin's
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{admin_user}}"
     key: "{{item}}"
     manage_dir: true
   with_items: "{{(authkeys.content|b64decode).splitlines()}}"
 
 - name: Set up Google Authenticator for admin
-  command: |
+  ansible.builtin.command: |
     google-authenticator
         --disallow-reuse
         --force
@@ -65,7 +67,7 @@
   become_user: "{{admin_user}}"
 
 - name: Give admin special sudo powers
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sudoers.d/jwodder
     line: '{{admin_user}} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw, /usr/bin/less'
     validate: 'visudo -cf %s'
@@ -75,7 +77,7 @@
     backup: true
 
 - name: Set admin's crontab variables
-  cronvar:
+  community.general.cronvar:
     user: "{{admin_user}}"
     name: "{{item.key}}"
     value: "{{item.value}}"
@@ -86,10 +88,12 @@
     PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
 - name: Install share/cruft
-  copy: src=share/cruft dest="{{jwodder_root}}/share/cruft"
+  ansible.builtin.copy:
+    src: share/cruft
+    dest: "{{jwodder_root}}/share/cruft"
 
 - name: Create cronjob for cleaning admin's ~
-  cron:
+  ansible.builtin.cron:
     user: "{{admin_user}}"
     name: purge
     minute: 0

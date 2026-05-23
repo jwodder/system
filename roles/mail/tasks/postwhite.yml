@@ -1,6 +1,6 @@
 ---
 - name: Install spf-tools
-  git:
+  ansible.builtin.git:
     repo: https://github.com/jsarenik/spf-tools
     dest: /usr/local/spf-tools
     update: false
@@ -8,7 +8,7 @@
     - Run postwhite
 
 - name: Install postwhite
-  git:
+  ansible.builtin.git:
     repo: https://github.com/stevejenkins/postwhite
     dest: /usr/local/postwhite
     update: false
@@ -16,12 +16,12 @@
     - Run postwhite
 
 - name: Install postwhite config file
-  command: cp /usr/local/postwhite/postwhite.conf /etc/postwhite.conf
+  ansible.builtin.command: cp /usr/local/postwhite/postwhite.conf /etc/postwhite.conf
   args:
     creates: /etc/postwhite.conf
 
 - name: Configure postwhite
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/postwhite.conf
     regexp: '^{{item.key}}='
     line: '{{item.key}}={{item.value}}'
@@ -32,7 +32,7 @@
     - Run postwhite
 
 - name: Create postwhite cronjob
-  copy:
+  ansible.builtin.copy:
     dest: /etc/cron.daily/postwhite
     content: |
         #!/bin/bash

@@ -1,6 +1,6 @@
 ---
 - name: Install bin/authfail
-  copy:
+  ansible.builtin.copy:
     src: bin/authfail
     dest: "{{jwodder_root}}/bin/authfail"
     mode: 0755
@@ -8,14 +8,14 @@
     - Restart rsyslog
 
 - name: Ensure authfail errfile exists
-  file:
+  ansible.builtin.file:
     path: "{{jwodder_root}}/logs/authfail.err"
     state: touch
     owner: syslog
     group: syslog
 
 - name: Configure logging of failed SSH logins
-  template:
+  ansible.builtin.template:
     src: 99-authfail.conf
     dest: /etc/rsyslog.d/99-authfail.conf
     backup: true
@@ -26,7 +26,7 @@
 # <https://askubuntu.com/q/1537301/25560>
 
 - name: Make rsyslog apparmor profile unconfined
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/apparmor.d/usr.sbin.rsyslogd
     regexp: '^profile rsyslogd /usr/sbin/rsyslogd '
     line: 'profile rsyslogd /usr/sbin/rsyslogd flags=(attach_disconnected unconfined) {'
@@ -35,7 +35,7 @@
     - Restart apparmor
 
 - name: Configure apparmor to allow rsyslog to execute authfail
-  template:
+  ansible.builtin.template:
     src: authfail.apparmor
     dest: /etc/apparmor.d/rsyslog.d/authfail.apparmor
     backup: true

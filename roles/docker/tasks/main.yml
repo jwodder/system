@@ -1,8 +1,11 @@
 ---
 - name: Install Docker
-  shell: 'wget -qO- https://get.docker.io | bash -'
+  ansible.builtin.shell: 'wget -qO- https://get.docker.io | bash -'
   args:
     creates: /usr/bin/docker
 
 - name: Add admin user to `docker` group
-  user: name={{admin_user}} groups=docker append=true
+  ansible.builtin.user:
+    name: "{{ admin_user }}"
+    groups: docker
+    append: true

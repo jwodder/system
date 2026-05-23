@@ -1,15 +1,15 @@
 ---
-- assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
+- ansible.builtin.assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
 
 - name: Install Certbot
-  apt:
+  ansible.builtin.apt:
     name:
         - certbot
         - python3-certbot-dns-digitalocean
     state: "{{update_certbot|ternary('latest', 'present')}}"
 
 - name: Store DigitalOcean token
-  template:
+  ansible.builtin.template:
     dest: "{{jwodder_root}}/etc/secret/certbot_digitalocean.ini"
     src: certbot_digitalocean.ini
     mode: 0600
@@ -17,14 +17,14 @@
     group: root
 
 - name: Create deploy hook folder
-  file:
+  ansible.builtin.file:
     path: /etc/letsencrypt/renewal-hooks/deploy
     state: directory
     owner: root
     group: root
 
 - name: Install Certbot deploy hook
-  copy:
+  ansible.builtin.copy:
     src: certbot-deploy-hook.sh
     dest: /etc/letsencrypt/renewal-hooks/deploy/certbot-deploy-hook
     mode: 0755
@@ -32,7 +32,7 @@
 - name: Get SSL certificates
   ### Not idempotent
   ### TODO: Force a run if certbot_domains changed?  Always run?
-  command: |
+  ansible.builtin.command: |
     certbot certonly
         --dns-digitalocean
         --dns-digitalocean-credentials {{jwodder_root|quote}}/etc/secret/certbot_digitalocean.ini

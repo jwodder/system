@@ -1,6 +1,6 @@
 ---
 - name: Install Apache
-  apt:
+  ansible.builtin.apt:
     name:
         - apache2
         #- apache2-utils  # htpasswd
@@ -9,16 +9,24 @@
     update_cache: false
 
 - name: Allow incoming HTTP(S) connections
-  ufw: rule=allow to_ip=any to_port={{item}} proto=any direction=in
+  community.general.ufw:
+    rule: allow
+    to_ip: any
+    to_port: "{{ item }}"
+    proto: any
+    direction: in
   with_items:
     - 80
     - 443
 
 - name: Add admin user to `www-data` group
-  user: name={{admin_user}} groups=www-data append=true
+  ansible.builtin.user:
+    name: "{{ admin_user }}"
+    groups: www-data
+    append: true
 
 - name: Give www-data write access to Apache directories
-  file:
+  ansible.builtin.file:
     path: "{{item}}"
     state: directory
     follow: false
@@ -30,7 +38,7 @@
     - /var/www
 
 - name: Enable Apache modules
-  apache2_module:
+  community.general.apache2_module:
     state: present
     name: "{{item}}"
   with_items:
@@ -42,10 +50,10 @@
     - Restart Apache
 
 - name: Disable other-vhosts-access-log
-  command: a2disconf other-vhosts-access-log
+  ansible.builtin.command: a2disconf other-vhosts-access-log
 
 - name: Add custom Apache configuration
-  template:
+  ansible.builtin.template:
     src: jwodder.conf
     dest: /etc/apache2/conf-available/jwodder.conf
     backup: true
@@ -53,16 +61,16 @@
     - Restart Apache
 
 - name: Enable custom Apache configuration
-  command: a2enconf jwodder
+  ansible.builtin.command: a2enconf jwodder
 
-- include: apache_access.yml
+- ansible.builtin.import_tasks: apache_access.yml
   when: "'logsdb' in features"
 
 - name: Disable default website configuration
-  command: a2dissite 000-default
+  ansible.builtin.command: a2dissite 000-default
 
 - name: Configure custom default website
-  template:
+  ansible.builtin.template:
     src: domain.conf
     dest: /etc/apache2/sites-available/domain.conf
     backup: true
@@ -70,10 +78,10 @@
     - Restart Apache
 
 - name: Enable custom default website
-  command: a2ensite domain
+  ansible.builtin.command: a2ensite domain
 
 - name: Cut down on old Apache logs
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/logrotate.d/apache2
     line: "\t{{item.key}} {{item.value}}"
     regexp: '^\s*{{item.key}}'
@@ -83,7 +91,7 @@
     rotate: 10
 
 - name: Configure fail2ban
-  copy:
+  ansible.builtin.copy:
     src: "fail2ban/{{item}}"
     dest: "/etc/fail2ban/{{item}}"
     backup: true

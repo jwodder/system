@@ -18,21 +18,26 @@
 #    data: "{{mail_hostname}}"
 
 - name: Allow incoming SMTP connections
-  ufw: rule=allow to_ip=any to_port=25 proto=any direction=in
+  community.general.ufw:
+    rule: allow
+    to_ip: any
+    to_port: 25
+    proto: any
+    direction: in
 
-- debconf:
+- ansible.builtin.debconf:
     name: postfix
     question: postfix/main_mailer_type
     vtype: select
     value: Internet Site
 
-- debconf:
+- ansible.builtin.debconf:
     name: postfix
     question: postfix/mailname
     vtype: string
     value: "{{mail_origin}}"
 
-- apt:
+- ansible.builtin.apt:
     name:
         - mailutils
         - opendkim
@@ -43,11 +48,11 @@
     state: present
     update_cache: false
 
-- include: dkim.yml
-- include: postwhite.yml
+- ansible.builtin.import_tasks: dkim.yml
+- ansible.builtin.import_tasks: postwhite.yml
 
 - name: Create luser_relay user
-  user:
+  ansible.builtin.user:
     name: "{{luser}}"
     groups: mail
     append: true
@@ -57,20 +62,20 @@
     comment: 'Mail Failure'
 
 - name: Remove the contents of /etc/postgrey/whitelist_recipients
-  copy:
+  ansible.builtin.copy:
     dest: /etc/postgrey/whitelist_recipients
     content: ''
     backup: true
 
 - name: Whitelist e-mails sent via Mailgun and Mandrill
-  copy:
+  ansible.builtin.copy:
     dest: /etc/postgrey/whitelist_clients.local
     content: |
         mailgun.net
         mandrillapp.com
 
 - name: Configure Postfix
-  template:
+  ansible.builtin.template:
     src: main.cf
     dest: /etc/postfix/main.cf
     backup: true
@@ -78,7 +83,7 @@
     - Restart Postfix
 
 - name: Configure /etc/aliases
-  template:
+  ansible.builtin.template:
     src: aliases
     dest: /etc/aliases
     backup: true
@@ -86,7 +91,7 @@
     - Run newaliases
 
 - name: Populate /etc/postfix/access
-  file:
+  ansible.builtin.file:
     src: access
     dest: /etc/postfix/access
     backup: true
@@ -95,28 +100,28 @@
     - Restart Postfix
 
 - name: Rehash access file
-  command: postmap hash:/etc/postfix/access
+  ansible.builtin.command: postmap hash:/etc/postfix/access
   when: access is changed
 
-- include: maillog.yml
+- ansible.builtin.import_tasks: maillog.yml
   when: "'logsdb' in features"
 
 - name: Install bin/mailuser  # used by luser's procmailrc
-  copy:
+  ansible.builtin.copy:
     src: bin/mailuser
     dest: "{{jwodder_root}}/bin/mailuser"
     mode: 0755
 
-- template:
+- ansible.builtin.template:
     src: luser.procmailrc
     dest: /home/{{luser}}/.procmailrc
     owner: "{{luser}}"
     group: "{{luser}}"
 
-- include: admin.yml
+- ansible.builtin.import_tasks: admin.yml
 
 - name: Create /var/mail.old
-  file:
+  ansible.builtin.file:
     path: /var/mail.old
     state: directory
     owner: mail
@@ -124,7 +129,7 @@
     mode: 0775
 
 - name: Configure logrotate to move old e-mails to /var/mail.old
-  copy:
+  ansible.builtin.copy:
     src: mailboxes.logrotate
     dest: /etc/logrotate.d/mailboxes
     # The logrotate manpage doesn't mention that you need to chown root, but
@@ -133,7 +138,7 @@
     group: root
 
 - name: Create cronjob for deleting old e-mails
-  copy:
+  ansible.builtin.copy:
     dest: /etc/cron.weekly/purge-mail
     content: |
         #!/bin/bash
@@ -141,7 +146,7 @@
     mode: 0755
 
 - name: Configure fail2ban
-  copy:
+  ansible.builtin.copy:
     src: postfix.local
     dest: /etc/fail2ban/jail.d/postfix.local
     backup: true

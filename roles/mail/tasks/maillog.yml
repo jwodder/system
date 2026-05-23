@@ -1,18 +1,21 @@
 ---
 - name: Install bin/maillog
-  copy:
+  ansible.builtin.copy:
     src: bin/maillog
     dest: "{{jwodder_root}}/bin/maillog"
     mode: 0755
 
 - name: Install /etc/procmailrc
-  template:
+  ansible.builtin.template:
     src: etc.procmailrc
     dest: /etc/procmailrc
     backup: true
 
 - name: Ensure maillog logfiles exist
-  file: dest={{jwodder_root}}/logs/{{item}} mode=0666 state=touch
+  ansible.builtin.file:
+    dest: "{{ jwodder_root }}/logs/{{ item }}"
+    mode: "0666"
+    state: touch
   with_items:
     - fatal.email
     - maillog.err

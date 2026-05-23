@@ -1,6 +1,6 @@
 ---
 - name: Configure OpenDKIM
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/opendkim.conf
     regexp: '^{{item.key}}(\s+|$)'
     line: '{{item.key}} {{item.value}}'
@@ -26,7 +26,7 @@
     - Restart OpenDKIM
 
 - name: Configure OpenDKIM socket
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/default/opendkim
     regexp: '^SOCKET='
     line: 'SOCKET="inet:12301@localhost"'
@@ -34,11 +34,11 @@
   notify:
     - Restart OpenDKIM
 
-- file:
+- ansible.builtin.file:
     path: /etc/opendkim/keys/{{mail_origin}}
     state: directory
 
-- copy:
+- ansible.builtin.copy:
     dest: /etc/opendkim/TrustedHosts
     content: |
         127.0.0.1
@@ -48,33 +48,33 @@
   notify:
     - Restart OpenDKIM
 
-- copy:
+- ansible.builtin.copy:
     dest: /etc/opendkim/KeyTable
     content: |
         mail._domainkey.{{mail_origin}} {{mail_origin}}:mail:/etc/opendkim/keys/{{mail_origin}}/mail.private
   notify:
     - Restart OpenDKIM
 
-- copy:
+- ansible.builtin.copy:
     dest: /etc/opendkim/SigningTable
     content: |
         *@{{mail_origin}} mail._domainkey.{{mail_origin}}
   notify:
     - Restart OpenDKIM
 
-- command: opendkim-genkey -s mail -d {{mail_origin}}
+- ansible.builtin.command: opendkim-genkey -s mail -d {{mail_origin}}
   args:
     chdir: /etc/opendkim/keys/{{mail_origin}}
     creates: /etc/opendkim/keys/{{mail_origin}}/mail.private
   notify:
     - Restart OpenDKIM
 
-- file:
+- ansible.builtin.file:
     dest: /etc/opendkim/keys/{{mail_origin}}/mail.private
     owner: opendkim
     group: opendkim
 
-- slurp:
+- ansible.builtin.slurp:
     src: /etc/opendkim/keys/{{mail_origin}}/mail.txt
   register: dkimkey
 

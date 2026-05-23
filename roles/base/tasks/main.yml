@@ -1,6 +1,6 @@
 ---
 - name: Install essential software
-  apt:
+  ansible.builtin.apt:
     name:
         - apt-transport-https
         - build-essential
@@ -28,32 +28,49 @@
     update_cache: true
 
 - name: Create swap space
-  command: fallocate -l {{ansible_memtotal_mb * 2}}M /swapfile
+  ansible.builtin.command: fallocate -l {{ansible_memtotal_mb * 2}}M /swapfile
   args:
     creates: /swapfile
-  register: createdSwap
+  register: base_created_swap
 
-- block:
-    - file: path=/swapfile mode=0600
-    - command: mkswap /swapfile
-    - lineinfile: dest=/etc/fstab line="/swapfile none swap sw 0 0"
-    - command: swapon /swapfile
-  when: createdSwap is changed
+- name: Create swapfile  # noqa: no-handler
+  when: base_created_swap is changed
+  block:
+    - ansible.builtin.file:
+        path: /swapfile
+        mode: "0600"
+    - ansible.builtin.command: mkswap /swapfile
+      changed_when: true
+    - ansible.builtin.lineinfile:
+        dest: /etc/fstab
+        line: "/swapfile none swap sw 0 0"
+    - ansible.builtin.command: swapon /swapfile
+      changed_when: true
 
 #- name: Reset any changes made to ufw
-#  ufw: state=reset
+#  community.general.ufw:
+#    state: reset
 
 - name: Deny all incoming connections
-  ufw: policy=deny proto=any direction=incoming
+  community.general.ufw:
+    policy: deny
+    proto: any
+    direction: incoming
 
 - name: Allow incoming SSH connections
-  ufw: rule=allow to_ip=any to_port=22 proto=any direction=in
+  community.general.ufw:
+    rule: allow
+    to_ip: any
+    to_port: 22
+    proto: any
+    direction: in
 
 - name: Enable ufw
-  ufw: state=enabled
+  community.general.ufw:
+    state: enabled
 
 - name: Keep UFW messages from being logged to files other than ufw.log
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rsyslog.d/20-ufw.conf
     regexp: '^\s*#?\s*&\s+(~|stop)\s*$'
     line: '& stop'
@@ -63,7 +80,7 @@
     - Restart rsyslog
 
 - name: Give some syslog facilities their own logfiles
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rsyslog.d/50-default.conf
     regexp: '^#?{{item.key}}\s+{{item.value}}$'
     line: '{{item.key}} {{item.value}}'
@@ -75,7 +92,7 @@
     - Restart rsyslog
 
 - name: Deprive some syslog facilities of their own logfiles
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rsyslog.d/50-default.conf
     regexp: '^({{item}}\s+.+)'
     line: '#\1'
@@ -87,14 +104,14 @@
     - Restart rsyslog
 
 - name: Configure SSH
-  copy:
+  ansible.builtin.copy:
     src: sshd.conf
     dest: /etc/ssh/sshd_config.d/99jwodder.conf
   notify:
     - Restart SSHd
 
 - name: Enable Google Authenticator in PAM
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/pam.d/sshd
     line: 'auth required pam_google_authenticator.so'
     insertafter: EOF
@@ -102,7 +119,7 @@
     - Restart SSHd
 
 - name: Configure PAM to show the "Last login" and "Failed logins" messages
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/pam.d/sshd
     # Insert between the pam_env lines and the pam_selinux line
     insertafter: 'pam_env'
@@ -115,7 +132,7 @@
     - 'session [default=1] pam_lastlog.so nowtmp showfailed'
 
 - name: Disable cruft in login message
-  file:
+  ansible.builtin.file:
     ### TODO: This will fail when the file doesn't exist; fix this!
     path: "/etc/update-motd.d/{{item}}"
     mode: 0644
@@ -124,33 +141,34 @@
     - '10-help-text'
 
 - name: Omit Landscape link from sysinfo in login message
-  replace:
+  ansible.builtin.replace:
     dest: /etc/update-motd.d/50-landscape-sysinfo
     regexp: 'landscape-sysinfo(?! --exclude-sysinfo-plugins)'
     replace: 'landscape-sysinfo --exclude-sysinfo-plugins=LandscapeLink'
     backup: true
 
 - name: Disable live news
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/default/motd-news
     regexp: '^\s*#?\s*ENABLED='
     line: 'ENABLED=0'
 
 - name: Configure APT
-  copy:
+  ansible.builtin.copy:
     src: apt.conf
     dest: /etc/apt/apt.conf.d/99jwodder
 
 - name: Configure needrestart
-  copy:
+  ansible.builtin.copy:
     src: needrestart.conf
     dest: /etc/needrestart/conf.d/99jwodder.conf
 
 - name: Set timezone to UTC
-  timezone: name=Etc/UTC
+  community.general.timezone:
+    name: Etc/UTC
 
 - name: Enable unattended upgrades
-  debconf:
+  ansible.builtin.debconf:
     name: unattended-upgrades
     question: unattended-upgrades/enable_auto_updates
     vtype: boolean
@@ -158,11 +176,11 @@
   register: unattup
 
 - name: Enable new unattended-upgrades settings
-  command: dpkg-reconfigure -f noninteractive unattended-upgrades
+  ansible.builtin.command: dpkg-reconfigure -f noninteractive unattended-upgrades
   when: unattup is changed
 
 - name: Configure fail2ban
-  copy:
+  ansible.builtin.copy:
     src: "fail2ban/{{item}}"
     dest: "/etc/fail2ban/{{item}}"
     backup: true
@@ -175,14 +193,14 @@
     - Restart fail2ban
 
 - name: Create journald.conf.d
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/journald.conf.d
     state: directory
     owner: root
     group: root
 
 - name: Configure journald
-  copy:
+  ansible.builtin.copy:
     src: journald.conf
     dest: /etc/systemd/journald.conf.d/jwodder.conf
     backup: true
