@@ -11,4 +11,4 @@ mail_destinations:
 certbot_cert_name: jwodder  # noqa: var-naming[no-role-prefix]
 
 mail_spf_tools_version: 90b0c65d86ae21052c957361cb3895087f7651c6  # 2020-10-21
-mail_postwhite_version: v3.4  # 2018-04-14
+mail_postwhite_version: c880eb448959b831ea28c77a61c24c613b91db1d  # 2018-04-16

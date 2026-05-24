@@ -25,18 +25,6 @@
     groups: www-data
     append: true
 
-- name: Give www-data write access to Apache directories
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    follow: false
-    recurse: true
-    group: www-data
-    mode: g+wX
-  with_items:
-    - /etc/apache2
-    - /var/www
-
 - name: Enable Apache modules
   community.general.apache2_module:
     state: present
