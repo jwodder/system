@@ -9,13 +9,13 @@
     name: opendkim
     state: restarted
 
-- name: Rehash access file
+- name: Rehash access file  # noqa: no-changed-when
   ansible.builtin.command: postmap hash:/etc/postfix/access
 
-- name: Run newaliases
+- name: Run newaliases  # noqa: no-changed-when
   ansible.builtin.command: newaliases
 
-- name: Run postwhite
+- name: Run postwhite  # noqa: no-changed-when
   ansible.builtin.command: /usr/local/postwhite/postwhite
 
 - name: Restart Postfix

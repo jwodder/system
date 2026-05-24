@@ -1,5 +1,5 @@
 ---
-- name: Install spf-tools
+- name: Install spf-tools  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/jsarenik/spf-tools
     dest: /usr/local/spf-tools
@@ -7,7 +7,7 @@
   notify:
     - Run postwhite
 
-- name: Install postwhite
+- name: Install postwhite  # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/stevejenkins/postwhite
     dest: /usr/local/postwhite

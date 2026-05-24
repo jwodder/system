@@ -21,23 +21,23 @@
     dest: /etc/sudoers.d/jwodder
     line: '%sudmin ALL=(ALL:ALL) ALL'
     validate: 'visudo -cf %s'
-    mode: 0440
     owner: root
     group: root
+    mode: "0440"
     create: true
     backup: true
 
 - name: Create admin user
   ansible.builtin.user:
-    name: "{{admin_user}}"
+    name: "{{ admin_user }}"
     groups: adm,staff,sudmin,users
     # `adm` membership lets me read files in `/var/log` without the need for
     # `sudo`.
     append: true
     shell: /bin/bash
-    home: "/home/{{admin_user}}"
+    home: "/home/{{ admin_user }}"
     move_home: true
-    comment: "{{admin_gecos}}"
+    comment: "{{ admin_gecos }}"
     generate_ssh_key: true
     ssh_key_type: ed25519
     ssh_key_comment: "{{ admin_user }}@{{ ansible_facts['hostname'] }}"
@@ -45,14 +45,14 @@
 - name: Fetch root's authorized_keys
   ansible.builtin.slurp:
     src: /root/.ssh/authorized_keys
-  register: authkeys
+  register: admin_authkeys
 
 - name: Add root's authorized_keys to admin's
   ansible.posix.authorized_key:
-    user: "{{admin_user}}"
-    key: "{{item}}"
+    user: "{{ admin_user }}"
+    key: "{{ item }}"
     manage_dir: true
-  with_items: "{{(authkeys.content|b64decode).splitlines()}}"
+  with_items: "{{ (admin_authkeys.content | b64decode).splitlines() }}"
 
 - name: Set up Google Authenticator for admin
   ansible.builtin.command: |
@@ -65,24 +65,25 @@
         --time-based
         --window-size=3
   args:
-    creates: "/home/{{admin_user}}/.google_authenticator"
-  become_user: "{{admin_user}}"
+    creates: "/home/{{ admin_user }}/.google_authenticator"
+  become: true
+  become_user: "{{ admin_user }}"
 
 - name: Give admin special sudo powers
   ansible.builtin.lineinfile:
     dest: /etc/sudoers.d/jwodder
-    line: '{{admin_user}} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw, /usr/bin/less'
+    line: '{{ admin_user }} ALL=(ALL:ALL) NOPASSWD: /usr/sbin/ufw, /usr/bin/less'
     validate: 'visudo -cf %s'
-    mode: 0440
     owner: root
     group: root
+    mode: "0440"
     backup: true
 
 - name: Set admin's crontab variables
   community.general.cronvar:
-    user: "{{admin_user}}"
-    name: "{{item.key}}"
-    value: "{{item.value}}"
+    user: "{{ admin_user }}"
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
   with_dict:
     CONTENT_TYPE: 'text/plain; charset="utf-8"'
     LANG: en_US.UTF-8
@@ -92,12 +93,14 @@
 - name: Install share/cruft
   ansible.builtin.copy:
     src: share/cruft
-    dest: "{{jwodder_root}}/share/cruft"
+    dest: "{{ jwodder_root }}/share/cruft"
+    owner: "{{ admin_user }}"
+    mode: "0644"
 
 - name: Create cronjob for cleaning admin's ~
   ansible.builtin.cron:
-    user: "{{admin_user}}"
+    user: "{{ admin_user }}"
     name: purge
     minute: 0
     hour: 9
-    job: 'cd ~; xargs -a {{jwodder_root|quote}}/share/cruft -r rm -rf'
+    job: 'cd ~; xargs -a {{ jwodder_root | quote }}/share/cruft -r rm -rf'

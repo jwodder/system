@@ -1,16 +1,20 @@
 ---
-- hosts: all
+- name: Fetch SSH keys
+  hosts: all
   gather_facts: false
   serial: 1
   tasks:
-    - ansible.builtin.known_hosts:
+    - name: Add remote SSH keys to known_hosts
+      ansible.builtin.known_hosts:
         name: "{{ ansible_host }}"
         key: "{{ lookup('pipe', 'ssh-keyscan ' + ansible_host) }}"
       delegate_to: localhost
 
-- hosts: all
+- name: Install Python
+  hosts: all
   gather_facts: false
   tasks:
-    - ansible.builtin.raw: apt-get update && apt-get install -y python3
+    - name: Ensure Python is installed
+      ansible.builtin.raw: apt-get update && apt-get install -y python3
       args:
         creates: /usr/bin/python3
