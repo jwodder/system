@@ -1,13 +1,14 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # Set a DNS record in DigitalOcean to a given value, deleting any conflicting
 # records of the same domain, name, & type
 # cf. <https://github.com/ansible/ansible/pull/31765>
+import json
 import traceback
+from ansible.module_utils.basic import AnsibleModule
 import requests
 
-### TODO: Use Ansible's utility functions in place of `requests`
 
-def main():
+def main() -> None:
     module = AnsibleModule(
         argument_spec={
             "oauth_token": {"required": True},
@@ -24,8 +25,11 @@ def main():
     s = requests.Session()
     s.headers["Authorization"] = "Bearer " + module.params["oauth_token"].strip()
 
-    recurl = 'https://api.digitalocean.com/v2/domains/' \
-            + module.params["domain"] + '/records'
+    recurl = (
+        "https://api.digitalocean.com/v2/domains/"
+        + module.params["domain"]
+        + "/records"
+    )
 
     recname = module.params["name"]
     rectype = module.params["type"]
@@ -51,36 +55,40 @@ def main():
                 break
 
         matching = {
-            rec["id"] for rec in records
-                      if rec["data"] == recdata
-                          and rec["priority"] == recpriority
-                          and rec["port"] == recport
-                          and rec["weight"] == recweight
+            rec["id"]
+            for rec in records
+            if rec["data"] == recdata
+            and rec["priority"] == recpriority
+            and rec["port"] == recport
+            and rec["weight"] == recweight
         }
         if not matching:
             if not module.check_mode:
-                s.post(recurl, json={
-                    "type": rectype,
-                    "name": recname,
-                    "data": recdata,
-                    "priority": recpriority,
-                    "port": recport,
-                    "weight": recweight,
-                }).raise_for_status()
+                s.post(
+                    recurl,
+                    json={
+                        "type": rectype,
+                        "name": recname,
+                        "data": recdata,
+                        "priority": recpriority,
+                        "port": recport,
+                        "weight": recweight,
+                    },
+                ).raise_for_status()
             changed = True
 
         for rec in records:
             if rec["id"] not in matching:
                 if not module.check_mode:
-                    s.delete(recurl + '/' + str(rec["id"])).raise_for_status()
+                    s.delete(recurl + "/" + str(rec["id"])).raise_for_status()
                 changed = True
     except requests.HTTPError as e:
         if 400 <= e.response.status_code < 500:
-            msg = '{0.status_code} Client Error: {0.reason} for URL: {0.url}\n'
+            msg = "{0.status_code} Client Error: {0.reason} for URL: {0.url}\n"
         elif 500 <= e.response.status_code < 600:
-            msg = '{0.status_code} Server Error: {0.reason} for URL: {0.url}\n'
+            msg = "{0.status_code} Server Error: {0.reason} for URL: {0.url}\n"
         else:
-            msg = '{0.status_code} Unknown Error: {0.reason} for URL: {0.url}\n'
+            msg = "{0.status_code} Unknown Error: {0.reason} for URL: {0.url}\n"
         msg = msg.format(e.response)
         try:
             resp = e.response.json()
@@ -88,10 +96,11 @@ def main():
             msg += e.response.text
         else:
             msg += json.dumps(resp, sort_keys=True, indent=4)
-        module.fail_json(msg=traceback.format_exc() + '\n\n' + msg)
+        module.fail_json(msg=traceback.format_exc() + "\n\n" + msg)
     except Exception:
         module.fail_json(msg=traceback.format_exc())
     module.exit_json(changed=changed)
 
-from ansible.module_utils.basic import *
-main()
+
+if __name__ == "__main__":
+    main()
