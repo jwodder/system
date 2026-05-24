@@ -4,6 +4,7 @@
     name:
       - apt-transport-https
       - build-essential
+      - ca-certificates
       - curl
       - fail2ban
       - git
