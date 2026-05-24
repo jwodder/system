@@ -37,6 +37,14 @@
     group: root
     mode: "0600"
 
+- name: Store backup recipient pubkey
+  ansible.builtin.copy:
+    dest: "{{ jwodder_root }}/etc/backup-recipient.txt"
+    content: |
+      {{ backup_recipient_pubkey }}
+    owner: "{{ admin_user }}"
+    mode: "0644"
+
 - name: Create backup cronjob
   ansible.builtin.copy:
     dest: /etc/cron.daily/backdroplet

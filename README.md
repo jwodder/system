@@ -27,6 +27,7 @@ Required Variables
     backup_dropbox_oauth_app_key
     backup_dropbox_oauth_app_secret
     backup_dropbox_oauth_app_refresh_token
+    backup_recipient_pubkey
 
 `logsdb` role
 -------------
