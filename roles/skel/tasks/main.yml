@@ -28,6 +28,7 @@
   ansible.builtin.file:
     path: "{{ jwodder_root }}/logs"
     state: directory
+    owner: "{{ admin_user }}"
     group: syslog
     mode: "0775"
 

@@ -3,6 +3,7 @@
   ansible.builtin.copy:
     src: bin/apache_access
     dest: "{{ jwodder_root }}/bin/apache_access"
+    owner: "{{ admin_user }}"
     mode: "0755"
   notify:
     - Restart Apache

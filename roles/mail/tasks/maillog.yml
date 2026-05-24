@@ -17,8 +17,8 @@
 - name: Ensure maillog logfiles exist
   ansible.builtin.file:
     dest: "{{ jwodder_root }}/logs/{{ item }}"
-    mode: "0666"
     owner: "{{ admin_user }}"
+    mode: "0666"
     state: touch
   with_items:
     - fatal.email

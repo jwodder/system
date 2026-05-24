@@ -34,8 +34,6 @@
     mode: "0755"
 
 - name: Get SSL certificates
-  ### Not idempotent
-  ### TODO: Force a run if certbot_domains changed?  Always run?
   ansible.builtin.command: |
     certbot certonly
         --dns-digitalocean

@@ -5,8 +5,6 @@
     state: present
     update_cache: false
 
-### TODO: Make vnstat only monitor eth0?
-
 - name: Install bin/dailyreport
   ansible.builtin.copy:
     src: bin/dailyreport

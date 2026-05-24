@@ -39,6 +39,7 @@
   ansible.builtin.template:
     src: xmission-done
     dest: "{{ jwodder_root }}/bin/xmission-done"
+    owner: "{{ admin_user }}"
     mode: "0755"
 
 - name: Allow incoming connections to Transmission
