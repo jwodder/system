@@ -30,6 +30,12 @@
 ### TODO: Ensure all tables in database are owned by {{logsdb_user}}? (ALTER
 ### TABLE public.$table OWNER TO {{logsdb_user}})
 
+- name: Purge venv
+  ansible.builtin.file:
+    path: "{{ jwodder_root }}/venvs/logsdb"
+    state: absent
+  when: logsdb_purge_venv|bool
+
 - name: Install jwodder-logsdb in venv
   ansible.builtin.pip:
     name: git+https://github.com/jwodder/logsdb
