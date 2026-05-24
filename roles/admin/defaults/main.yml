@@ -1,3 +1,4 @@
 ---
 admin_user: jwodder
 admin_gecos: 'John T. Wodder II'
+admin_authorized_keys: []

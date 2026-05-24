@@ -1,35 +1,38 @@
 ---
 features:
-    - apache
-    - authfail
-    - backup
-    - dailyreport
-    - docker
-    - logsdb
-    - mail
-    - postgres
-    - ssl
-    - xmission
+  - apache
+  - authfail
+  - backup
+  - dailyreport
+  - docker
+  - logsdb
+  - mail
+  - postgres
+  - ssl
+  - xmission
+
+admin_authorized_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAJaUfN7FGxAB/1K/hY8/sKQCEl5kRjVOj9qmXHmjlNy jwodder@Johns-Laptop-4.local
 
 certbot_email: jwodder+letsencrypt@gmail.com
 
 certbot_domains:
-    - 'varonathe.org'
-    - '*.varonathe.org'
+  - 'varonathe.org'
+  - '*.varonathe.org'
 
 certbot_cert_name: varonathe.org
 
 mail_admin_aliases:
-    - git
-    - pypi
-    - readthedocs
-    - steam
+  - git
+  - pypi
+  - readthedocs
+  - steam
 
 mail_destinations:
-    - varonathe.org
-    - mail.varonathe.org
-    - mg.varonathe.org
-    - firefly
-    - firefly.varonathe.org
+  - varonathe.org
+  - mail.varonathe.org
+  - mg.varonathe.org
+  - firefly
+  - firefly.varonathe.org
 
 # vim:set syntax=yaml:
