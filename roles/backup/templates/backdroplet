@@ -39,8 +39,10 @@ cd "$ROOT/.."
 TARBALL=/var/backups/`hostname`-`date -u +%Y%m%dT%H%M%SZ`.tgz
 tar zcf "$TARBALL" "$(basename "$ROOT")"
 
+/usr/local/bin/age -e -R /opt/jwodder/etc/backup-recipient.txt -o "$TARBALL.age" "$TARBALL"
+
 /usr/local/bin/dropbox_uploader \
     -f "$JWODDER_ROOT/etc/secret/dropbox_uploader" \
-    upload "$TARBALL" /Historical/Backups/Droplets/
+    upload "$TARBALL.age" /Backups/
 
-rm -f "$TARBALL"
+rm -f "$TARBALL" "$TARBALL.age"

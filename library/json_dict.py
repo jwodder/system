@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 import traceback
 from ansible.module_utils.basic import AnsibleModule
 

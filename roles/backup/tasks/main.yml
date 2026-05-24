@@ -6,6 +6,10 @@
     mode: 0755
     force: "{{update_dropbox_uploader}}"
 
+- name: Install age
+  install_age:
+    minversion: v1.3.0
+
 - name: Install bin/backdroplet
   ansible.builtin.template:
     src: backdroplet

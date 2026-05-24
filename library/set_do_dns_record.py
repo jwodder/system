@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 # Set a DNS record in DigitalOcean to a given value, deleting any conflicting
 # records of the same domain, name, & type
 # cf. <https://github.com/ansible/ansible/pull/31765>
