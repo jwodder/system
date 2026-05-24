@@ -9,8 +9,7 @@
     - Restart Apache
 
 - name: Ensure apache_access errfile exists
-  ansible.builtin.file:
-    dest: "{{ jwodder_root }}/logs/apache_access.err"
-    state: touch
+  ensure_file:
+    path: "{{ jwodder_root }}/logs/apache_access.err"
     owner: root
     mode: "0644"

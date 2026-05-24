@@ -9,9 +9,8 @@
     - Restart rsyslog
 
 - name: Ensure authfail errfile exists
-  ansible.builtin.file:
+  ensure_file:
     path: "{{ jwodder_root }}/logs/authfail.err"
-    state: touch
     owner: syslog
     group: syslog
     mode: "0644"

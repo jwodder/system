@@ -15,11 +15,10 @@
     backup: true
 
 - name: Ensure maillog logfiles exist
-  ansible.builtin.file:
-    dest: "{{ jwodder_root }}/logs/{{ item }}"
+  ensure_file:
+    path: "{{ jwodder_root }}/logs/{{ item }}"
     owner: "{{ admin_user }}"
     mode: "0666"
-    state: touch
   with_items:
     - fatal.email
     - maillog.err

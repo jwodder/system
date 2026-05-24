@@ -33,8 +33,7 @@
     mode: "0775"
 
 - name: Keep venvs directory from being backed up
-  ansible.builtin.file:
+  ensure_file:
     path: "{{ jwodder_root }}/venvs/.norsync"
-    state: touch
     owner: "{{ admin_user }}"
     mode: "0644"
