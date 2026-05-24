@@ -40,8 +40,8 @@ myorigin = {{mail_origin}}
 mydomain = {{mail_origin}}
 mydestination =
     {% for dest in mail_destinations %}
-    {{dest}},
-    {% endfor %}
+{{dest}},
+    {% endfor -%}
     localhost,
     localhost.$mydomain,
     localhost.localdomain
