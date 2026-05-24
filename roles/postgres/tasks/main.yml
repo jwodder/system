@@ -2,7 +2,7 @@
 - name: Install PostgreSQL
   ansible.builtin.apt:
     name:
-      - libpq-dev
+      - libpq-dev  # so psycopg2 can be installed via pip
       - postgresql
       - python3-psycopg2  # Needed by Ansible's postgresql_* modules
     state: present

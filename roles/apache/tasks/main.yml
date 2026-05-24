@@ -3,8 +3,8 @@
   ansible.builtin.apt:
     name:
       - apache2
-      # - apache2-utils  # htpasswd
-      # - libapache2-mod-wsgi-py3
+      - apache2-utils  # htpasswd
+      - libapache2-mod-wsgi-py3
     state: present
     update_cache: false
 

@@ -43,6 +43,7 @@
   ansible.builtin.apt:
     name:
       - mailutils
+      - mutt
       - opendkim
       - opendkim-tools
       - postfix

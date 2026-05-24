@@ -3,6 +3,7 @@ ansible-lint
 git+https://github.com/jwodder/aptrepo
 black
 build
+coverage
 daemail
 dotdrop
 flake8
