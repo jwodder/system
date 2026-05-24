@@ -243,3 +243,6 @@
     backup: true
   notify:
     - Regenerate locales
+
+- name: Install gh
+  ansible.builtin.import_tasks: gh.yml

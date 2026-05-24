@@ -31,7 +31,7 @@
       Components: stable
       Architectures: {{ docker_arch.stdout }}
       Signed-By: /etc/apt/keyrings/docker.asc
-    ownrer: root
+    owner: root
     mode: "0644"
 
 - name: Install Docker
