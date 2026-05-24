@@ -1,0 +1,26 @@
+---
+# Based on <https://repos.insights.digitalocean.com/install.sh> (linked from
+# <https://docs.digitalocean.com/products/monitoring/how-to/install-agent/>) as
+# of 2026-05-24
+
+- name: Download DigitalOcean metrics agent package key
+  ansible.builtin.get_url:
+    url: https://repos.insights.digitalocean.com/sonar-agent.asc
+    dest: /usr/share/keyrings/digitalocean-agent-keyring.gpg
+    owner: root
+    mode: "0644"
+    force: false
+
+- name: Create digitalocean-agent.list file
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/digitalocean-agent.list
+    content: |
+      deb [signed-by=/usr/share/keyrings/digitalocean-agent-keyring.gpg] https://repos.insights.digitalocean.com/apt/do-agent main main
+    owner: root
+    mode: "0644"
+
+- name: Install DigitalOcean metrics agent
+  ansible.builtin.apt:
+    name: do-agent
+    state: present
+    update_cache: true

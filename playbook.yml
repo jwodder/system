@@ -24,6 +24,7 @@
     - {role: mail,        when: "'mail' in features"}
     - {role: dailyreport, when: "'dailyreport' in features"}
     - {role: docker,      when: "'docker' in features"}
+    - {role: doagents,    when: "'doagents' in features"}
     - {role: xmission,    when: "'xmission' in features"}
     - {role: apache,      when: "'apache' in features"}
     - {role: authfail,    when: "'authfail' in features"}

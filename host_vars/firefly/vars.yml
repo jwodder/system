@@ -4,6 +4,7 @@ features:
   - authfail
   - backup
   - dailyreport
+  - doagents
   - docker
   - logsdb
   - mail

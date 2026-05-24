@@ -1,0 +1,6 @@
+---
+- name: Install DigitalOcean droplet agent
+  ansible.builtin.import_tasks: droplet.yml
+
+- name: Install DigitalOcean metrics agent
+  ansible.builtin.import_tasks: metrics.yml
