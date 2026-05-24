@@ -29,7 +29,10 @@
   ansible.builtin.copy:
     dest: "{{ jwodder_root }}/etc/secret/dropbox_uploader"
     content: |
-        OAUTH_ACCESS_TOKEN={{ dropbox_oauth_access_token | quote }}
+        CONFIGFILE_VERSION=2.0
+        OAUTH_APP_KEY={{ backup_dropbox_oauth_app_key | quote }}
+        OAUTH_APP_SECRET={{ backup_dropbox_oauth_app_secret | quote }}
+        OAUTH_REFRESH_TOKEN={{ backup_dropbox_oauth_app_refresh_token | quote }}
     owner: root
     group: root
     mode: "0600"

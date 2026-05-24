@@ -22,7 +22,9 @@ Required Variables
 `backup` role
 -------------
 
-    dropbox_oauth_access_token
+    backup_dropbox_oauth_app_key
+    backup_dropbox_oauth_app_secret
+    backup_dropbox_oauth_app_refresh_token
 
 `logsdb` role
 -------------
