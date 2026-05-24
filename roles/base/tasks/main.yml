@@ -136,10 +136,9 @@
     - 'session [default=1] pam_lastlog.so nowtmp showfailed'
 
 - name: Disable cruft in login message
-  ansible.builtin.file:
-    ### TODO: This will fail when the file doesn't exist; fix this!
-    path: "/etc/update-motd.d/{{item}}"
-    mode: 0644
+  ansible.builtin.command: mv -f /etc/update-motd.d/{{ item }} /etc/update-motd.d/{{ item }}.off
+  args:
+    removes: /etc/update-motd.d/{{ item }}
   with_items:
     - '00-header'
     - '10-help-text'
