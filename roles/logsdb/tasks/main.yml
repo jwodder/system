@@ -1,8 +1,8 @@
 ---
 - name: Create logsdb config file
   ansible.builtin.template:
-    src: logsdb.ini
-    dest: "{{ jwodder_root }}/etc/logsdb.ini"
+    src: logsdb.toml
+    dest: "{{ jwodder_root }}/etc/logsdb.toml"
     owner: "{{ admin_user }}"
     mode: "0644"
 
