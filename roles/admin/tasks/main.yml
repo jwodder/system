@@ -83,7 +83,7 @@
     CONTENT_TYPE: 'text/plain; charset="utf-8"'
     LANG: en_US.UTF-8
     LC_ALL: en_US.UTF-8
-    PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/{{ admin_user }}/.local/bin'
 
 - name: Install share/cruft
   ansible.builtin.copy:
