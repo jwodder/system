@@ -1,15 +1,24 @@
 ---
 - name: Restart fail2ban
-  service: name=fail2ban state=restarted
+  ansible.builtin.service:
+    name: fail2ban
+    state: restarted
 
 - name: Restart OpenDKIM
-  service: name=opendkim state=restarted
+  ansible.builtin.service:
+    name: opendkim
+    state: restarted
 
-- name: Restart Postfix
-  service: name=postfix state=restarted
+- name: Rehash access file
+  ansible.builtin.command: postmap hash:/etc/postfix/access
 
 - name: Run newaliases
-  command: newaliases
+  ansible.builtin.command: newaliases
 
 - name: Run postwhite
-  command: /usr/local/postwhite/postwhite
+  ansible.builtin.command: /usr/local/postwhite/postwhite
+
+- name: Restart Postfix
+  ansible.builtin.service:
+    name: postfix
+    state: restarted

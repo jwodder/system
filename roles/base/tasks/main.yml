@@ -2,28 +2,28 @@
 - name: Install essential software
   ansible.builtin.apt:
     name:
-        - apt-transport-https
-        - build-essential
-        - curl
-        - fail2ban
-        - git
-        - htop
-        - jq
-        - libpam-google-authenticator
-        - moreutils  # chronic
-        - patch
-        - python3
-        - python3-dev
-        - python3-pip
-        - python3-requests  # Required for `install_age` and `set_do_dns_record` modules
-        - python3-venv
-        - software-properties-common  # apt-add-repository
-        - tree
-        - unattended-upgrades
-        - unzip
-        - ufw
-        - wget
-        - zip
+      - apt-transport-https
+      - build-essential
+      - curl
+      - fail2ban
+      - git
+      - htop
+      - jq
+      - libpam-google-authenticator
+      - moreutils  # chronic
+      - patch
+      - python3
+      - python3-dev
+      - python3-pip
+      - python3-requests  # Required for `install_age` and `set_do_dns_record` modules
+      - python3-venv
+      - software-properties-common  # apt-add-repository
+      - tree
+      - unattended-upgrades
+      - unzip
+      - ufw
+      - wget
+      - zip
     state: present
     update_cache: true
 
@@ -51,9 +51,9 @@
       ansible.builtin.command: swapon /swapfile
       changed_when: true
 
-#- name: Reset any changes made to ufw
-#  community.general.ufw:
-#    state: reset
+# - name: Reset any changes made to ufw
+#   community.general.ufw:
+#     state: reset
 
 - name: Deny all incoming connections
   community.general.ufw:
@@ -86,8 +86,8 @@
 - name: Give some syslog facilities their own logfiles
   ansible.builtin.lineinfile:
     dest: /etc/rsyslog.d/50-default.conf
-    regexp: '^#?{{item.key}}\s+{{item.value}}$'
-    line: '{{item.key}} {{item.value}}'
+    regexp: '^#?{{ item.key }}\s+{{ item.value }}$'
+    line: '{{ item.key }} {{ item.value }}'
     backup: true
   with_dict:
     "cron.*": /var/log/cron.log
@@ -98,7 +98,7 @@
 - name: Deprive some syslog facilities of their own logfiles
   ansible.builtin.lineinfile:
     dest: /etc/rsyslog.d/50-default.conf
-    regexp: '^({{item}}\s+.+)'
+    regexp: '^({{ item }}\s+.+)'
     line: '#\1'
     backup: true
     backrefs: true
@@ -111,6 +111,8 @@
   ansible.builtin.copy:
     src: sshd.conf
     dest: /etc/ssh/sshd_config.d/99jwodder.conf
+    owner: root
+    mode: "0644"
   notify:
     - Restart SSHd
 
@@ -127,7 +129,7 @@
     dest: /etc/pam.d/sshd
     # Insert between the pam_env lines and the pam_selinux line
     insertafter: 'pam_env'
-    line: "{{item}}"
+    line: "{{ item }}"
     backup: true
   with_items:
     # Note that the lines will & must appear in the opposite order in the
@@ -153,11 +155,15 @@
   ansible.builtin.copy:
     src: apt.conf
     dest: /etc/apt/apt.conf.d/99jwodder
+    owner: root
+    mode: "0644"
 
 - name: Configure needrestart
   ansible.builtin.copy:
     src: needrestart.conf
     dest: /etc/needrestart/conf.d/99jwodder.conf
+    owner: root
+    mode: "0644"
 
 - name: Set timezone to UTC
   community.general.timezone:
@@ -169,16 +175,15 @@
     question: unattended-upgrades/enable_auto_updates
     vtype: boolean
     value: true
-  register: unattup
-
-- name: Enable new unattended-upgrades settings
-  ansible.builtin.command: dpkg-reconfigure -f noninteractive unattended-upgrades
-  when: unattup is changed
+  notify:
+    - Enable new unattended-upgrades settings
 
 - name: Configure fail2ban
   ansible.builtin.copy:
-    src: "fail2ban/{{item}}"
-    dest: "/etc/fail2ban/{{item}}"
+    src: "fail2ban/{{ item }}"
+    dest: "/etc/fail2ban/{{ item }}"
+    owner: root
+    mode: "0644"
     backup: true
   with_items:
     - fail2ban.d/dbpurgeage.local
@@ -194,11 +199,15 @@
     state: directory
     owner: root
     group: root
+    mode: "0755"
 
 - name: Configure journald
   ansible.builtin.copy:
     src: journald.conf
     dest: /etc/systemd/journald.conf.d/jwodder.conf
+    owner: root
+    group: root
+    mode: "0644"
     backup: true
   notify:
     - Restart journald
@@ -209,8 +218,5 @@
     regexp: '^(#\s*)?de_DE\.UTF-8\s+UTF-8$'
     line: 'de_DE.UTF-8 UTF-8'
     backup: true
-  register: base_locale_edited
-
-- name: Regenerate locales
-  ansible.builtin.command: locale-gen
-  when: base_locale_edited is changed
+  notify:
+    - Regenerate locales

@@ -2,12 +2,14 @@
 - name: Install bin/apache_access
   ansible.builtin.copy:
     src: bin/apache_access
-    dest: "{{jwodder_root}}/bin/apache_access"
-    mode: 0755
+    dest: "{{ jwodder_root }}/bin/apache_access"
+    mode: "0755"
   notify:
     - Restart Apache
 
 - name: Ensure apache_access errfile exists
   ansible.builtin.file:
-    dest: "{{jwodder_root}}/logs/apache_access.err"
+    dest: "{{ jwodder_root }}/logs/apache_access.err"
     state: touch
+    owner: root
+    mode: "0644"

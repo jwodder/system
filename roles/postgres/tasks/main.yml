@@ -2,9 +2,9 @@
 - name: Install PostgreSQL
   ansible.builtin.apt:
     name:
-        - libpq-dev
-        - postgresql
-        - python3-psycopg2  # Needed by Ansible's postgresql_* modules
+      - libpq-dev
+      - postgresql
+      - python3-psycopg2  # Needed by Ansible's postgresql_* modules
     state: present
     update_cache: false
 
@@ -16,10 +16,13 @@
     line: '\setenv LESS -iS'
     backup: true
     create: true
+    owner: postgres
+    mode: "0644"
 
 # This lets me do `psql DATABASE` without needing `sudo` or an explicit login:
 - name: Grant extra PostgreSQL powers to admin user
   community.postgresql.postgresql_user:
-    name: "{{admin_user}}"
+    name: "{{ admin_user }}"
     role_attr_flags: NOSUPERUSER,CREATEDB,CREATEROLE,LOGIN
+  become: true
   become_user: postgres

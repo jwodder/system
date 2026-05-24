@@ -1,21 +1,21 @@
 ---
-#- name: Add DNS record for mail subdomain
-#  ### TODO: Create a CNAME record instead when the mail_origin and
-#  ### mail_hostname are the same server
-#  set_do_dns_record:
-#    oauth_token: "{{digitalocean_token}}"
-#    domain: "{{mail_origin}}"
-#    type: A
-#    name: "{{mail_hostname[:-(mail_origin|length)-1]}}"
-#    data: "{{ansible_default_ipv4.address}}"
+# - name: Add DNS record for mail subdomain
+#   ### TODO: Create a CNAME record instead when the mail_origin and
+#   ### mail_hostname are the same server
+#   set_do_dns_record:
+#     oauth_token: "{{ digitalocean_token }}"
+#     domain: "{{ mail_origin }}"
+#     type: A
+#     name: "{{ mail_hostname[:-(mail_origin | length)-1] }}"
+#     data: "{{ ansible_default_ipv4.address }}"
 
-#- name: Create DNS MX record
-#  set_do_dns_record:
-#    oauth_token: "{{digitalocean_token}}"
-#    domain: "{{mail_origin}}"
-#    type: MX
-#    name: '@'
-#    data: "{{mail_hostname}}"
+# - name: Create DNS MX record
+#   set_do_dns_record:
+#     oauth_token: "{{ digitalocean_token }}"
+#     domain: "{{ mail_origin }}"
+#     type: MX
+#     name: '@'
+#     data: "{{ mail_hostname }}"
 
 - name: Allow incoming SMTP connections
   community.general.ufw:
@@ -37,30 +37,33 @@
     name: postfix
     question: postfix/mailname
     vtype: string
-    value: "{{mail_origin}}"
+    value: "{{ mail_origin }}"
 
 - name: Install postfix
   ansible.builtin.apt:
     name:
-        - mailutils
-        - opendkim
-        - opendkim-tools
-        - postfix
-        - postgrey
-        - procmail
+      - mailutils
+      - opendkim
+      - opendkim-tools
+      - postfix
+      - postgrey
+      - procmail
     state: present
     update_cache: false
 
-- ansible.builtin.import_tasks: dkim.yml
-- ansible.builtin.import_tasks: postwhite.yml
+- name: Set up DKIM
+  ansible.builtin.import_tasks: dkim.yml
+
+- name: Set up postwhite
+  ansible.builtin.import_tasks: postwhite.yml
 
 - name: Create luser_relay user
   ansible.builtin.user:
-    name: "{{luser}}"
+    name: "{{ luser }}"
     groups: mail
     append: true
     shell: /bin/bash
-    home: "/home/{{luser}}"
+    home: "/home/{{ luser }}"
     move_home: true
     comment: 'Mail Failure'
 
@@ -68,6 +71,8 @@
   ansible.builtin.copy:
     dest: /etc/postgrey/whitelist_recipients
     content: ''
+    owner: root
+    mode: "0644"
     backup: true
 
 - name: Whitelist e-mails sent via Mailgun and Mandrill
@@ -76,11 +81,15 @@
     content: |
         mailgun.net
         mandrillapp.com
+    owner: root
+    mode: "0644"
 
 - name: Configure Postfix
   ansible.builtin.template:
     src: main.cf
     dest: /etc/postfix/main.cf
+    owner: root
+    mode: "0644"
     backup: true
   notify:
     - Restart Postfix
@@ -89,6 +98,8 @@
   ansible.builtin.template:
     src: aliases
     dest: /etc/aliases
+    owner: root
+    mode: "0644"
     backup: true
   notify:
     - Run newaliases
@@ -97,32 +108,34 @@
   ansible.builtin.copy:
     src: access
     dest: /etc/postfix/access
+    owner: root
+    mode: "0644"
     backup: true
-  register: access
   notify:
     - Restart Postfix
+    - Rehash access file
 
-- name: Rehash access file
-  ansible.builtin.command: postmap hash:/etc/postfix/access
-  when: access is changed
-
-- ansible.builtin.import_tasks: maillog.yml
+- name: Set up mail logging
+  ansible.builtin.import_tasks: maillog.yml
   when: "'logsdb' in features"
 
 - name: Install bin/mailuser  # used by luser's procmailrc
   ansible.builtin.copy:
     src: bin/mailuser
-    dest: "{{jwodder_root}}/bin/mailuser"
-    mode: 0755
+    dest: "{{ jwodder_root }}/bin/mailuser"
+    owner: "{{ admin_user }}"
+    mode: "0755"
 
 - name: Create procmailrc for luser
   ansible.builtin.template:
     src: luser.procmailrc
-    dest: /home/{{luser}}/.procmailrc
-    owner: "{{luser}}"
-    group: "{{luser}}"
+    dest: /home/{{ luser }}/.procmailrc
+    owner: "{{ luser }}"
+    group: "{{ luser }}"
+    mode: "0644"
 
-- ansible.builtin.import_tasks: admin.yml
+- name: Configure admin user's mail
+  ansible.builtin.import_tasks: admin.yml
 
 - name: Create /var/mail.old
   ansible.builtin.file:
@@ -130,7 +143,7 @@
     state: directory
     owner: mail
     group: mail
-    mode: 0775
+    mode: "0775"
 
 - name: Configure logrotate to move old e-mails to /var/mail.old
   ansible.builtin.copy:
@@ -140,6 +153,7 @@
     # it's very necessary.
     owner: root
     group: root
+    mode: "0644"
 
 - name: Create cronjob for deleting old e-mails
   ansible.builtin.copy:
@@ -147,12 +161,15 @@
     content: |
         #!/bin/bash
         find /var/mail.old -type f -mtime +42 -delete
-    mode: 0755
+    owner: root
+    mode: "0755"
 
 - name: Configure fail2ban
   ansible.builtin.copy:
     src: postfix.local
     dest: /etc/fail2ban/jail.d/postfix.local
+    owner: root
+    mode: "0644"
     backup: true
   notify:
     - Restart fail2ban

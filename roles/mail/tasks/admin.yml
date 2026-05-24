@@ -7,31 +7,33 @@
 
 - name: Create admin user's Mail directory
   ansible.builtin.file:
-    path: /home/{{admin_user}}/Mail
+    path: /home/{{ admin_user }}/Mail
     state: directory
-    owner: "{{admin_user}}"
-    group: "{{admin_user}}"
+    owner: "{{ admin_user }}"
+    group: "{{ admin_user }}"
+    mode: "0755"
 
 - name: Send admin user's incoming e-mail to Mail/INBOX
   ansible.builtin.lineinfile:
-    dest: /home/{{admin_user}}/.procmailrc
+    dest: /home/{{ admin_user }}/.procmailrc
     regexp: '^DEFAULT='
     line: 'DEFAULT=$HOME/Mail/INBOX'
     insertbefore: BOF
     backup: true
     create: true
-    owner: "{{admin_user}}"
-    group: "{{admin_user}}"
+    owner: "{{ admin_user }}"
+    group: "{{ admin_user }}"
+    mode: "0644"
 
 - name: Set admin user's MAIL envvar
   ansible.builtin.lineinfile:
-    dest: /home/{{admin_user}}/.profile
+    dest: /home/{{ admin_user }}/.profile
     regexp: '^export MAIL='
     line: 'export MAIL=$HOME/Mail/INBOX'
     backup: true
 
 - name: Move admin user's mailbox
-  ansible.builtin.command: mv -n /var/mail/{{admin_user}} /home/{{admin_user}}/Mail/INBOX
+  ansible.builtin.command: mv -n /var/mail/{{ admin_user }} /home/{{ admin_user }}/Mail/INBOX
   args:
-    creates: /home/{{admin_user}}/Mail/INBOX
-    removes: /var/mail/{{admin_user}}
+    creates: /home/{{ admin_user }}/Mail/INBOX
+    removes: /var/mail/{{ admin_user }}

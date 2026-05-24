@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: Configure system
+  hosts: all
   become: true
   roles:
     # All other roles are allowed to assume that these three roles have already

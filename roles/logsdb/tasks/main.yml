@@ -2,22 +2,25 @@
 - name: Create logsdb config file
   ansible.builtin.template:
     src: logsdb.ini
-    dest: "{{jwodder_root}}/etc/logsdb.ini"
-    mode: 0644
+    dest: "{{ jwodder_root }}/etc/logsdb.ini"
+    owner: "{{ admin_user }}"
+    mode: "0644"
 
 - name: Create PostgreSQL logsdb user
   community.postgresql.postgresql_user:
-    name: "{{logsdb_user}}"
-    password: "{{logsdb_password}}"
+    name: "{{ logsdb_user }}"
+    password: "{{ logsdb_password }}"
     encrypted: true
     role_attr_flags: NOSUPERUSER,NOCREATEDB,NOCREATEROLE,LOGIN
+  become: true
   become_user: postgres
 
 - name: Create logs database
   community.postgresql.postgresql_db:
-    name: "{{logsdb_db}}"
-    owner: "{{logsdb_user}}"
+    name: "{{ logsdb_db }}"
+    owner: "{{ logsdb_user }}"
     encoding: utf8
+  become: true
   become_user: postgres
 
 ### TODO: Run on database (cf. <http://stackoverflow.com/a/6454469>):
@@ -31,6 +34,6 @@
   ansible.builtin.pip:
     name: git+https://github.com/jwodder/logsdb
     state: forcereinstall
-    virtualenv: "{{jwodder_root}}/venvs/logsdb"
+    virtualenv: "{{ jwodder_root }}/venvs/logsdb"
     virtualenv_command: "{{ ansible_facts['python']['executable'] }} -m venv"
     virtualenv_python: python3

@@ -3,12 +3,14 @@
   gather_facts: false
   serial: 1
   tasks:
-    - known_hosts:
-        name: "{{ansible_host}}"
-        key: "{{lookup('pipe', 'ssh-keyscan ' + ansible_host)}}"
+    - ansible.builtin.known_hosts:
+        name: "{{ ansible_host }}"
+        key: "{{ lookup('pipe', 'ssh-keyscan ' + ansible_host) }}"
       delegate_to: localhost
 
 - hosts: all
   gather_facts: false
   tasks:
-    - raw: apt-get update && apt-get install -y python3
+    - ansible.builtin.raw: apt-get update && apt-get install -y python3
+      args:
+        creates: /usr/bin/python3

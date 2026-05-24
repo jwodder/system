@@ -23,8 +23,8 @@
 - name: Configure postwhite
   ansible.builtin.lineinfile:
     dest: /etc/postwhite.conf
-    regexp: '^{{item.key}}='
-    line: '{{item.key}}={{item.value}}'
+    regexp: '^{{ item.key }}='
+    line: '{{ item.key }}={{ item.value }}'
   with_dict:
     spftoolspath: /usr/local/spf-tools
     include_yahoo: 'no'
@@ -37,4 +37,5 @@
     content: |
         #!/bin/bash
         chronic /usr/local/postwhite/postwhite
-    mode: 0755
+    owner: root
+    mode: "0755"

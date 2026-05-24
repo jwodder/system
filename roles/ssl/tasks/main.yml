@@ -1,21 +1,22 @@
 ---
 - name: Assert that certbot_domains is defined and nonempty
-  ansible.builtin.assert: that='certbot_domains is defined and (certbot_domains|length > 0)'
+  ansible.builtin.assert:
+    that: 'certbot_domains is defined and (certbot_domains|length > 0)'
 
 - name: Install Certbot
   ansible.builtin.apt:
     name:
-        - certbot
-        - python3-certbot-dns-digitalocean
-    state: "{{update_certbot|ternary('latest', 'present')}}"
+      - certbot
+      - python3-certbot-dns-digitalocean
+    state: "{{ update_certbot | ternary('latest', 'present') }}"
 
 - name: Store DigitalOcean token
   ansible.builtin.template:
-    dest: "{{jwodder_root}}/etc/secret/certbot_digitalocean.ini"
+    dest: "{{ jwodder_root }}/etc/secret/certbot_digitalocean.ini"
     src: certbot_digitalocean.ini
-    mode: 0600
     owner: root
     group: root
+    mode: "0600"
 
 - name: Create deploy hook folder
   ansible.builtin.file:
@@ -23,12 +24,14 @@
     state: directory
     owner: root
     group: root
+    mode: "0755"
 
 - name: Install Certbot deploy hook
   ansible.builtin.copy:
     src: certbot-deploy-hook.sh
     dest: /etc/letsencrypt/renewal-hooks/deploy/certbot-deploy-hook
-    mode: 0755
+    owner: root
+    mode: "0755"
 
 - name: Get SSL certificates
   ### Not idempotent
@@ -36,15 +39,15 @@
   ansible.builtin.command: |
     certbot certonly
         --dns-digitalocean
-        --dns-digitalocean-credentials {{jwodder_root|quote}}/etc/secret/certbot_digitalocean.ini
+        --dns-digitalocean-credentials {{ jwodder_root | quote }}/etc/secret/certbot_digitalocean.ini
         --rsa-key-size 4096
         --expand
-        --cert-name {{certbot_cert_name|quote}}
-        --email {{certbot_email|quote}}
-        --domains {{certbot_domains|join(',')|quote}}
+        --cert-name {{ certbot_cert_name | quote }}
+        --email {{ certbot_email | quote }}
+        --domains {{ certbot_domains | join(',') | quote }}
         --non-interactive
         --agree-tos
   args:
-    creates: /etc/letsencrypt/live/{{certbot_cert_name}}
+    creates: /etc/letsencrypt/live/{{ certbot_cert_name }}
 
 # Cert autorenewal is done by a cronjob installed by the certbot package

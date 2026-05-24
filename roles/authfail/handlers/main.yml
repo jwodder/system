@@ -1,6 +1,10 @@
 ---
 - name: Restart rsyslog
-  service: name=rsyslog state=restarted
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
 
 - name: Restart apparmor
-  service: name=apparmor state=restarted
+  ansible.builtin.service:
+    name: apparmor
+    state: restarted

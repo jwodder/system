@@ -2,22 +2,26 @@
 - name: Install bin/authfail
   ansible.builtin.copy:
     src: bin/authfail
-    dest: "{{jwodder_root}}/bin/authfail"
-    mode: 0755
+    dest: "{{ jwodder_root }}/bin/authfail"
+    owner: "{{ admin_user }}"
+    mode: "0755"
   notify:
     - Restart rsyslog
 
 - name: Ensure authfail errfile exists
   ansible.builtin.file:
-    path: "{{jwodder_root}}/logs/authfail.err"
+    path: "{{ jwodder_root }}/logs/authfail.err"
     state: touch
     owner: syslog
     group: syslog
+    mode: "0644"
 
 - name: Configure logging of failed SSH logins
   ansible.builtin.template:
     src: 99-authfail.conf
     dest: /etc/rsyslog.d/99-authfail.conf
+    owner: root
+    mode: "0644"
     backup: true
   notify:
     - Restart rsyslog
@@ -38,6 +42,8 @@
   ansible.builtin.template:
     src: authfail.apparmor
     dest: /etc/apparmor.d/rsyslog.d/authfail.apparmor
+    owner: root
+    mode: "0644"
     backup: true
   notify:
     - Restart apparmor

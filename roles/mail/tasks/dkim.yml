@@ -2,8 +2,8 @@
 - name: Configure OpenDKIM
   ansible.builtin.lineinfile:
     dest: /etc/opendkim.conf
-    regexp: '^{{item.key}}(\s+|$)'
-    line: '{{item.key}} {{item.value}}'
+    regexp: '^{{ item.key }}(\s+|$)'
+    line: '{{ item.key }} {{ item.value }}'
     backup: true
   with_dict:
     AutoRestart:        'yes'
@@ -36,8 +36,10 @@
 
 - name: Create OpenDKIM keys directory for mail server
   ansible.builtin.file:
-    path: /etc/opendkim/keys/{{mail_origin}}
+    path: /etc/opendkim/keys/{{ mail_origin }}
     state: directory
+    owner: root
+    mode: "0755"
 
 - name: Configure OpenDKIM trusted hosts
   ansible.builtin.copy:
@@ -46,7 +48,9 @@
         127.0.0.1
         localhost
         192.168.0.1/24
-        *.{{mail_origin}}
+        *.{{ mail_origin }}
+    owner: root
+    mode: "0644"
   notify:
     - Restart OpenDKIM
 
@@ -54,7 +58,9 @@
   ansible.builtin.copy:
     dest: /etc/opendkim/KeyTable
     content: |
-        mail._domainkey.{{mail_origin}} {{mail_origin}}:mail:/etc/opendkim/keys/{{mail_origin}}/mail.private
+        mail._domainkey.{{ mail_origin }} {{ mail_origin }}:mail:/etc/opendkim/keys/{{ mail_origin }}/mail.private
+    owner: root
+    mode: "0644"
   notify:
     - Restart OpenDKIM
 
@@ -62,34 +68,37 @@
   ansible.builtin.copy:
     dest: /etc/opendkim/SigningTable
     content: |
-        *@{{mail_origin}} mail._domainkey.{{mail_origin}}
+        *@{{ mail_origin }} mail._domainkey.{{ mail_origin }}
+    owner: root
+    mode: "0644"
   notify:
     - Restart OpenDKIM
 
 - name: Generate OpenDKIM keys
-  ansible.builtin.command: opendkim-genkey -s mail -d {{mail_origin}}
+  ansible.builtin.command: opendkim-genkey -s mail -d {{ mail_origin }}
   args:
-    chdir: /etc/opendkim/keys/{{mail_origin}}
-    creates: /etc/opendkim/keys/{{mail_origin}}/mail.private
+    chdir: /etc/opendkim/keys/{{ mail_origin }}
+    creates: /etc/opendkim/keys/{{ mail_origin }}/mail.private
   notify:
     - Restart OpenDKIM
 
 - name: Set owner of private OpenDKIM key
   ansible.builtin.file:
-    dest: /etc/opendkim/keys/{{mail_origin}}/mail.private
+    dest: /etc/opendkim/keys/{{ mail_origin }}/mail.private
     owner: opendkim
     group: opendkim
+    mode: "0600"
 
 - name: Fetch contents of OpenDKIM mail.txt file
   ansible.builtin.slurp:
-    src: /etc/opendkim/keys/{{mail_origin}}/mail.txt
-  register: dkimkey
+    src: /etc/opendkim/keys/{{ mail_origin }}/mail.txt
+  register: mail_dkimkey
 
 ### TODO: The format of mail.txt contains extraneous stuff.  Handle this.
-#- name: Create mail._domainkey DNS record
-#  set_do_dns_record:
-#    oauth_token: "{{digitalocean_token}}"
-#    domain: "{{mail_origin}}"
-#    type: TXT
-#    name: mail._domainkey
-#    data: "{{dkimkey.content.strip()|b64decode}}"
+# - name: Create mail._domainkey DNS record
+#   set_do_dns_record:
+#     oauth_token: "{{ digitalocean_token }}"
+#     domain: "{{ mail_origin }}"
+#     type: TXT
+#     name: mail._domainkey
+#     data: "{{ mail_dkimkey.content.strip() | b64decode }}"

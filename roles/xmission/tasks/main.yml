@@ -2,8 +2,8 @@
 - name: Install Transmission
   ansible.builtin.apt:
     name:
-        - transmission-cli
-        - transmission-daemon
+      - transmission-cli
+      - transmission-daemon
     state: present
     update_cache: false
 
@@ -12,34 +12,34 @@
     dest: /etc/transmission-daemon/settings.json
     owner: debian-transmission
     group: debian-transmission
-    mode: 0600
+    mode: "0600"
     backup: true
     update:
-        download-queue-size: 10
-        peer-port: "{{xmission_port}}"
-        queue-stalled-minutes: 15
-        rpc-authentication-required: false
-        rpc-bind-address: "127.0.0.1"
-        rpc-host-whitelist-enabled: false
-        script-torrent-done-enabled: true
-        script-torrent-done-filename: "{{jwodder_root}}/bin/xmission-done"
-        seed-queue-enabled: true
-        seed-queue-size: 20
-        speed-limit-down: 1000
-        speed-limit-down-enabled: true
-        speed-limit-up: 1000
-        speed-limit-up-enabled: true
-        trash-original-torrent-files: true
-        watch-dir: "/var/lib/transmission-daemon/watch"
-        watch-dir-enabled: true
+      download-queue-size: 10
+      peer-port: "{{ xmission_port }}"
+      queue-stalled-minutes: 15
+      rpc-authentication-required: false
+      rpc-bind-address: "127.0.0.1"
+      rpc-host-whitelist-enabled: false
+      script-torrent-done-enabled: true
+      script-torrent-done-filename: "{{ jwodder_root }}/bin/xmission-done"
+      seed-queue-enabled: true
+      seed-queue-size: 20
+      speed-limit-down: 1000
+      speed-limit-down-enabled: true
+      speed-limit-up: 1000
+      speed-limit-up-enabled: true
+      trash-original-torrent-files: true
+      watch-dir: "/var/lib/transmission-daemon/watch"
+      watch-dir-enabled: true
   notify:
     - Reload Transmission
 
 - name: Install xmission-done
   ansible.builtin.template:
     src: xmission-done
-    dest: "{{jwodder_root}}/bin/xmission-done"
-    mode: 0755
+    dest: "{{ jwodder_root }}/bin/xmission-done"
+    mode: "0755"
 
 - name: Allow incoming connections to Transmission
   community.general.ufw:
@@ -60,7 +60,7 @@
     state: directory
     owner: debian-transmission
     group: debian-transmission
-    mode: 0775
+    mode: "0775"
 
 - name: Add admin user to `debian-transmission` group
   ansible.builtin.user:

@@ -2,34 +2,38 @@
 - name: Store jwodder_root var for later roles
   ansible.builtin.set_fact:
     # This makes the variable accessible to subsequent roles, right?
-    jwodder_root: "{{jwodder_root}}"
+    jwodder_root: "{{ jwodder_root }}"
 
 - name: Create jwodder package skeleton
   ansible.builtin.file:
-    path: "{{item}}"
+    path: "{{ item }}"
     state: directory
+    owner: "{{ admin_user }}"
+    mode: "0755"
   with_items:
-    - "{{jwodder_root}}/bin"
-    - "{{jwodder_root}}/etc"
-    - "{{jwodder_root}}/share"
-    - "{{jwodder_root}}/venvs"
+    - "{{ jwodder_root }}/bin"
+    - "{{ jwodder_root }}/etc"
+    - "{{ jwodder_root }}/share"
+    - "{{ jwodder_root }}/venvs"
 
 - name: Create secrets directory
   ansible.builtin.file:
-    path: "{{jwodder_root}}/etc/secret"
+    path: "{{ jwodder_root }}/etc/secret"
     state: directory
-    mode: 0700
     owner: root
     group: root
+    mode: "0700"
 
 - name: Create logs directory
   ansible.builtin.file:
-    path: "{{jwodder_root}}/logs"
+    path: "{{ jwodder_root }}/logs"
     state: directory
     group: syslog
-    mode: 0775
+    mode: "0775"
 
 - name: Keep venvs directory from being backed up
   ansible.builtin.file:
-    path: "{{jwodder_root}}/venvs/.norsync"
+    path: "{{ jwodder_root }}/venvs/.norsync"
     state: touch
+    owner: "{{ admin_user }}"
+    mode: "0644"
