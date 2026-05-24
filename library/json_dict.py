@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import json
 import traceback
 from ansible.module_utils.basic import AnsibleModule
 
@@ -17,8 +18,8 @@ def main() -> None:
     dest = module.params["dest"]
     file_args = module.load_file_common_arguments(module.params)
     try:
-        with open(dest) as fp:
-            data = module.from_json(fp.read())
+        with open(dest, "rb") as fp:
+            data = json.load(fp)
     except Exception:
         module.fail_json(msg=traceback.format_exc())
     if not isinstance(data, dict):
@@ -36,8 +37,8 @@ def main() -> None:
         if changed and not module.check_mode:
             if module.params["backup"]:
                 module.backup_local(dest)
-            with open(dest, "w") as fp:
-                fp.write(module.jsonify(data))
+            with open(dest, "w", encoding="utf-8") as fp:
+                json.dump(data, fp, indent=4, sort_keys=True)
         changed = module.set_fs_attributes_if_different(file_args, changed)
     except Exception:
         module.fail_json(msg=traceback.format_exc())
