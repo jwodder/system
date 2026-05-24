@@ -9,3 +9,6 @@ mail_destinations:
     - "{{ mail_hostname }}"
 
 certbot_cert_name: jwodder  # noqa: var-naming[no-role-prefix]
+
+mail_spf_tools_version: 90b0c65d86ae21052c957361cb3895087f7651c6  # 2020-10-21
+mail_postwhite_version: v3.4  # 2018-04-14

@@ -14,6 +14,7 @@
     dest: /etc/apt/keyrings/docker.asc
     owner: root
     mode: "0644"
+    force: true
 
 - name: Determine dpkg architecture
   ansible.builtin.command: dpkg --print-architecture

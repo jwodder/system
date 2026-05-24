@@ -1,17 +1,19 @@
 ---
-- name: Install spf-tools  # noqa: latest[git]
+- name: Install spf-tools
   ansible.builtin.git:
     repo: https://github.com/jsarenik/spf-tools
     dest: /usr/local/spf-tools
-    update: false
+    version: "{{ mail_spf_tools_version }}"
+    update: true
   notify:
     - Run postwhite
 
-- name: Install postwhite  # noqa: latest[git]
+- name: Install postwhite
   ansible.builtin.git:
     repo: https://github.com/stevejenkins/postwhite
     dest: /usr/local/postwhite
-    update: false
+    version: "{{ mail_postwhite_version }}"
+    update: true
   notify:
     - Run postwhite
 
