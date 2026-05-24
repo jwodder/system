@@ -59,11 +59,11 @@
 
 - name: Create luser_relay user
   ansible.builtin.user:
-    name: "{{ luser }}"
+    name: "{{ mail_luser }}"
     groups: mail
     append: true
     shell: /bin/bash
-    home: "/home/{{ luser }}"
+    home: "/home/{{ mail_luser }}"
     move_home: true
     comment: 'Mail Failure'
 
@@ -119,7 +119,7 @@
   ansible.builtin.import_tasks: maillog.yml
   when: "'logsdb' in features"
 
-- name: Install bin/mailuser  # used by luser's procmailrc
+- name: Install bin/mailuser  # used by mail_luser's procmailrc
   ansible.builtin.copy:
     src: bin/mailuser
     dest: "{{ jwodder_root }}/bin/mailuser"
@@ -129,9 +129,9 @@
 - name: Create procmailrc for luser
   ansible.builtin.template:
     src: luser.procmailrc
-    dest: /home/{{ luser }}/.procmailrc
-    owner: "{{ luser }}"
-    group: "{{ luser }}"
+    dest: /home/{{ mail_luser }}/.procmailrc
+    owner: "{{ mail_luser }}"
+    group: "{{ mail_luser }}"
     mode: "0644"
 
 - name: Configure admin user's mail

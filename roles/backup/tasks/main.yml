@@ -5,7 +5,7 @@
     dest: /usr/local/bin/dropbox_uploader
     owner: root
     mode: "0755"
-    force: "{{ update_dropbox_uploader }}"
+    force: "{{ backup_update_dropbox_uploader }}"
 
 - name: Install age
   install_age:

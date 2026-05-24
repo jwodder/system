@@ -19,7 +19,7 @@ certbot_domains:
 
 certbot_cert_name: varonathe.org
 
-admin_aliases:
+mail_admin_aliases:
     - git
     - pypi
     - readthedocs

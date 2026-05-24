@@ -54,7 +54,7 @@ inet_protocols = all
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 local_recipient_maps =
-luser_relay = {{luser}}@{{mail_origin}}
+luser_relay = {{ mail_luser }}@{{ mail_origin }}
 mailbox_command = procmail -a "$EXTENSION" ORIGINAL_RECIPIENT="$ORIGINAL_RECIPIENT"
 mailbox_size_limit = 0
 recipient_delimiter = +

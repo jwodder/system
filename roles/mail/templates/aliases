@@ -1,13 +1,13 @@
-mailer-daemon: {{luser}}
-postmaster:    {{luser}}
+mailer-daemon: {{ mail_luser }}
+postmaster:    {{ mail_luser }}
 abuse:         admin
 contact:       admin
 hostmaster:    admin
 root:          admin
 webmaster:     admin
 {% if admin_user != 'admin' %}
-admin:         {{admin_user}}
+admin:         {{ admin_user }}
 {% endif %}
-{% for alias in admin_aliases %}
-{{alias}}: {{admin_user}}
+{% for alias in mail_admin_aliases %}
+{{ alias }}: {{ admin_user }}
 {% endfor %}

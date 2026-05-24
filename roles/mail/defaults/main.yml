@@ -1,6 +1,6 @@
 ---
-admin_aliases: []
-luser: muffins
+mail_admin_aliases: []
+mail_luser: muffins
 
 mail_origin: varonathe.org  # Must be a domain name rather than a subdomain
 mail_hostname: "mail.{{ mail_origin }}"  # Must be a subdomain of mail_origin
@@ -8,4 +8,4 @@ mail_destinations:
     - "{{ mail_origin }}"
     - "{{ mail_hostname }}"
 
-certbot_cert_name: jwodder
+certbot_cert_name: jwodder  # noqa: var-naming[no-role-prefix]

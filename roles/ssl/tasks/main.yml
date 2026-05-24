@@ -8,7 +8,7 @@
     name:
       - certbot
       - python3-certbot-dns-digitalocean
-    state: "{{ update_certbot | ternary('latest', 'present') }}"
+    state: "{{ ssl_update_certbot | ternary('latest', 'present') }}"
 
 - name: Store DigitalOcean token
   ansible.builtin.template:

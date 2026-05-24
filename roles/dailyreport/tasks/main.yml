@@ -16,7 +16,7 @@
 
 - name: Create dailyreport cronjob
   ansible.builtin.cron:
-    user: "{{ dailyreporter }}"
+    user: "{{ dailyreport_user }}"
     name: dailyreport
     minute: 0
     hour: 8

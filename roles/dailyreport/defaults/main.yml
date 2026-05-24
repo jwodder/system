@@ -1,2 +1,2 @@
 ---
-dailyreporter: "{{ admin_user }}"
+dailyreport_user: "{{ admin_user }}"

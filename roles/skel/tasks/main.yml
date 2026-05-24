@@ -2,7 +2,7 @@
 - name: Store jwodder_root var for later roles
   ansible.builtin.set_fact:
     # This makes the variable accessible to subsequent roles, right?
-    jwodder_root: "{{ jwodder_root }}"
+    jwodder_root: "{{ jwodder_root }}"  # noqa: var-naming[no-role-prefix]
 
 - name: Create jwodder package skeleton
   ansible.builtin.file:

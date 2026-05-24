@@ -1,6 +1,6 @@
 ---
-update_certbot: false
-certbot_cert_name: jwodder
+ssl_update_certbot: false
+certbot_cert_name: jwodder  # noqa: var-naming[no-role-prefix]
 
 # Required: certbot_domains (list of strings)
 # Required: certbot_email

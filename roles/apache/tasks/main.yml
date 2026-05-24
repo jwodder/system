@@ -59,7 +59,7 @@
     dest: /etc/apache2/conf-available/jwodder.conf
     owner: root
     group: www-data
-    mode: "0644"
+    mode: "0664"
     backup: true
   notify:
     - Restart Apache
@@ -84,7 +84,7 @@
     dest: /etc/apache2/sites-available/domain.conf
     owner: root
     group: www-data
-    mode: "0644"
+    mode: "0664"
     backup: true
   notify:
     - Restart Apache
