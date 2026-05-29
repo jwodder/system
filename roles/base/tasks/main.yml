@@ -246,3 +246,10 @@
 
 - name: Install gh
   ansible.builtin.import_tasks: gh.yml
+
+- name: Enable non-LTS release uprades
+  ansible.builtin.lineinfile:
+    dest: /etc/update-manager/release-upgrades
+    regexp: '^Prompt='
+    line: 'Prompt=normal'
+    backup: true
