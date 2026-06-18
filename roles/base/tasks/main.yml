@@ -251,13 +251,9 @@
     - Restart journald
 
 - name: Enable German locale
-  ansible.builtin.lineinfile:
-    dest: /etc/locale.gen
-    regexp: '^(#\s*)?de_DE\.UTF-8\s+UTF-8$'
-    line: 'de_DE.UTF-8 UTF-8'
-    backup: true
-  notify:
-    - Regenerate locales
+  community.general.locale_gen:
+    name: de_DE.UTF-8
+    state: present
 
 - name: Install gh
   ansible.builtin.import_tasks: gh.yml
