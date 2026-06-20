@@ -147,19 +147,6 @@
   notify:
     - Restart SSHd
 
-- name: Configure PAM to show the "Last login" and "Failed logins" messages
-  ansible.builtin.lineinfile:
-    dest: /etc/pam.d/sshd
-    # Insert between the pam_env lines and the pam_selinux line
-    insertafter: 'pam_env'
-    line: "{{ item }}"
-    backup: true
-  with_items:
-    # Note that the lines will & must appear in the opposite order in the
-    # configured file.
-    - 'session optional    pam_lastlog.so silent noupdate showfailed'
-    - 'session [default=1] pam_lastlog.so nowtmp showfailed'
-
 - name: Configure mail behavior on SSH login
   # This change accomplishes the following:
   # - Removes the default "noenv" option so that $MAIL is set
