@@ -17,15 +17,14 @@
     force: true
 
 - name: Determine dpkg architecture
-  ansible.builtin.command: dpkg --print-architecture
-  changed_when: false
+  dpkg_arch:
   register: base_arch
 
 - name: Create github-cli.list file
   ansible.builtin.copy:
     dest: /etc/apt/sources.list.d/github-cli.list
     content: |
-      deb [arch={{ base_arch.stdout }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+      deb [arch={{ base_arch.arch }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
     owner: root
     mode: "0644"
 
