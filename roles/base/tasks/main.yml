@@ -48,6 +48,7 @@
       - bikeshed  # dman
       - pipx
     state: present
+    install_recommends: false
     update_cache: false
 
 - name: Create swap space
