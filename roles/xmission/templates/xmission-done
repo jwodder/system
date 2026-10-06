@@ -1,16 +1,87 @@
-#!/bin/bash
-FROM_ADDR='xmission@{{ mail_origin }}'
-TO_ADDR='{{ xmission_recipient }}'
+#!/usr/bin/env python3
+from __future__ import annotations
+from datetime import datetime
+import os
+import re
+import subprocess
+import sys
 
-sendmail -t <<EOT
-Subject: Download complete: $TR_TORRENT_NAME
-From: $FROM_ADDR
-To: $TO_ADDR
+FROM_ADDR = "xmission@{{ mail_origin }}"
+TO_ADDR = "{{ xmission_recipient }}"
 
-$TR_TORRENT_NAME
-Torrent #$TR_TORRENT_ID ($TR_TORRENT_HASH)
-Download dir: $TR_TORRENT_DIR
 
--- 
-Transmission $TR_APP_VERSION
-EOT
+def main() -> None:
+    tr_name = os.environ["TR_TORRENT_NAME"]
+    tr_id = os.environ["TR_TORRENT_ID"]
+    tr_hash = os.environ["TR_TORRENT_HASH"]
+    tr_dir = os.environ["TR_TORRENT_DIR"]
+    xmis_version = os.environ["TR_APP_VERSION"]
+    r = subprocess.run(
+        ["transmission-remote", "-t", tr_id, "-i"],
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    )
+    if m := re.search(
+        r"^\s*Date added:\s*\w{3} (\w{3} \d\d \d\d:\d\d:\d\d \d{4,})\s*$",
+        r.stdout,
+        flags=re.M,
+    ):
+        added = datetime.strptime(m[1], "%b %d %H:%M:%S %Y").astimezone()
+        now = datetime.now().astimezone()
+        elapsed = display_seconds(int((now - added).total_seconds()))
+        subprocess.run(
+            ["sendmail", "-t"],
+            check=True,
+            encoding="utf-8",
+            input=(
+                f"Subject: Download complete: {tr_name}\n"
+                f"From: {FROM_ADDR}\n"
+                f"To: {TO_ADDR}\n"
+                "\n"
+                f"{tr_name}\n"
+                f"Torrent #{tr_id} ({tr_hash})\n"
+                f"Downloaded in: {elapsed}\n"
+                f"Download dir: {tr_dir}\n"
+                "\n"
+                "-- \n"
+                f"Transmission {xmis_version}\n"
+            ),
+        )
+    else:
+        sys.exit('Could not find parseable "Date added" field in torrent info')
+
+
+def display_seconds(seconds: int) -> str:
+    bits = []
+    dhm, seconds = divmod(seconds, 60)
+    if seconds:
+        bits.append(quantify(seconds, "second"))
+    dh, minutes = divmod(dhm, 60)
+    if minutes:
+        bits.append(quantify(minutes, "minute"))
+    days, hours = divmod(dh, 24)
+    if hours:
+        bits.append(quantify(hours, "hour"))
+    if days:
+        bits.append(quantify(days, "day"))
+    bits.reverse()
+    if bits:
+        return ", ".join(bits)
+    else:
+        return "---"
+
+
+def quantify(qty: int, singular: str, plural: str | None = None) -> str:
+    # cf. the humanfriendly package's pluralize() function
+    if qty == 1:
+        return f"{qty} {singular}"
+    elif plural is None:
+        return f"{qty} {singular}s"
+    else:
+        return f"{qty} {plural}"
+
+
+if __name__ == "__main__":
+    main()
