@@ -1,0 +1,9 @@
+[Unit]
+Description=Record failed SSH logins
+Requires=authfail.socket
+
+[Service]
+Type=exec
+ExecStart={{ jwodder_root }}/bin/authfail
+StandardInput=socket
+Restart=no
