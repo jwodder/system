@@ -6,7 +6,7 @@
     owner: "{{ admin_user }}"
     mode: "0755"
   notify:
-    - Restart rsyslog
+    - Restart authfail.service if running
 
 - name: Ensure authfail errfile exists
   ensure_file:
@@ -15,29 +15,7 @@
     group: syslog
     mode: "0644"
 
-- name: Configure logging of failed SSH logins
-  ansible.builtin.template:
-    src: 99-authfail.conf
-    dest: /etc/rsyslog.d/99-authfail.conf
-    owner: root
-    mode: "0644"
-    backup: true
-  notify:
-    - Restart rsyslog
-
-# TODO: Look for a better way to configure apparmor
-# <https://askubuntu.com/q/1537301/25560>
-
-- name: Make rsyslog apparmor profile unconfined
-  ansible.builtin.lineinfile:
-    dest: /etc/apparmor.d/usr.sbin.rsyslogd
-    regexp: '^profile rsyslogd /usr/sbin/rsyslogd '
-    line: 'profile rsyslogd /usr/sbin/rsyslogd flags=(attach_disconnected unconfined) {'
-    backup: true
-  notify:
-    - Restart apparmor
-
-- name: Configure apparmor to allow rsyslog to execute authfail
+- name: Configure apparmor to allow rsyslog to open socket
   ansible.builtin.template:
     src: authfail.apparmor
     dest: /etc/apparmor.d/rsyslog.d/authfail.apparmor
@@ -46,3 +24,37 @@
     backup: true
   notify:
     - Restart apparmor
+
+- name: Install authfail socket & service units
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/{{ item }}
+    owner: root
+    mode: "0644"
+  with_items:
+    - authfail.service
+    - authfail.socket
+  register: authfail_units
+
+# This has to run before we can enable stuff, so using a handler isn't an
+# option here.
+- name: Reload systemd  # noqa: no-handler
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: authfail_units is changed
+
+- name: Enable socket unit
+  ansible.builtin.systemd:
+    name: authfail.socket
+    enabled: true
+    state: started
+
+- name: Configure rsyslog to send failed SSH logins to FIFO
+  ansible.builtin.template:
+    src: 99-authfail.conf
+    dest: /etc/rsyslog.d/99-authfail.conf
+    owner: root
+    mode: "0644"
+    backup: true
+  notify:
+    - Restart rsyslog
