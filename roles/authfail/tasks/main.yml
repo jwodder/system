@@ -15,15 +15,6 @@
     group: syslog
     mode: "0644"
 
-- name: Undo "Make rsyslog apparmor profile unconfined" from previous setup
-  ansible.builtin.lineinfile:
-    dest: /etc/apparmor.d/usr.sbin.rsyslogd
-    regexp: '^profile rsyslogd /usr/sbin/rsyslogd '
-    line: 'profile rsyslogd /usr/sbin/rsyslogd flags=(attach_disconnected) {'
-    backup: true
-  notify:
-    - Restart apparmor
-
 - name: Configure apparmor to allow rsyslog to open socket
   ansible.builtin.template:
     src: authfail.apparmor
