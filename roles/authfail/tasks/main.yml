@@ -24,10 +24,13 @@
   notify:
     - Restart apparmor
 
-- name: Remove apparmor config for authfail from previous setup
-  ansible.builtin.file:
-    path: /etc/apparmor.d/rsyslog.d/authfail.apparmor
-    state: absent
+- name: Configure apparmor to allow rsyslog to open socket
+  ansible.builtin.template:
+    src: authfail.apparmor
+    dest: /etc/apparmor.d/rsyslog.d/authfail.apparmor
+    owner: root
+    mode: "0644"
+    backup: true
   notify:
     - Restart apparmor
 
@@ -53,6 +56,7 @@
   ansible.builtin.systemd:
     name: authfail.socket
     enabled: true
+    state: started
 
 - name: Configure rsyslog to send failed SSH logins to FIFO
   ansible.builtin.template:
