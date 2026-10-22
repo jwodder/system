@@ -6,16 +6,26 @@
 - name: Download DigitalOcean droplet agent package key
   ansible.builtin.get_url:
     url: https://repos-droplet.digitalocean.com/gpg.key
-    dest: /usr/share/keyrings/droplet-agent-keyring.gpg
+    dest: /usr/share/keyrings/droplet-agent-keyring.gpg.asc
     owner: root
     mode: "0644"
     force: false
 
-- name: Create droplet-agent.list file
+- name: Dearmor package key
+  ansible.builtin.command: >
+    gpg --dearmor --output /usr/share/keyrings/droplet-agent-keyring.gpg /usr/share/keyrings/droplet-agent-keyring.gpg.asc
+  args:
+    creates: /usr/share/keyrings/droplet-agent-keyring.gpg
+
+- name: Create droplet-agent.sources file
   ansible.builtin.copy:
-    dest: /etc/apt/sources.list.d/droplet-agent.list
+    dest: /etc/apt/sources.list.d/droplet-agent.sources
     content: |
-      deb [signed-by=/usr/share/keyrings/droplet-agent-keyring.gpg] https://repos-droplet.digitalocean.com/apt/droplet-agent main main
+      Types: deb
+      URIs: https://repos-droplet.digitalocean.com/apt/droplet-agent
+      Suites: main
+      Components: main
+      Signed-By: /usr/share/keyrings/droplet-agent-keyring.gpg
     owner: root
     mode: "0644"
 

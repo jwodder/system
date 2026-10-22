@@ -10,6 +10,7 @@
       - cloc
       - curl
       - fail2ban
+      - fzf
       - git
       - htop
       - jekyll
@@ -38,6 +39,7 @@
       - unzip
       - w3m
       - wget
+      - wtmpdb  # last
       - zip
     state: present
     update_cache: true

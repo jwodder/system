@@ -4,7 +4,7 @@ Control system requirements:
 
 Target system requirements:
 
-- Ubuntu 24.04 or higher
+- Ubuntu 26.04 or higher
 - Python 3.12 or higher must already be installed
 - There must already exist a non-root user with sudo powers that the control
   system can SSH in as.  Use this user as the `ansible_user`.

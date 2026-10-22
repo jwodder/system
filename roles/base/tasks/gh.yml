@@ -20,11 +20,16 @@
   dpkg_arch:
   register: base_arch
 
-- name: Create github-cli.list file
+- name: Create github-cli.sources file
   ansible.builtin.copy:
-    dest: /etc/apt/sources.list.d/github-cli.list
+    dest: /etc/apt/sources.list.d/github-cli.sources
     content: |
-      deb [arch={{ base_arch.arch }} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
+      Types: deb
+      URIs: https://cli.github.com/packages
+      Suites: stable
+      Components: main
+      Architectures: {{ base_arch.arch }}
+      Signed-By: /etc/apt/keyrings/githubcli-archive-keyring.gpg
     owner: root
     mode: "0644"
 
