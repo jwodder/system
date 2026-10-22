@@ -39,6 +39,7 @@
       - unzip
       - w3m
       - wget
+      - wtmpdb  # last
       - zip
     state: present
     update_cache: true
