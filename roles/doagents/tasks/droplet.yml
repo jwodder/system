@@ -11,11 +11,15 @@
     mode: "0644"
     force: false
 
-- name: Create droplet-agent.list file
+- name: Create droplet-agent.sources file
   ansible.builtin.copy:
-    dest: /etc/apt/sources.list.d/droplet-agent.list
+    dest: /etc/apt/sources.list.d/droplet-agent.sources
     content: |
-      deb [signed-by=/usr/share/keyrings/droplet-agent-keyring.gpg] https://repos-droplet.digitalocean.com/apt/droplet-agent main main
+      Types: deb
+      URIs: https://repos-droplet.digitalocean.com/apt/droplet-agent
+      Suites: main
+      Components: main
+      Signed-By: /usr/share/keyrings/droplet-agent-keyring.gpg
     owner: root
     mode: "0644"
 

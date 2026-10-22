@@ -11,11 +11,15 @@
     mode: "0644"
     force: false
 
-- name: Create digitalocean-agent.list file
+- name: Create digitalocean-agent.sources file
   ansible.builtin.copy:
-    dest: /etc/apt/sources.list.d/digitalocean-agent.list
+    dest: /etc/apt/sources.list.d/digitalocean-agent.sources
     content: |
-      deb [signed-by=/usr/share/keyrings/digitalocean-agent-keyring.gpg] https://repos.insights.digitalocean.com/apt/do-agent main main
+      Types: deb
+      URIs: https://repos.insights.digitalocean.com/apt/do-agent
+      Suites: main
+      Components: main
+      Signed-By: /usr/share/keyrings/digitalocean-agent-keyring.gpg
     owner: root
     mode: "0644"
 
