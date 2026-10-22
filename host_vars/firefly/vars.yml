@@ -1,17 +1,4 @@
 ---
-features:
-  - apache
-  - authfail
-  - backup
-  - dailyreport
-  - doagents
-  - docker
-  - logsdb
-  - mail
-  - postgres
-  - ssl
-  - xmission
-
 admin_authorized_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAJaUfN7FGxAB/1K/hY8/sKQCEl5kRjVOj9qmXHmjlNy jwodder@Johns-Laptop-4.local
 

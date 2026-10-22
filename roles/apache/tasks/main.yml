@@ -59,7 +59,6 @@
 
 - name: Set up Apache access logging
   ansible.builtin.import_tasks: apache_access.yml
-  when: "'logsdb' in features"
 
 - name: Disable default website configuration
   ansible.builtin.command: a2dissite 000-default
