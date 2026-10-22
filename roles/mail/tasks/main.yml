@@ -118,7 +118,6 @@
 
 - name: Set up mail logging
   ansible.builtin.import_tasks: maillog.yml
-  when: "'logsdb' in features"
 
 - name: Install bin/mailuser  # used by mail_luser's procmailrc
   ansible.builtin.copy:

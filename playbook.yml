@@ -9,22 +9,14 @@
     - skel
     - admin
 
-    ### TODO: Fill in `features` based on role dependencies:
-    ### - dailyreport: implies mail and logsdb
-    ### - logsdb: implies postgres
-    ### - mail: implies ssl
-    ### - xmission: implies mail
-    ### - apache: implies ssl
-    ### - authfail: implies logsdb
-
-    - {role: backup,      when: "'backup' in features"}
-    - {role: postgres,    when: "'postgres' in features"}
-    - {role: logsdb,      when: "'logsdb' in features"}
-    - {role: ssl,         when: "'ssl' in features"}
-    - {role: mail,        when: "'mail' in features"}
-    - {role: dailyreport, when: "'dailyreport' in features"}
-    - {role: docker,      when: "'docker' in features"}
-    - {role: doagents,    when: "'doagents' in features"}
-    - {role: xmission,    when: "'xmission' in features"}
-    - {role: apache,      when: "'apache' in features"}
-    - {role: authfail,    when: "'authfail' in features"}
+    - backup
+    - postgres
+    - logsdb
+    - ssl
+    - mail
+    - dailyreport
+    - docker
+    - doagents
+    - xmission
+    - apache
+    - authfail
