@@ -10,6 +10,7 @@
       - cloc
       - curl
       - fail2ban
+      - fzf
       - git
       - htop
       - jekyll
