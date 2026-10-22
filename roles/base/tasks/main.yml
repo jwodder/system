@@ -128,7 +128,7 @@
     line: '#\1'
     backup: true
     backrefs: true
-  with_items:
+  loop:
     - mail.err
   notify:
     - Restart rsyslog
@@ -169,7 +169,7 @@
   ansible.builtin.command: mv -f /etc/update-motd.d/{{ item }} /etc/update-motd.d/{{ item }}.off
   args:
     removes: /etc/update-motd.d/{{ item }}
-  with_items:
+  loop:
     - '00-header'
     - '10-help-text'
 
@@ -213,7 +213,7 @@
     owner: root
     mode: "0644"
     backup: true
-  with_items:
+  loop:
     - fail2ban.d/dbpurgeage.local
     - jail.d/defaults.local
     - jail.d/recidive.local

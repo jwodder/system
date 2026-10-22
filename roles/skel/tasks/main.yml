@@ -10,7 +10,7 @@
     state: directory
     owner: "{{ admin_user }}"
     mode: "0755"
-  with_items:
+  loop:
     - "{{ jwodder_root }}/bin"
     - "{{ jwodder_root }}/etc"
     - "{{ jwodder_root }}/share"

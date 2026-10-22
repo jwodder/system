@@ -19,7 +19,7 @@
     path: "{{ jwodder_root }}/logs/{{ item }}"
     owner: "{{ admin_user }}"
     mode: "0666"
-  with_items:
+  loop:
     - fatal.email
     - maillog.err
     - procmail.err
