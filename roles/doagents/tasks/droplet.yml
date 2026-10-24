@@ -10,12 +10,12 @@
     owner: root
     mode: "0644"
     force: false
+  register: doagents_droplet_key
 
-- name: Dearmor package key
+- name: Dearmor package key  # noqa: no-changed-when no-handler
   ansible.builtin.command: >
     gpg --dearmor --output /usr/share/keyrings/droplet-agent-keyring.gpg /usr/share/keyrings/droplet-agent-keyring.gpg.asc
-  args:
-    creates: /usr/share/keyrings/droplet-agent-keyring.gpg
+  when: doagents_droplet_key is changed
 
 - name: Create droplet-agent.sources file
   ansible.builtin.copy:
