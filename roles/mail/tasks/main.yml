@@ -47,6 +47,7 @@
       - opendkim
       - opendkim-tools
       - postfix
+      - postfix-lmdb
       - postgrey
       - procmail
     state: present

@@ -1,4 +1,5 @@
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
+default_database_type = lmdb
 smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 biff = no
 notify_classes = bounce, 2bounce, data, delay, resource, software
@@ -16,11 +17,11 @@ append_dot_mydomain = no
 # information on enabling SSL in the smtp client.
 smtpd_tls_cert_file = /etc/letsencrypt/live/{{certbot_cert_name}}/fullchain.pem
 smtpd_tls_key_file = /etc/letsencrypt/live/{{certbot_cert_name}}/privkey.pem
-smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtpd_tls_session_cache_database = lmdb:${data_directory}/smtpd_scache
 smtpd_tls_security_level = may
 smtpd_tls_protocols = !SSLv2, !SSLv3
 
-smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_tls_session_cache_database = lmdb:${data_directory}/smtp_scache
 smtp_tls_security_level = may
 smtp_tls_protocols = !SSLv2, !SSLv3
 
@@ -30,7 +31,7 @@ smtpd_recipient_restrictions = permit_mynetworks,
                                # Postgrey:
                                check_policy_service inet:127.0.0.1:10023
 smtpd_relay_restrictions =
-smtpd_sender_restrictions = check_sender_access hash:/etc/postfix/access
+smtpd_sender_restrictions = check_sender_access lmdb:/etc/postfix/access
 postscreen_access_list = permit_mynetworks,
                          # Postwhite:
                          cidr:/etc/postfix/postscreen_spf_whitelist.cidr,
@@ -51,8 +52,8 @@ relayhost =
 inet_interfaces = all
 inet_protocols = all
 
-alias_maps = hash:/etc/aliases
-alias_database = hash:/etc/aliases
+alias_maps = lmdb:/etc/aliases
+alias_database = lmdb:/etc/aliases
 local_recipient_maps =
 luser_relay = {{ mail_luser }}@{{ mail_origin }}
 mailbox_command = procmail -a "$EXTENSION" ORIGINAL_RECIPIENT="$ORIGINAL_RECIPIENT"

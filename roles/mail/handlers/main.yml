@@ -10,7 +10,7 @@
     state: restarted
 
 - name: Rehash access file  # noqa: no-changed-when
-  ansible.builtin.command: postmap hash:/etc/postfix/access
+  ansible.builtin.command: postmap lmdb:/etc/postfix/access
 
 - name: Run newaliases  # noqa: no-changed-when
   ansible.builtin.command: newaliases
