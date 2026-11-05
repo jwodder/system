@@ -5,7 +5,7 @@
     domain: "{{ apache_base_domain }}"
     type: CNAME
     name: dav
-    data: "{{ apache_base_domain }}"
+    data: "{{ apache_base_domain }}."
 
 - name: Enable Radicale uWSGI config
   ansible.builtin.file:
