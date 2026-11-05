@@ -1,0 +1,62 @@
+---
+- name: Create DNS record for Radicale site
+  set_do_dns_record:
+    oauth_token: "{{ digitalocean_token }}"
+    domain: "{{ apache_base_domain }}"
+    type: CNAME
+    name: dav
+    data: "{{ apache_base_domain }}"
+
+- name: Enable Radicale uWSGI config
+  ansible.builtin.file:
+    src: /etc/uwsgi/apps-available/radicale.ini
+    path: /etc/uwsgi/apps-enabled/radicale.ini
+    state: link
+  notify:
+    - Restart uwsgi
+
+- name: Enable Apache modules
+  community.general.apache2_module:
+    state: present
+    name: "{{ item }}"
+  loop:
+    - headers
+    - proxy_uwsgi
+  notify:
+    - Restart Apache
+
+- name: Configure Radicale website
+  ansible.builtin.template:
+    src: dav.conf
+    dest: /etc/apache2/sites-available/dav.conf
+    owner: root
+    group: www-data
+    mode: "0664"
+    backup: true
+  notify:
+    - Restart Apache
+
+- name: Enable Radicale website
+  ansible.builtin.command: a2ensite dav
+  args:
+    creates: /etc/apache2/sites-enabled/dav.conf
+
+- name: Configure Radicale
+  ansible.builtin.template:
+    src: radicale.cfg
+    dest: /etc/radicale/config
+    owner: radicale
+    group: radicale
+    mode: "0664"
+    backup: true
+  notify:
+    - Restart uwsgi
+
+- name: Configure Radicale auth
+  community.general.htpasswd:
+    path: /etc/radicale/passwd
+    name: "{{ apache_dav_username }}"
+    password: "{{ apache_dav_password }}"
+    owner: www-data
+    group: www-data
+    mode: "0600"

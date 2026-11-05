@@ -15,11 +15,17 @@ Other assumptions made:
 - The target system's DNS is managed by DigitalOcean
 - The `mail` role assumes that the SSL cert is valid for both `mail_origin` and
   `mail_hostname`
-- The `apache` role assumes that the SSL cert is valid for `default_web_domain`
-  both with & without leading "www."
+- The `apache` role assumes that the SSL cert is valid for `apache_base_domain`
+  and the subdomains "www" and "dav"
 
 Required Variables
 ==================
+
+`apache` role
+-------------
+
+    apache_dav_password
+    digitalocean_token
 
 `backup` role
 -------------

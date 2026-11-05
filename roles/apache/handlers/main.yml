@@ -8,3 +8,8 @@
   ansible.builtin.service:
     name: fail2ban
     state: restarted
+
+- name: Restart uwsgi
+  ansible.builtin.service:
+    name: uwsgi
+    state: restarted
