@@ -1,4 +1,5 @@
 ---
-apache_default_web_domain: www.varonathe.org
+apache_base_domain: varonathe.org
+apache_dav_username: jwodder
 apache_webmaster_email: webmaster@varonathe.org
 certbot_cert_name: jwodder  # noqa: var-naming[no-role-prefix]

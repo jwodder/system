@@ -1,10 +1,14 @@
 ---
-- name: Install Apache
+- name: Install Apache and related packages
   ansible.builtin.apt:
     name:
       - apache2
       - apache2-utils  # htpasswd
       - libapache2-mod-wsgi-py3
+      - python3-passlib  # Needed for community.general.htpasswd module
+      - radicale
+      - uwsgi
+      - uwsgi-plugin-python3
     state: present
     update_cache: false
 
@@ -80,6 +84,9 @@
   ansible.builtin.command: a2ensite domain
   args:
     creates: /etc/apache2/sites-enabled/domain.conf
+
+- name: Set up Radicale website
+  ansible.builtin.import_tasks: dav.yml
 
 - name: Cut down on old Apache logs
   ansible.builtin.lineinfile:

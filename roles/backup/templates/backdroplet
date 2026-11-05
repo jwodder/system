@@ -14,7 +14,12 @@ mkdir -p "$ROOT"
 
 JWODDER_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
 
-for dir in /home /var/mail /var/mail.old /var/www /etc/letsencrypt \
+for dir in /home \
+            /var/lib/radicale/collections \
+            /var/mail \
+            /var/mail.old \
+            /var/www \
+            /etc/letsencrypt \
            "$JWODDER_ROOT"
 do if [ -e "$dir" ]
    then rsync -avRF --delete --delete-excluded \
