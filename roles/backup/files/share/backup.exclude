@@ -4,6 +4,9 @@
 *.o
 *.pyc
 .*.swp
+.Radicale.cache/
+.Radicale.lock
+.Radicale.tmp-*
 .ansible/
 .aptitude/
 .cache/
