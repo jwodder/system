@@ -1,5 +1,0 @@
----
-- name: Reload Transmission
-  ansible.builtin.service:
-    name: transmission-daemon
-    state: reloaded

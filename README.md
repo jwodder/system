@@ -51,8 +51,3 @@ Required Variables
     certbot_domains
     certbot_email
     digitalocean_token
-
-`xmission` role
----------------
-
-    xmission_recipient
